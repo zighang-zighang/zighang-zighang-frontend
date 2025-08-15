@@ -1,6 +1,6 @@
 ---
-name: 기능 PR 템플릿
-about: Suggest an idea for this project
+name: pull_request_template
+about: Describe this issue template's purpose here.
 title: ''
 labels: ''
 assignees: ''
