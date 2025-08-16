@@ -79,11 +79,7 @@ const mockRecCount = {
   count: 43,
 };
 
-export default function RecruitmentPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default function RecruitmentPage() {
   return (
     <main className="flex min-h-screen flex-col items-center">
       <Header />
