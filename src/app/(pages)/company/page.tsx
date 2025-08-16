@@ -2,6 +2,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Refresh from "@/app/components/Refresh";
 import Toggle from "@/app/components/Toggle";
+import CompanyCard from "@/app/components/CompanyCard";
+import FilterTagInteractive from "@/app/components/FilterTag";
 
 export default function Company() {
   return (
@@ -74,25 +76,11 @@ export default function Company() {
               role="none"
               className="shrink-0 mx-1 h-7 w-[1.5px] bg-[#DDDDE1] md:mx-2"
             ></div>
-            <button
-              type="button"
-              className="flex h-10 cursor-pointer flex-row items-center gap-1 rounded-[10px] border border-gray-300 bg-white px-3 pr-2 py-2.5"
-            >
-              <span className="font-semibold text-[#353535] md:font-semibold">
-                산업
-              </span>
-              <img
-                alt="드롭다운 아이콘"
-                loading="lazy"
-                width="0"
-                height="0"
-                decoding="async"
-                data-nimg="1"
-                className="h-5 w-5 rotate-90"
-                style={{ color: "transparent" }}
-                src="https://zighang.com/icon/chevron_right.svg"
-              />
-            </button>
+            <div className="z-10 flex gap-2 overflow-x-auto md:gap-3">
+              <FilterTagInteractive label="산업"></FilterTagInteractive>
+              <FilterTagInteractive label="지역"></FilterTagInteractive>
+              <FilterTagInteractive label="기업 규모"></FilterTagInteractive>
+            </div>
           </div>
         </section>
         <div className="flex w-full justify-between px-4 pt-0 md:px-0 md:pt-6">
@@ -141,6 +129,31 @@ export default function Company() {
               </svg>
             </button>
           </div>
+        </div>
+        <div
+          className="box-border flex w-full flex-col items-start pb-10 pt-0 md:flex-row md:flex-wrap md:content-start md:justify-between md:pb-12 md:pt-8"
+          style={{ minHeight: "730px" }}
+        >
+          <CompanyCard
+            slug="bagelcode"
+            name="베이글코드"
+            logoSrc="https://d2juy7qzamcf56.cloudfront.net/2024-10-06/f7d2267d-f249-476e-8c30-ba51a99b3199.png"
+            positionsCount={32}
+            companyScaleLabel="대기업"
+            industry="IT·웹·통신"
+            location="서울특별시 강남구"
+            views={5564}
+          />
+          <CompanyCard
+            slug="bagelcode"
+            name="베이글코드"
+            logoSrc="https://d2juy7qzamcf56.cloudfront.net/2024-10-06/f7d2267d-f249-476e-8c30-ba51a99b3199.png"
+            positionsCount={32}
+            companyScaleLabel="대기업"
+            industry="IT·웹·통신"
+            location="서울특별시 강남구"
+            views={5564}
+          />
         </div>
       </div>
 
