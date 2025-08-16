@@ -97,7 +97,7 @@ export default function Header() {
             </Link>
 
             <Link href="/join" rel="nofollow" className="block md:hidden">
-              <div className="text-[#6F00B6]">로그인</div>
+              <div className="text-[#6F00B6] font-semibold">로그인</div>
             </Link>
 
             <button
