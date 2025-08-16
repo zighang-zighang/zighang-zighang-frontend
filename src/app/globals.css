@@ -3,8 +3,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --primary: #6F00B6;
-  --line: #EDEDED;
+  --primary: #6f00b6;
+  --line: #ededed;
   --zighangtext-60: #646464;
   --label-neutral: #6B7280;
 }
@@ -33,7 +33,7 @@ body {
 
 /* Custom styles for zighang */
 .ds-web-navi {
-  font-family: 'Pretendard-Medium', Helvetica, sans-serif;
+  font-family: "Pretendard-Medium", Helvetica, sans-serif;
   font-weight: 500;
   transition: color 0.2s ease;
 }
@@ -43,7 +43,7 @@ body {
 }
 
 .ds-Button2-16sb {
-  font-family: 'Pretendard-Medium', Helvetica, sans-serif;
+  font-family: "Pretendard-Medium", Helvetica, sans-serif;
   font-weight: 500;
   transition: all 0.2s ease;
 }
@@ -70,4 +70,17 @@ body {
   .hbp\:block {
     display: block;
   }
+}
+
+/* Additional utility classes */
+.ds-mobile-filter {
+  font-family: "Pretendard-Medium", Helvetica, sans-serif;
+  font-weight: 500;
+}
+
+.ds-web-badge-lg {
+  font-family: "Pretendard-Medium", Helvetica, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
 }
