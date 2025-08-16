@@ -1,10 +1,14 @@
+"use client";
+import { useRef, useState } from "react";
+
 type Props = {
   label: string;
   selected?: string;
   expanded?: boolean;
   id?: string;
 };
-export default function FilterTag({ label, selected, expanded, id }: Props) {
+
+export function FilterTag({ label, selected, expanded, id }: Props) {
   return (
     <div
       className="shrink-0 inline-flex items-center rounded-[10px] border border-gray-300 bg-white h-10 md:h-11 py-2.5 pl-3 pr-2 md:pl-4 md:pr-3"
@@ -23,5 +27,23 @@ export default function FilterTag({ label, selected, expanded, id }: Props) {
         />
       </span>
     </div>
+  );
+}
+
+export default function FilterTagInteractive({ label }: Props) {
+  const [open, setOpen] = useState(false);
+  const id = `${label}-popover`;
+
+  return (
+    <button
+      type="button"
+      onClick={() => setOpen((o) => !o)}
+      className="shrink-0"
+      aria-expanded={open}
+      aria-controls={id}
+    >
+      <FilterTag label={label} selected="" expanded={open} id={id} />
+      {/*팝오버 자리*/}
+    </button>
   );
 }
