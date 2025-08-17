@@ -3,11 +3,19 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary: #6f00b6;
+  --line: #ededed;
+  --zighangtext-60: #646464;
+  --label-neutral: #6B7280;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-line: var(--line);
+  --color-zighangtext-60: var(--zighangtext-60);
+  --color-label-neutral: var(--label-neutral);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -21,4 +29,58 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: "Pretendard", sans-serif;
+}
+
+/* Custom styles for zighang */
+.ds-web-navi {
+  font-family: "Pretendard-Medium", Helvetica, sans-serif;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.ds-web-navi:hover {
+  color: var(--primary);
+}
+
+.ds-Button2-16sb {
+  font-family: "Pretendard-Medium", Helvetica, sans-serif;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.ds-Button2-16sb:hover {
+  background-color: rgba(111, 0, 182, 0.1);
+}
+
+/* Responsive breakpoints */
+@media (min-width: 640px) {
+  .sm\:block {
+    display: block;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:block {
+    display: block;
+  }
+}
+
+/* Custom hbp breakpoint (if needed) */
+@media (min-width: 1024px) {
+  .hbp\:block {
+    display: block;
+  }
+}
+
+/* Additional utility classes */
+.ds-mobile-filter {
+  font-family: "Pretendard-Medium", Helvetica, sans-serif;
+  font-weight: 500;
+}
+
+.ds-web-badge-lg {
+  font-family: "Pretendard-Medium", Helvetica, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
 }
