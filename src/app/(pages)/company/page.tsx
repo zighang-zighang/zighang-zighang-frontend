@@ -3,11 +3,12 @@ import Footer from "@/components/Footer";
 import Refresh from "@/app/components/Refresh";
 import Toggle from "@/app/components/Toggle";
 import CompanyCard from "@/app/components/CompanyCard";
-import FilterTagInteractive from "@/app/components/FilterTag";
+import { INDUSTRY, REGION, COMPANY_SIZE } from "@/app/constants/filterOptions";
+import FilterTagSelect from "@/app/components/FilterTag";
 
 export default function Company() {
   return (
-    <main className="flex min-h-screen flex-col items-center">
+    <main className=" flex min-h-screen flex-col items-center">
       <Header />
 
       <div className="relative w-full md:px-10 md:max-w-screen-xl overflow-visible md:mx-auto">
@@ -68,7 +69,7 @@ export default function Company() {
           </form>
         </section>
 
-        <section className="sticky top-0 z-10 flex flex-row items-start w-full pt-5 gap-3 bg-white px-4 pb-2 md:flex-row md:items-end md:px-0">
+        <section className="justify sticky top-0 z-10 flex flex-col items-start w-full pt-5 gap-3 bg-white px-4 pb-2 md:flex-row md:items-end md:px-0">
           <div className="flex flex-shrink-0 items-center pt-4 md:pt-5 gap-2">
             <Refresh></Refresh>
             <div
@@ -77,9 +78,9 @@ export default function Company() {
               className="shrink-0 mx-1 h-7 w-[1.5px] bg-[#DDDDE1] md:mx-2"
             ></div>
             <div className="z-10 flex gap-2 overflow-x-auto md:gap-3">
-              <FilterTagInteractive label="산업"></FilterTagInteractive>
-              <FilterTagInteractive label="지역"></FilterTagInteractive>
-              <FilterTagInteractive label="기업 규모"></FilterTagInteractive>
+              <FilterTagSelect id="industry" label="산업" options={INDUSTRY} />
+              <FilterTagSelect id="region" label="지역" options={REGION} />
+              <FilterTagSelect id="size" label="기업" options={COMPANY_SIZE} />
             </div>
           </div>
         </section>
