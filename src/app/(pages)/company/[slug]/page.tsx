@@ -2,13 +2,23 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import JobCardList from "@/app/components/JobCardList";
 import Refresh from "@/app/components/Refresh";
-import FilterTagInteractive from "@/app/components/FilterTag";
+import FilterTagSelect from "@/app/components/FilterTag";
 import Filter from "@/app/components/Filter";
-
+import FilterBar from "@/app/components/FilterBar";
+import ClientFilterProviders from "@/app/components/ClientFilterProviders";
+import {
+  INDUSTRY,
+  REGION,
+  COMPANY_SIZE,
+  TYPE,
+  EDUCATION,
+  CAREER,
+  DEADLINE,
+} from "@/app/constants/filterOptions";
 export default function CompanyDetail() {
   return (
     <div>
-      <Header></Header>
+      <Header />
       <div className="w-full px-5">
         <div className="h-9 md:h-12"></div>
         <div className="w-full max-w-screen-lg pl-5 md:max-w-screen-xl">
@@ -215,25 +225,18 @@ export default function CompanyDetail() {
         </div>
       </div>
       <section className="sticky top-0 z-10 flex flex-row items-start w-full pt-5 gap-3 bg-white px-4 pb-2 md:flex-row md:items-end md:px-0">
-        <div className="flex flex-shrink-0 items-center pt-4 md:pt-5 gap-2 px-4">
-          <div className="flex items-center gap-1 md:gap-2">
-            <Refresh></Refresh>
-            <div
-              data-orientation="vertical"
-              role="none"
-              className="shrink-0 mx-1 h-7 w-[1.5px] bg-[#DDDDE1] md:mx-2"
-            ></div>
-            <Filter></Filter>
-          </div>
+        <div className="flex flex-col flex-shrink-0 items-center pt-4 md:pt-5 gap-2 px-4">
           <div className="z-10 flex gap-2 overflow-x-auto md:gap-3">
-            <FilterTagInteractive label="산업"></FilterTagInteractive>
-            <FilterTagInteractive label="지역"></FilterTagInteractive>
-            <FilterTagInteractive label="기업 규모"></FilterTagInteractive>
+            <ClientFilterProviders>
+              <div className="z-10 flex gap-2 overflow-x-auto md:gap-3">
+                <FilterBar />
+              </div>
+            </ClientFilterProviders>
           </div>
         </div>
       </section>
-      <JobCardList />
-      <Footer></Footer>
+      <JobCardList></JobCardList>
+      <Footer />
     </div>
   );
 }

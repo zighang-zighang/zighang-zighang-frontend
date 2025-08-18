@@ -78,9 +78,19 @@ export default function Company() {
               className="shrink-0 mx-1 h-7 w-[1.5px] bg-[#DDDDE1] md:mx-2"
             ></div>
             <div className="z-10 flex gap-2 overflow-x-auto md:gap-3">
-              <FilterTagSelect id="industry" label="산업" options={INDUSTRY} />
-              <FilterTagSelect id="region" label="지역" options={REGION} />
-              <FilterTagSelect id="size" label="기업" options={COMPANY_SIZE} />
+              <div className="z-10 flex gap-2 overflow-x-auto md:gap-3">
+                <FilterTagSelect
+                  id="industry"
+                  label="산업"
+                  options={INDUSTRY}
+                />
+                <FilterTagSelect id="region" label="지역" options={REGION} />
+                <FilterTagSelect
+                  id="size"
+                  label="기업규모"
+                  options={COMPANY_SIZE}
+                />
+              </div>
             </div>
           </div>
         </section>
