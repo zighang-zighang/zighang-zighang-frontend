@@ -33,3 +33,40 @@ export const COMPANY_SIZE: Option[] = [
   { id: "MID", label: "중견" },
   { id: "ENTERPRISE", label: "대기업" },
 ];
+
+export const TYPE: Option[] = [
+  { id: "ALL", label: "전체" },
+  { id: "FULLTIME", label: "정규직" },
+  { id: "CONTRACT", label: "계약직" },
+  { id: "INTERN_CONVERT", label: "전환형 인턴" },
+  { id: "INTERN", label: "체험형 인턴" },
+  { id: "PARTTIME", label: "아르바이트" },
+  { id: "FREELANCE", label: "프리랜서" },
+  { id: "MILITARY", label: "병역특례" },
+];
+
+export const EDUCATION: Option[] = [
+  { id: "ALL", label: "전체" },
+  { id: "NONE", label: "학력 무관" },
+  { id: "HIGH", label: "고졸" },
+  { id: "ASSOCIATE", label: "초대졸" },
+  { id: "BACHELOR", label: "학사" },
+  { id: "MASTER", label: "석사" },
+  { id: "DOCTOR", label: "박사" },
+];
+
+export const CAREER: Option[] = [
+  { id: "ALL", label: "전체" },
+  { id: "NEW", label: "신입" },
+  { id: "1_3", label: "1~3년" },
+  { id: "3_5", label: "3~5년" },
+  { id: "5_10", label: "5~10년" },
+  { id: "10_PLUS", label: "10년 이상" },
+];
+
+export const DEADLINE: Option[] = [
+  { id: "ALL", label: "전체" },
+  { id: "ALWAYS", label: "상시 채용" },
+  { id: "UNTIL_FILLED", label: "채용 시 마감" },
+  { id: "FIXED", label: "기한 설정" },
+];
