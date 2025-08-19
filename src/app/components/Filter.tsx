@@ -1,5 +1,5 @@
 type FilterProps = {
-  activated?: boolean; // true: 보라 배경 + 컬러 아이콘, false: 흰 배경 + 회색 아이콘
+  activated?: boolean;
   onClick?: () => void;
 };
 

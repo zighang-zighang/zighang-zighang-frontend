@@ -30,11 +30,14 @@ export default function CompanyCard({
   return (
     <Link
       href={`/company/${slug}`}
-      className={`block ${className}`}
+      className={`flex  ${className} w-full px-0 md:min-w-[592px] md:px-0`}
       aria-label={`${name} 상세 페이지로 이동`}
     >
-      <div className="flex w-[1200px] items-center gap-5 border-b border-[#EDEDED] bg-white px-5 py-8 hover:bg-gray-50 transition-colors">
-        <div className="relative h-20 w-20 overflow-hidden rounded-[16px] border border-[#DDDDE1] bg-[lightgray]">
+      <div className="flex w-full items-center gap-5 border-b border-[#EDEDED] bg-white px-5 py-8 hover:bg-gray-50 transition-colors">
+        <div
+          className="relative shrink-0 h-14 w-14 overflow-hidden rounded-[16px] 
+             border border-[#DDDDE1] bg-[lightgray] md:h-20 md:w-20"
+        >
           <Image
             src={logoSrc}
             alt={`${name} 로고`}
@@ -45,13 +48,13 @@ export default function CompanyCard({
 
         <section className="flex flex-col gap-2">
           <div className="flex items-center gap-3 self-stretch">
-            <h2 className="text-2xl font-semibold text-black">{name}</h2>
+            <h2 className="text-xl font-semibold md:text-2xl ">{name}</h2>
             <p className="text-base font-medium text-[#FF6127]">
               {positionsCount}개 포지션 채용 중
             </p>
           </div>
 
-          <div className="flex items-center gap-3 self-stretch">
+          <div className="flex flex-row items-center flex-wrap gap-3 self-stretch">
             <span className="text-base font-medium text-[#71717A]">
               {companyScaleLabel}
             </span>
