@@ -2,6 +2,7 @@
 import { createPortal } from "react-dom";
 import { useEffect, useRef, useState } from "react";
 import type { Option } from "./FilterTag";
+import { useIsDesktop } from "../hooks/useIsDesktop";
 
 export function PopoverPanel({
   open,
@@ -24,16 +25,8 @@ export function PopoverPanel({
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // md 기준으로 데스크톱/모바일 분기 (훅 없이)
-  const [isDesktop, setIsDesktop] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mq = window.matchMedia("(min-width: 768px)");
-    const update = () => setIsDesktop(mq.matches);
-    update();
-    mq.addEventListener?.("change", update);
-    return () => mq.removeEventListener?.("change", update);
-  }, []);
+  // 훅으로 생성 따로 분기
+  const isDesktop = useIsDesktop();
 
   useEffect(() => {
     if (!open) return;
