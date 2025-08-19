@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { useEffect, useRef, useState } from "react";
 import type { Option } from "./FilterTag";
 import { useIsDesktop } from "../hooks/useIsDesktop";
-
+import FilterOptionList from "./FilterOptionList";
 export function PopoverPanel({
   open,
   label,
@@ -73,43 +73,6 @@ export function PopoverPanel({
     onChange(set.size === 0 ? [ALL_ID] : [...set]);
   };
 
-  // 공통 리스트(직행 스타일)
-  const List = (
-    <div
-      className={
-        isDesktop
-          ? "max-h-[56vh] overflow-y-auto px-4 pb-4 pt-3"
-          : "max-h-[60vh] overflow-y-auto px-4 pb-4 pt-3"
-      }
-    >
-      {options?.map((opt) => {
-        const checked =
-          opt.id === ALL_ID ? isAll : value.includes(opt.id) && !isAll;
-        return (
-          <label
-            key={opt.id}
-            className={[
-              "mb-3 flex items-center gap-3 rounded-2xl border border-[#EDEDED] bg-white px-4 py-3",
-              checked ? "bg-[#F7F5FF] border-[#E3D9FF]" : "",
-              "cursor-pointer",
-            ].join(" ")}
-          >
-            <input
-              type="checkbox"
-              className="h-5 w-5 accent-[#6F3FF5]"
-              checked={checked}
-              onChange={() => toggle(opt.id)}
-              onPointerDown={(e) => e.stopPropagation()}
-            />
-            <span className="text-[16px] md:text-[17px] font-medium text-[#111]">
-              {opt.label}
-            </span>
-          </label>
-        );
-      })}
-    </div>
-  );
-
   // 데스크톱
   if (isDesktop) {
     return (
@@ -128,7 +91,14 @@ export function PopoverPanel({
             중복 선택 가능
           </div>
         </div>
-        {List}
+        <FilterOptionList
+          options={options}
+          value={value}
+          isAll={isAll}
+          onToggle={toggle}
+          isDesktop={isDesktop}
+          allId={ALL_ID}
+        />
         <div className="sticky bottom-0 z-10 bg-white p-4">
           <button
             type="button"
@@ -167,7 +137,14 @@ export function PopoverPanel({
             중복 선택 가능
           </div>
         </div>
-        {List}
+        <FilterOptionList
+          options={options}
+          value={value}
+          isAll={isAll}
+          onToggle={toggle}
+          isDesktop={isDesktop}
+          allId={ALL_ID}
+        />
         <div className="sticky bottom-0 z-10 bg-white p-4">
           <button
             type="button"
