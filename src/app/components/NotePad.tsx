@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import NoteItem from "./NoteItem";
 
 export default function MemoCard() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,13 +22,7 @@ export default function MemoCard() {
             메모장
           </div>
         </div>
-        <div
-          data-property-1="active"
-          className="w-6 h-6 relative overflow-hidden"
-        >
-          <div className="w-0 h-2.5 left-[12px] top-[7px] absolute outline outline-2 outline-offset-[-1px] outline-black"></div>
-          <div className="w-0 h-2.5 left-[17px] top-[12px] absolute origin-top-left rotate-90 outline outline-2 outline-offset-[-1px] outline-black"></div>
-        </div>
+        <div>추가버튼</div>
       </div>
 
       <div className="self-stretch h-80 px-3.5 py-3 bg-white rounded-bl-lg rounded-br-lg border-l border-r border-b border-zinc-200 inline-flex justify-center items-start gap-2.5">
@@ -46,6 +41,7 @@ export default function MemoCard() {
               </div>
             </div>
           </div>
+          {isLoggedIn && <NoteItem></NoteItem>}
           {!isLoggedIn && (
             <div className="px-3 text-center">
               <Link
