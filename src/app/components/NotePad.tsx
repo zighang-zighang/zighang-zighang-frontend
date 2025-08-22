@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import NoteItem from "./NoteItem";
-
+import Image from "next/image";
 export default function MemoCard() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -22,7 +22,22 @@ export default function MemoCard() {
             메모장
           </div>
         </div>
-        <div>추가버튼</div>
+        <button className="group relative inline-block h-6 w-6">
+          <Image
+            src="/icons/plus/plus.svg"
+            alt=""
+            fill
+            sizes="24px"
+            className="opacity-100 transition-opacity group-hover:opacity-0"
+          />
+          <Image
+            src="/icons/plus/plus-hover.svg"
+            alt=""
+            fill
+            sizes="24px"
+            className="opacity-0 transition-opacity group-hover:opacity-100"
+          />
+        </button>
       </div>
 
       <div className="self-stretch h-80 px-3.5 py-3 bg-white rounded-bl-lg rounded-br-lg border-l border-r border-b border-zinc-200 inline-flex justify-center items-start gap-2.5">
