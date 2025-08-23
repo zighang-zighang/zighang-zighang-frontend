@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import NoteItem from "./NoteItem";
-import Image from "next/image";
+import HoverIcon from "./HoverIcon";
 export default function MemoCard() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [notes, setNotes] = useState<
@@ -41,19 +41,9 @@ export default function MemoCard() {
           disabled={!isLoggedIn}
           className="group relative inline-block h-6 w-6"
         >
-          <Image
-            src="/icons/plus/plus.svg"
-            alt=""
-            fill
-            sizes="24px"
-            className="opacity-100 transition-opacity group-hover:opacity-0"
-          />
-          <Image
-            src="/icons/plus/plus-hover.svg"
-            alt=""
-            fill
-            sizes="24px"
-            className="opacity-0 transition-opacity group-hover:opacity-100"
+          <HoverIcon
+            variant="plus"
+            className="text-gray-400 hover:text-black cursor-pointer"
           />
         </button>
       </div>

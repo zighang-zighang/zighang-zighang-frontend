@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import HoverIcon from "./HoverIcon";
 
 type NoteItemProps = {
   title?: string;
@@ -38,23 +39,12 @@ export default function NoteItem({
           onClick={() => setOpen((prev) => !prev)}
           className="group relative inline-block h-6 w-6"
         >
-          <Image
-            src="/icons/right/right.svg"
-            alt=""
-            fill
-            sizes="24px"
-            className={`opacity-100 transition-all group-hover:opacity-0 ${
+          <HoverIcon
+            variant="right"
+            className={`transition-transform ${
               open ? "rotate-270" : "rotate-90"
-            }`}
-          />
-          <Image
-            src="/icons/right/right-hover.svg"
-            alt=""
-            fill
-            sizes="24px"
-            className={`opacity-0 transition-all group-hover:opacity-100 ${
-              open ? "rotate-270" : "rotate-90"
-            }`}
+            } 
+              text-gray-400 group-hover:text-black`}
           />
         </button>
       </div>
@@ -77,19 +67,9 @@ export default function NoteItem({
               {date}
             </p>
             <button className="group relative inline-block h-6 w-6">
-              <Image
-                src="/icons/trash/trash.svg"
-                alt=""
-                fill
-                sizes="24px"
-                className="opacity-100 transition-opacity group-hover:opacity-0"
-              />
-              <Image
-                src="/icons/trash/trash-hover.svg"
-                alt=""
-                fill
-                sizes="24px"
-                className="opacity-0 transition-opacity group-hover:opacity-100"
+              <HoverIcon
+                variant="trash"
+                className="text-gray-400 hover:text-black"
               />
             </button>
           </div>
