@@ -21,6 +21,11 @@ export default function MemoCard() {
       },
     ]);
   };
+
+  const deleteNote = (id: number) => {
+    setNotes((prev) => prev.filter((n) => n.id !== id));
+  };
+
   return (
     <div className="w-56 h-96 inline-flex flex-col justify-start items-start">
       <button
@@ -79,6 +84,7 @@ export default function MemoCard() {
                     title={note.title}
                     content={note.content}
                     date={note.date}
+                    onDelete={() => deleteNote(note.id)}
                     editable
                   />
                 ))
