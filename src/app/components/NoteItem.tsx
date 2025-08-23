@@ -88,7 +88,7 @@ export default function NoteItem({
               {content}
             </div>
           )}
-          <div className="flex w-full justify-between items-end">
+          <div className="flex w-full justify-between items-center">
             <p className="w-32 justify-start text-neutral-400 text-xs font-normal font-['Pretendard'] leading-none">
               {date}
             </p>
