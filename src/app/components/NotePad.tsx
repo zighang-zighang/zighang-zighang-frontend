@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import NoteItem from "./NoteItem";
 import HoverIcon from "./HoverIcon";
-export default function MemoCard() {
+export default function NotePad() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [notes, setNotes] = useState<
     { id: number; title: string; content: string; date: string }[]
