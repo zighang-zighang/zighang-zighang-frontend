@@ -1,0 +1,42 @@
+"use client";
+import HoverIcon from "./HoverIcon";
+import { useEffect, useRef, useState } from "react";
+
+export default function KebabMenu() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        type="button"
+        className="group inline-flex h-6 w-6 items-center justify-center disabled:opacity-50"
+        title="더보기"
+      >
+        <HoverIcon
+          variant="more"
+          className="text-gray-400 group-hover:text-black"
+        />
+      </button>
+
+      {open && (
+        <div className="w-24 bg-white border border-neutral-200 rounded-lg absolute top-full mt-2 z-10 flex flex-col">
+          <button className="text-xs font-medium px-3 py-2.5 hover:bg-neutral-100 flex gap-0.5 ">
+            <HoverIcon
+              variant="minimize"
+              className="transition-transform text-black"
+            />
+            접어보기
+          </button>
+          <div></div>
+          <button className="text-xs font-medium px-3 py-2.5 hover:bg-neutral-100 flex gap-0.5">
+            <HoverIcon
+              variant="trash"
+              className="transition-transform text-black"
+            />
+            삭제하기
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
