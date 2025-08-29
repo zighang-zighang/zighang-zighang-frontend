@@ -11,6 +11,7 @@ import { useNotes } from "@/app/hooks/useNotes";
 export default function NotePad() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLargeOpen, setIsLargeOpen] = useState(false);
+  const notesHook = useNotes({ storageKey: "notes" });
 
   const {
     notes,
@@ -22,7 +23,7 @@ export default function NotePad() {
     deleteNote,
     openDetail,
     updateContent,
-  } = useNotes({ storageKey: "notes" });
+  } = notesHook;
 
   return (
     <>
@@ -34,7 +35,7 @@ export default function NotePad() {
       </button>
 
       <div className="w-56 h-96 inline-flex flex-col justify-start items-start">
-        {editMode && isLoggedIn ? (
+        {editMode && isLoggedIn && selected ? (
           <div className="self-stretch h-11 pl-2.5 pr-3.5 py-2.5 bg-white rounded-tl-lg rounded-tr-lg outline outline-1 outline-offset-[-1px] outline-zinc-200 inline-flex justify-between items-center">
             <div className="flex items-center gap-2.5">
               <button onClick={() => setEditMode(false)}>
@@ -44,7 +45,12 @@ export default function NotePad() {
                 />
               </button>
             </div>
-            <KebabMenu />
+            <KebabMenu
+              type={"small"}
+              onToggle={() => setIsLargeOpen((v) => !v)}
+              note={selected}
+              onDelete={deleteNote}
+            />
           </div>
         ) : (
           <div className="self-stretch h-11 pl-4 pr-3.5 py-2.5 bg-white rounded-tl-lg rounded-tr-lg outline outline-1 outline-offset-[-1px] outline-zinc-200 inline-flex justify-between items-center">
@@ -56,21 +62,23 @@ export default function NotePad() {
             <button
               onClick={() => setIsLargeOpen(true)}
               disabled={!isLoggedIn}
-              className="group relative inline-block h-6 w-6"
+              className="
+              cursor-pointer
+              group relative inline-block h-6 w-6"
               title="크게 보기"
             >
               <HoverIcon
                 variant="maximize"
-                className="text-gray-400 hover:text-black cursor-pointer"
+                className="text-black cursor-pointer"
               />
             </button>
           </div>
         )}
 
-        {editMode && isLoggedIn ? (
+        {editMode && isLoggedIn && selected ? (
           <div className="relative self-stretch h-96 p-4 bg-white rounded-bl-lg rounded-br-lg border-l border-r border-b border-zinc-200 flex flex-col gap-2.5">
             <textarea
-              className="w-full h-full text-xs font-medium overflow-y-auto overflow-x-hidden outline-none"
+              className="w-full h-full resize-none text-xs font-medium overflow-y-auto overflow-x-hidden outline-none"
               placeholder={"첫 줄이 제목이 됩니다.\n내용을 입력하세요…"}
               value={selected?.content ?? ""}
               onChange={(e) => updateContent(e.target.value)}
@@ -152,10 +160,10 @@ export default function NotePad() {
 
       {isLargeOpen && (
         <NotePadLarge
-          selected={selected}
-          onClose={() => setIsLargeOpen(false)}
-          onDelete={() => selected && deleteNote(selected.id)}
-          onChangeContent={updateContent}
+          isOpen={isLargeOpen}
+          onToggle={() => setIsLargeOpen((v) => !v)}
+          isLoggedIn={isLoggedIn}
+          notesHook={notesHook}
         />
       )}
     </>

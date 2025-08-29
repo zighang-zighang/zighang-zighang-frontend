@@ -8,7 +8,6 @@ export type Note = { id: number; title: string; content: string; date: string };
 type Options = {
   storageKey?: string;
 };
-
 export function useNotes(opts: Options = {}) {
   const { storageKey } = opts;
 
