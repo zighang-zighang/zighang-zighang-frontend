@@ -4,25 +4,23 @@ import { useRef, useState } from "react";
 import HoverIcon from "./HoverIcon";
 
 type NoteItemProps = {
-  id?: number;
+  id: number;
   title: string;
-  active?: boolean;
   onClick?: () => void;
   editMode?: boolean;
   onToggleEdit?: () => void;
   onOpenDetail?: (id: number) => void;
+  onTitleChange?: (id: number, next: string) => void;
 };
 
 export default function NoteItem({
   id,
   title,
-  active,
   onClick,
   onToggleEdit,
   onOpenDetail,
+  onTitleChange,
 }: NoteItemProps) {
-  const [value, setValue] = useState(title);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(input);
@@ -30,7 +28,7 @@ export default function NoteItem({
     if (isKorean && input.length > 10) return;
     if (!isKorean && input.length > 16) return;
 
-    setValue(input);
+    onTitleChange?.(id, input);
   };
 
   const goDetail = () => {
@@ -47,14 +45,14 @@ export default function NoteItem({
     <div className="self-stretch inline-flex flex-col items-start">
       <div
         className={`self-stretch h-11 pl-3.5 pr-2.5 py-2.5 bg-white 
-          rounded-tl-lg rounded-tr-lg outline outline-1 outline-offset-[-1px] 
+          rounded-lg  outline outline-1 outline-offset-[-1px] 
           outline-zinc-200 inline-flex justify-between items-center 
-          rounded-bl-lg `}
+           `}
       >
         <input
           type="text"
-          value={value}
-          className="w-full text-sm outline-none"
+          value={title}
+          className="w-full min-w-0 truncate text-sm outline-none"
           onChange={handleChange}
           placeholder="제목을 입력해주세요"
         />

@@ -124,11 +124,11 @@ export default function NotePadLarge({
                       key={note.id}
                       id={note.id}
                       title={note.title || ""}
-                      active={note.id === selectedId}
                       onClick={() => openDetail(note.id)}
                       editMode={false}
                       onToggleEdit={() => setEditMode((v) => !v)}
                       onOpenDetail={() => openDetail(note.id)}
+                      onTitleChange={notesHook.updateTitle}
                     />
                   ))}
                 </div>

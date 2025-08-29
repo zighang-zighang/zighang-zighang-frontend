@@ -79,15 +79,9 @@ export function useNotes(opts: Options = {}) {
     [selected]
   );
 
-  const updateTitle = useCallback(
-    (title: string) => {
-      if (!selected) return;
-      setNotes((prev) =>
-        prev.map((n) => (n.id === selected.id ? { ...n, title } : n))
-      );
-    },
-    [selected]
-  );
+  const updateTitle = useCallback((id: number, title: string) => {
+    setNotes((prev) => prev.map((n) => (n.id === id ? { ...n, title } : n)));
+  }, []);
 
   return {
     notes,

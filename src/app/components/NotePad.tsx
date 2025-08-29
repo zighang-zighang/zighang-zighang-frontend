@@ -23,6 +23,7 @@ export default function NotePad() {
     deleteNote,
     openDetail,
     updateContent,
+    updateTitle,
   } = notesHook;
 
   return (
@@ -119,11 +120,11 @@ export default function NotePad() {
                       key={note.id}
                       id={note.id}
                       title={note.title || ""}
-                      active={note.id === selectedId}
                       onClick={() => openDetail(note.id)}
                       editMode={false}
                       onToggleEdit={() => setEditMode((v) => !v)}
                       onOpenDetail={() => openDetail(note.id)}
+                      onTitleChange={notesHook.updateTitle}
                     />
                   ))}
                 </div>
@@ -132,9 +133,9 @@ export default function NotePad() {
               {!isLoggedIn && (
                 <div className="relative h-70">
                   <div className="space-y-2">
-                    <NoteItem title="네이버 쇼핑 서비스 조사" />
-                    <NoteItem title="네카라쿠배 공고들" />
-                    <NoteItem title="네카라쿠배 특징" />
+                    <NoteItem id={0} title="네이버 쇼핑 서비스 조사" />
+                    <NoteItem id={1} title="네카라쿠배 공고들" />
+                    <NoteItem id={2} title="네카라쿠배 특징" />
                   </div>
                   <div className="absolute h-full inset-0 z-10 flex flex-col items-center justify-center">
                     <div className="bg-white shadow-md rounded-lg px-2 py-4.5 border border-neutral-200">
