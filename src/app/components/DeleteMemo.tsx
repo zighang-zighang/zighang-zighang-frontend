@@ -21,19 +21,19 @@ export default function DeleteMemo({ isOpen, onDelete }: DeleteMemoProps) {
         </div>
         <div className="w-96 flex flex-col justify-start items-start gap-3">
           <div className="self-stretch inline-flex justify-center items-start gap-3">
-            <div className="cursor-pointer w-28 px-6 py-2 rounded-lg outline-offset-[-1px] outline outline-neutral-500 flex justify-center items-center gap-2 overflow-hidden">
-              <button
-                onClick={isOpen}
-                className=" justify-start text-neutral-500 text-base font-bold "
-              >
+            <div
+              onClick={isOpen}
+              className="cursor-pointer w-28 px-6 py-2 rounded-lg outline-offset-[-1px] outline outline-neutral-500 flex justify-center items-center gap-2 overflow-hidden"
+            >
+              <button className=" justify-start text-neutral-500 text-base font-bold ">
                 취소
               </button>
             </div>
-            <div className="cursor-pointer flex-1 px-4 py-2 bg-red-600 rounded-lg flex justify-center items-center gap-2 overflow-hidden">
-              <button
-                onClick={onDelete}
-                className="justify-start text-white text-base font-bold "
-              >
+            <div
+              onClick={onDelete}
+              className="cursor-pointer flex-1 px-4 py-2 bg-red-600 rounded-lg flex justify-center items-center gap-2 overflow-hidden"
+            >
+              <button className="justify-start text-white text-base font-bold ">
                 삭제하기
               </button>
             </div>

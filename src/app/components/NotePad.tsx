@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useCallback } from "react";
+import { useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import NoteItem from "./NoteItem";
 import HoverIcon from "./HoverIcon";
@@ -25,7 +25,25 @@ export default function NotePad() {
     updateContent,
     updateTitle,
   } = notesHook;
+  const frozenNotesRef = useRef<typeof notes | null>(null);
 
+  const handleToggleLarge = useCallback(() => {
+    setIsLargeOpen((prev) => {
+      const next = !prev;
+      if (next) {
+        // 펼쳐보기 열리면 현재 notes를 스냅샷
+        frozenNotesRef.current = notes.map((n) => ({ ...n }));
+        console.log(frozenNotesRef.current);
+      } else {
+        // 닫히면 스냅 샷 해제
+        frozenNotesRef.current = null;
+      }
+
+      return next;
+    });
+  }, [notes]);
+
+  const listFrozen = isLargeOpen ? frozenNotesRef.current ?? notes : notes;
   return (
     <>
       <button
@@ -36,7 +54,7 @@ export default function NotePad() {
       </button>
 
       <div className="w-56 h-96 inline-flex flex-col justify-start items-start">
-        {editMode && isLoggedIn && selected ? (
+        {!isLargeOpen && editMode && isLoggedIn && selected ? (
           <div className="self-stretch h-11 pl-2.5 pr-3.5 py-2.5 bg-white rounded-tl-lg rounded-tr-lg outline outline-1 outline-offset-[-1px] outline-zinc-200 inline-flex justify-between items-center">
             <div className="flex items-center gap-2.5">
               <button onClick={() => setEditMode(false)}>
@@ -48,7 +66,7 @@ export default function NotePad() {
             </div>
             <KebabMenu
               type={"small"}
-              onToggle={() => setIsLargeOpen((v) => !v)}
+              onToggle={handleToggleLarge}
               note={selected}
               onDelete={deleteNote}
             />
@@ -61,7 +79,7 @@ export default function NotePad() {
               </div>
             </div>
             <button
-              onClick={() => setIsLargeOpen(true)}
+              onClick={handleToggleLarge}
               disabled={!isLoggedIn}
               className="
               cursor-pointer
@@ -76,7 +94,7 @@ export default function NotePad() {
           </div>
         )}
 
-        {editMode && isLoggedIn && selected ? (
+        {!isLargeOpen && editMode && isLoggedIn && selected ? (
           <div className="relative self-stretch h-96 p-4 bg-white rounded-bl-lg rounded-br-lg border-l border-r border-b border-zinc-200 flex flex-col gap-2.5">
             <textarea
               className="w-full h-full resize-none text-xs font-medium overflow-y-auto overflow-x-hidden outline-none"
@@ -115,7 +133,7 @@ export default function NotePad() {
                     </div>
                   </div>
 
-                  {notes.map((note) => (
+                  {listFrozen.map((note) => (
                     <NoteItem
                       key={note.id}
                       id={note.id}
@@ -162,7 +180,7 @@ export default function NotePad() {
       {isLargeOpen && (
         <NotePadLarge
           isOpen={isLargeOpen}
-          onToggle={() => setIsLargeOpen((v) => !v)}
+          onToggle={handleToggleLarge}
           isLoggedIn={isLoggedIn}
           notesHook={notesHook}
         />
