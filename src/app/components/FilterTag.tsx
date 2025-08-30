@@ -1,7 +1,11 @@
 "use client";
 
-import { useId, useMemo, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { PopoverPanel } from "./PopOver";
+import {
+  useFilterDialog,
+  type FilterSection,
+} from "@/app/hooks/useFilterDialog";
 
 export type Option = { id: string; label: string };
 
@@ -101,10 +105,8 @@ export function FilterTagSelectModalTrigger({
   value,
   defaultValue,
 }: BaseProps & {
-  section: import("@/app/hooks/useFilterDialog").FilterSection;
+  section: FilterSection;
 }) {
-  const { useFilterDialog } =
-    require("@/app/hooks/useFilterDialog") as typeof import("@/app/hooks/useFilterDialog");
   const { openDialog } = useFilterDialog();
 
   const autoId = useId();
