@@ -48,7 +48,7 @@ export function PopoverPanel({
     return () => {
       document.removeEventListener("pointerdown", onDown, {
         capture: true,
-      } as any);
+      });
       document.removeEventListener("keydown", onKey);
     };
   }, [open, onClose, anchorEl, isDesktop]);
