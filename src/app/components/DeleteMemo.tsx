@@ -1,12 +1,28 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+
 type DeleteMemoProps = {
+  title: string;
   isOpen: () => void;
   onDelete: () => void;
 };
 
-export default function DeleteMemo({ isOpen, onDelete }: DeleteMemoProps) {
-  return (
+export default function DeleteMemo({
+  title,
+  isOpen,
+  onDelete,
+}: DeleteMemoProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  return createPortal(
     <div className="fixed inset-0 z-[100]">
       <div className="absolute inset-0 bg-black/40" />
 
@@ -16,7 +32,8 @@ export default function DeleteMemo({ isOpen, onDelete }: DeleteMemoProps) {
             메모를 삭제하시겠습니까?
           </div>
           <div className="self-stretch text-center justify-start text-gray-600 text-sm font-normal font-['Pretendard'] leading-tight">
-            ‘제목을 입력해주세요...’ 메모가 영구적으로 삭제됩니다
+            ‘{title === "" ? "제목을 입력해주세요..." : title}’ 메모가
+            영구적으로 삭제됩니다
           </div>
         </div>
         <div className="w-96 flex flex-col justify-start items-start gap-3">
@@ -40,6 +57,7 @@ export default function DeleteMemo({ isOpen, onDelete }: DeleteMemoProps) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

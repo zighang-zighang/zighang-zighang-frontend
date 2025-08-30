@@ -76,6 +76,7 @@ export default function KebabMenu({
       </div>
       {delConfirm && note && (
         <DeleteMemo
+          title={note.title}
           isOpen={() => setDelConfirm(false)}
           onDelete={() => onDelete(note.id)}
         ></DeleteMemo>
