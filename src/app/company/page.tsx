@@ -1,8 +1,8 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Refresh from "@/app/components/Refresh";
-import Toggle from "@/app/components/Toggle";
-import CompanyCard from "@/app/components/Card/CompanyCard";
+import Refresh from "@/app/[category]/components/Refresh";
+import Toggle from "@/app/[category]/components/Toggle";
+import CompanyCard from "@/app/[category]/components/Card/CompanyCard";
 import { INDUSTRY, REGION, COMPANY_SIZE } from "@/app/constants/filterOptions";
 import FilterTagSelect from "@/app/company/components/FilterTag";
 

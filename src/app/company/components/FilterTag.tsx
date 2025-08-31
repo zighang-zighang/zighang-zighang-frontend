@@ -124,14 +124,14 @@ export function FilterTagSelectModalTrigger({
     : `${label} · ${computed.length}개 선택`;
 
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block h-11 shrink-0">
       <button
         type="button"
         id={resolvedId}
         aria-haspopup="dialog"
         onClick={() => openDialog(section)}
         className={[
-          "flex h-10 items-center gap-1 rounded-[10px] py-2.5 pl-3 pr-2 md:h-11 md:pl-4 md:pr-3 border bg-white active:bg-zinc-100",
+          " flex h-11 items-center gap-1 rounded-[10px] py-2.5 pl-3 pr-2 md:h-11 md:pl-4 md:pr-3 border bg-white active:bg-zinc-100",
           isActive
             ? "border-[#7951FF] bg-[#F2EEFF] text-[#7951FF]"
             : "border-gray-300 text-[#353535]",

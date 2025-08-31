@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { useEffect, useRef, useState } from "react";
 import type { Option } from "./FilterTag";
 import { useIsDesktop } from "../../hooks/useIsDesktop";
-import FilterOptionList from "../../components/Filter/FilterOptionList";
+import FilterOptionList from "../../[category]/components/Filter/FilterOptionList";
 export function PopoverPanel({
   open,
   label,

@@ -1,9 +1,9 @@
 "use client";
 
-import Filter from "../../components/Filter";
+import Filter from "../../[category]/components/Filter";
 import { FilterTagSelectModalTrigger as FilterTagSelect } from "@/app/company/components/FilterTag";
 import { useFilterDialog } from "@/app/hooks/useFilterDialog";
-import Refresh from "../../components/Refresh";
+import Refresh from "../../[category]/components/Refresh";
 import {
   INDUSTRY,
   REGION,
@@ -14,11 +14,11 @@ import {
   DEADLINE,
 } from "@/app/constants/filterOptions"; // 옵션 상수들
 
-export default function FiltersBar() {
+export default function FilterBar() {
   const { openDialog } = useFilterDialog();
 
   return (
-    <>
+    <div className="flex gap-2 mx-4 py-2.5">
       <div className="flex items-center gap-1 md:gap-2">
         <Refresh></Refresh>
         <div
@@ -30,7 +30,7 @@ export default function FiltersBar() {
         <Filter onClick={() => openDialog("all")} />
       </div>
 
-      <div className="w-full overflow-x-auto">
+      <div className="w-full overflow-x-auto overflow-y-hidden">
         <section className="flex gap-2" aria-label="필터 목록">
           <FilterTagSelect
             id="industry"
@@ -76,6 +76,6 @@ export default function FiltersBar() {
           />
         </section>
       </div>
-    </>
+    </div>
   );
 }
