@@ -1,6 +1,6 @@
-import Image from 'next/image';
-import Link from 'next/link';
-
+import Image from "next/image";
+import Link from "next/link";
+import NotePad from "./Note/NotePad";
 export default function SidebarActions() {
   return (
     <>
@@ -51,6 +51,7 @@ export default function SidebarActions() {
               />
             </div>
           </Link>
+          <NotePad></NotePad>
         </div>
       </div>
 

@@ -7,7 +7,6 @@ import RecruitmentContent from "./components/RecruitmentContent";
 import SimilarRecruitments from "./components/SimilarRecruitments";
 import SidebarActions from "./components/SidebarActions";
 import Separator from "./components/Separator";
-
 const mockRecruitment = {
   uid: "13f8be02-f11b-4294-b6b6-d46e5a71e16b",
   title: "Solution Architect, Public sector",
