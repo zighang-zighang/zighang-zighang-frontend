@@ -17,7 +17,7 @@ function Chip({
     <button
       onClick={onClick}
       className={[
-        "h-9 px-4 shrink-0 rounded-lg border text-sm inline-flex items-center gap-1 transition",
+        "h-11 px-4 shrink-0 rounded-lg font-semibold border text-md inline-flex items-center gap-1 transition",
         active
           ? "border-violet-500 text-violet-700 bg-violet-50"
           : "border-zinc-200 hover:bg-zinc-50",
