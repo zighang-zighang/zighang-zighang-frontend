@@ -1,10 +1,10 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Refresh from "@/app/components/Refresh";
-import Toggle from "@/app/components/Toggle";
-import CompanyCard from "@/app/components/CompanyCard";
+import Refresh from "@/app/components/Filter/Refresh";
+import Toggle from "@/app/components/Filter/Toggle";
+import CompanyCard from "@/app/components/Card/CompanyCard";
 import { INDUSTRY, REGION, COMPANY_SIZE } from "@/app/constants/filterOptions";
-import FilterTagSelect from "@/app/components/FilterTag";
+import FilterTagSelect from "@/app/components/Filter/FilterTag";
 
 export default function Company() {
   return (

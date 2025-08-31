@@ -1,11 +1,11 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import JobCardList from "@/app/components/JobCardList";
-import Refresh from "@/app/components/Refresh";
-import FilterTagSelect from "@/app/components/FilterTag";
-import Filter from "@/app/components/Filter";
-import FilterBar from "@/app/components/FilterBar";
-import ClientFilterProviders from "@/app/components/ClientFilterProviders";
+import JobCardList from "@/app/components/Card/JobCardList";
+import Refresh from "@/app/components/Filter/Refresh";
+import FilterTagSelect from "@/app/components/Filter/FilterTag";
+import Filter from "@/app/components/Filter/Filter";
+import FilterBar from "@/app/components/Filter/FilterBar";
+import ClientFilterProviders from "@/app/components/Filter/ClientFilterProviders";
 import {
   INDUSTRY,
   REGION,

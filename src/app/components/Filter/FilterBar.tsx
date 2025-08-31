@@ -1,7 +1,7 @@
 "use client";
 
-import Filter from "@/app/components/Filter";
-import { FilterTagSelectModalTrigger as FilterTagSelect } from "@/app/components/FilterTag";
+import Filter from "./Filter";
+import { FilterTagSelectModalTrigger as FilterTagSelect } from "@/app/components/Filter/FilterTag";
 import { useFilterDialog } from "@/app/hooks/useFilterDialog";
 import Refresh from "./Refresh";
 import {

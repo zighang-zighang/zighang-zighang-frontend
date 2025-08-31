@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import NotePad from "@/app/components/NotePad";
+import NotePad from "./Note/NotePad";
 export default function SidebarActions() {
   return (
     <>

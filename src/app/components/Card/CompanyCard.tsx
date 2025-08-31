@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import View from "@/app/components/View";
+import View from "@/app/components/Card/View";
 
 type CompanyCardProps = {
   slug: string;

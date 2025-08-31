@@ -1,7 +1,7 @@
 "use client";
-import HoverIcon from "./HoverIcon";
+import HoverIcon from "@/app/recruitment/[slug]/components/Icons/HoverIcon";
 import { useEffect, useRef, useState } from "react";
-import { type Note } from "../hooks/useNotes";
+import { type Note } from "@/app/hooks/useNotes";
 import DeleteMemo from "./DeleteMemo";
 
 export type KebabMenuProps = {

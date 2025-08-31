@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import NoteItem from "./NoteItem";
-import HoverIcon from "./HoverIcon";
+import HoverIcon from "../Icons/HoverIcon";
 import KebabMenu from "./KebabMenu";
 import NotePadLarge from "./NotePadLarge";
 import { useNotes } from "@/app/hooks/useNotes";

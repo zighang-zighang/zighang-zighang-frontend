@@ -44,7 +44,7 @@ export default function DeleteMemo({
             id="delete-memo-title"
             className="self-stretch text-center justify-start text-gray-900 text-lg font-bold font-['Pretendard'] leading-7"
           >
-            메모를 삭제하시겠습니까? 메모를 삭제하시겠습니까?
+            메모를 삭제하시겠습니까?
           </div>
           <div
             id="delete-memo-desc"

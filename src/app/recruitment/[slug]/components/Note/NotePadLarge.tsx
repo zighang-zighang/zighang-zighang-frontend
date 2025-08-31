@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect } from "react";
-import HoverIcon from "./HoverIcon";
+import HoverIcon from "../Icons/HoverIcon";
 import KebabMenu from "./KebabMenu";
 import NoteItem from "./NoteItem";
 import { useNotes } from "@/app/hooks/useNotes";

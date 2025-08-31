@@ -1,6 +1,6 @@
 "use client";
 
-import HoverIcon from "./HoverIcon";
+import HoverIcon from "../Icons/HoverIcon";
 
 type NoteItemProps = {
   id: number;
