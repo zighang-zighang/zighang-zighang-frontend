@@ -1,45 +1,39 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import type { FilterSection } from "@/app/hooks/useFilterDialog";
+import type { Section } from "@/app/hooks/useFilterDialog";
 
 type RefKeys =
   | "jobGroup"
   | "jobRole"
-  | "industry"
-  | "region"
-  | "companySize"
-  | "type"
+  | "hireType"
   | "education"
-  | "career"
+  | "experience"
+  | "region"
   | "deadline";
 
-function isRefKey(s: FilterSection): s is RefKeys {
-  return s !== "all" && s !== "platform";
+function isRefKey(s: Section): s is RefKeys {
+  return s !== "all" && s !== "jobGroup";
 }
 
-export default function useFilterScroll(open: boolean, section: FilterSection) {
+export default function useFilterScroll(open: boolean, section: Section) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const jobGroup = useRef<HTMLDivElement | null>(null);
   const jobRole = useRef<HTMLDivElement | null>(null);
-  const industry = useRef<HTMLDivElement | null>(null);
+  const hireType = useRef<HTMLDivElement | null>(null);
   const region = useRef<HTMLDivElement | null>(null);
-  const companySize = useRef<HTMLDivElement | null>(null);
-  const type = useRef<HTMLDivElement | null>(null);
+  const experience = useRef<HTMLDivElement | null>(null);
   const education = useRef<HTMLDivElement | null>(null);
-  const career = useRef<HTMLDivElement | null>(null);
   const deadline = useRef<HTMLDivElement | null>(null);
 
   const refs = useRef({
     jobGroup,
     jobRole,
-    industry,
-    region,
-    companySize,
-    type,
+    hireType,
     education,
-    career,
+    experience,
+    region,
     deadline,
   }).current;
 

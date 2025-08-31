@@ -18,7 +18,7 @@ export type FilterState = {
   experience: { min: number; max: number };
 };
 
-type Section =
+export type Section =
   | "all"
   | "jobGroup"
   | "jobRole"
