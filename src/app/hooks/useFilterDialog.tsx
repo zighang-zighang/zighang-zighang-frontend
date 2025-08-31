@@ -46,7 +46,7 @@ type Ctx = {
 
 const FilterCtx = createContext<Ctx | null>(null);
 
-const DEFAULT: FilterState = {
+export const DEFAULT: FilterState = {
   jobGroup: "전체",
   jobRoles: ["전체"],
   hireTypes: ["전체"],

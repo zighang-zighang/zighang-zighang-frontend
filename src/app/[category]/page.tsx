@@ -1,14 +1,14 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import CategoryClient from "./CategoryClient";
+import CategoryClient from "./components/CategoryClient";
 import { getJobs } from "@/app/constants/jobs";
 
 export default async function CategoryPage({
   params,
 }: {
-  params: { category: string };
+  params: Promise<{ category: string }>;
 }) {
-  const { category: slug } = params;
+  const { category: slug } = await params;
   const jobs = await getJobs();
 
   return (

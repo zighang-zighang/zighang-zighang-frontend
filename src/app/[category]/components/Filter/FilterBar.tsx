@@ -1,5 +1,5 @@
 "use client";
-
+import { useState, useEffect } from "react";
 import { useFilterDialog } from "@/app/hooks/useFilterDialog";
 import Refresh from "../Refresh";
 import Filter from "@/app/[category]/components/Filter";
@@ -70,7 +70,7 @@ export default function FilterBar() {
       <div className="flex items-center gap-2 overflow-x-auto">
         <Chip
           label="직군"
-          active={activeJobGroup}
+          active={!!activeJobGroup}
           onClick={() => openDialog("jobGroup")}
         />
         <Chip

@@ -13,9 +13,7 @@ import FilterSection from "./FilterSection";
 import FilterRange from "./FilterRange";
 import { useEffect } from "react";
 
-type Props = { onApply?: () => void };
-
-export default function FilterModal({ onApply }: Props) {
+export default function FilterModal() {
   const {
     open,
     closeDialog,
@@ -37,7 +35,7 @@ export default function FilterModal({ onApply }: Props) {
   return (
     <div className="fixed inset-0 z-50">
       <div className="absolute inset-0 bg-black/40" onClick={closeDialog} />
-      <div className="absolute inset-x-0 bottom-0 top-0 md:inset-auto md:left-1/2 md:top-16 md:-translate-x-1/2 md:w-[720px] md:rounded-2xl md:shadow-2xl bg-white flex flex-col">
+      <div className="absolute inset-x-0 bottom-0 top-0 md:inset-auto md:left-1/2 md:top-16 md:-translate-x-1/2 md:max-w-[617px] md:max-h-[660px] md:rounded-lg md:shadow-2xl bg-white flex flex-col">
         <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200">
           <h2 className="text-lg font-semibold">필터</h2>
           <button
@@ -107,19 +105,18 @@ export default function FilterModal({ onApply }: Props) {
           />
         </div>
 
-        <div className="sticky bottom-0 flex items-center gap-4 border-t border-zinc-200 bg-white px-6 py-4">
+        <div className="sticky bottom-0 flex items-center gap-4 border-t md:rounded-b-lg border-zinc-200 bg-white px-6 py-4">
           <button
             onClick={resetAll}
-            className="px-4 py-2 rounded-xl border border-zinc-300 text-sm text-zinc-700 hover:bg-zinc-50"
+            className="px-4 py-3 rounded-lg  border-2 border-zinc-300 text-sm  text-zinc-700 hover:bg-zinc-50"
           >
             초기화
           </button>
           <button
             onClick={() => {
-              onApply?.();
               closeDialog();
             }}
-            className="flex-1 py-3 rounded-xl font-semibold text-white bg-violet-600 hover:bg-violet-700"
+            className="flex-1 py-3 rounded-lg font-semibold text-white bg-violet-600 hover:bg-violet-700"
           >
             적용
           </button>
