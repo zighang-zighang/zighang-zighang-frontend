@@ -1,10 +1,16 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import FilterTagSelect, { type Option } from "@/app/components/FilterTag";
+import FilterTagSelect, { type Option } from "@/app/company/components/FilterTag";
 
 // 실제 popover 까지 연동하려니 popover 에도 로직이 있어서 가짜 컴포넌트로 대체
-jest.mock("@/app/components/PopOver", () => ({
-  PopoverPanel: (props: any) =>
+interface PopoverPanelProps {
+  open: boolean;
+  label: string;
+  onChange: (value: string[]) => void;
+}
+
+jest.mock("@/app/company/components/PopOver", () => ({
+  PopoverPanel: (props: PopoverPanelProps) =>
     props.open ? (
       <div data-testid="popover-panel" aria-label={props.label}>
         <button data-testid="a 선택" onClick={() => props.onChange(["a"])}>
