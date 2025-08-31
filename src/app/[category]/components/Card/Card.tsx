@@ -3,7 +3,7 @@
 import { useState, useTransition, MouseEvent } from "react";
 import View from "./View";
 import Bookmark from "./BookMark";
-
+import { toggleBookmark } from "./toggleBookmark";
 export interface CardProps {
   itemId: string;
   href: string;
@@ -18,7 +18,6 @@ export interface CardProps {
   views: number;
   hot?: boolean;
   bookmarked?: boolean;
-  onToggleServer?: (id: string, next: boolean) => Promise<void>;
 }
 
 export default function Card({
@@ -34,23 +33,18 @@ export default function Card({
   dday,
   views,
   hot = false,
-  bookmarked = false,
-  onToggleServer,
+  bookmarked: initialBookmarked = false,
 }: CardProps) {
-  const [isBookmarked, setIsBookmarked] = useState(bookmarked);
+  const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
   const [isPending, startTransition] = useTransition();
 
-  const handleBookmarkClick = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (!onToggleServer) return;
-    const next = !isBookmarked;
-    const prev = isBookmarked;
-    setIsBookmarked(next); // optimistic
+  const onToggle = () => {
+    setIsBookmarked((b) => !b);
     startTransition(async () => {
       try {
-        await onToggleServer(itemId, next);
+        await toggleBookmark(itemId, !isBookmarked);
       } catch {
-        setIsBookmarked(prev); // rollback
+        setIsBookmarked(initialBookmarked);
       }
     });
   };
@@ -114,11 +108,7 @@ export default function Card({
           style={{ width: "48px" }}
         >
           <div className="flex h-full w-full flex-col">
-            <Bookmark
-              active={isBookmarked}
-              disabled={isPending}
-              onClick={handleBookmarkClick}
-            />
+            <Bookmark active={isBookmarked} disabled={isPending} />
 
             <div className="h-[1px] w-full bg-[#EDEDED]" />
 
