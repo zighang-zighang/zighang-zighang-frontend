@@ -125,31 +125,34 @@ export default function HoverIcon({ variant, ...props }: IconProps) {
           viewBox="0 0 16 16"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+          focusable="false"
+          {...props}
         >
           <path
             d="M10 2H14V6"
-            stroke="#303030"
+            stroke="currentColor"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
           <path
             d="M6 14H2V10"
-            stroke="#303030"
+            stroke="currentColor"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
           <path
             d="M14 2L9 7"
-            stroke="#303030"
+            stroke="currentColor"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
           <path
             d="M2 14L7 9"
-            stroke="#303030"
+            stroke="currentColor"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -165,24 +168,27 @@ export default function HoverIcon({ variant, ...props }: IconProps) {
           viewBox="0 0 20 20"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+          focusable="false"
+          {...props}
         >
           <path
             d="M9.9974 10.8327C10.4576 10.8327 10.8307 10.4596 10.8307 9.99935C10.8307 9.53911 10.4576 9.16602 9.9974 9.16602C9.53716 9.16602 9.16406 9.53911 9.16406 9.99935C9.16406 10.4596 9.53716 10.8327 9.9974 10.8327Z"
-            stroke="#303030"
+            stroke="currentColor"
             strokeWidth="1.66667"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
           <path
             d="M9.9974 5.00065C10.4576 5.00065 10.8307 4.62756 10.8307 4.16732C10.8307 3.70708 10.4576 3.33398 9.9974 3.33398C9.53716 3.33398 9.16406 3.70708 9.16406 4.16732C9.16406 4.62756 9.53716 5.00065 9.9974 5.00065Z"
-            stroke="#303030"
+            stroke="currentColor"
             strokeWidth="1.66667"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
           <path
             d="M9.9974 16.6667C10.4576 16.6667 10.8307 16.2936 10.8307 15.8333C10.8307 15.3731 10.4576 15 9.9974 15C9.53716 15 9.16406 15.3731 9.16406 15.8333C9.16406 16.2936 9.53716 16.6667 9.9974 16.6667Z"
-            stroke="#303030"
+            stroke="currentColor"
             strokeWidth="1.66667"
             strokeLinecap="round"
             strokeLinejoin="round"

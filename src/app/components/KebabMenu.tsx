@@ -40,7 +40,7 @@ export default function KebabMenu({
             {type == "large" ? (
               <button
                 onClick={onToggle}
-                className="text-xs font-medium px-3 py-2.5 hover:bg-neutral-100 flex gap-0.5 "
+                className="text-xs font-medium px-3 py-2.5 hover:bg-neutral-100 flex gap-0.5 border-b border-b-neutral-200"
               >
                 <HoverIcon
                   variant="minimize"
@@ -51,7 +51,7 @@ export default function KebabMenu({
             ) : (
               <button
                 onClick={onToggle}
-                className="text-xs font-medium px-3 py-2.5 hover:bg-neutral-100 flex gap-0.5 "
+                className="text-xs font-medium px-3 py-2.5 hover:bg-neutral-100 flex gap-0.5 border-b border-b-neutral-200"
               >
                 <HoverIcon
                   variant="maximize"
@@ -60,7 +60,7 @@ export default function KebabMenu({
                 펼쳐보기
               </button>
             )}
-            <div></div>
+
             <button
               onClick={() => setDelConfirm(true)}
               className="text-xs font-medium px-3 py-2.5 hover:bg-neutral-100 flex gap-0.5"

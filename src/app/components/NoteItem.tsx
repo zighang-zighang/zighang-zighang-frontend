@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef, useState } from "react";
 import HoverIcon from "./HoverIcon";
 
 type NoteItemProps = {
@@ -21,14 +20,13 @@ export default function NoteItem({
   onOpenDetail,
   onTitleChange,
 }: NoteItemProps) {
+  //제한 된 길이 넘어가면 잘라서 반영, RETURN이 아니라 SLICE
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(input);
-
-    if (isKorean && input.length > 10) return;
-    if (!isKorean && input.length > 16) return;
-
-    onTitleChange?.(id, input);
+    const limit = isKorean ? 10 : 16;
+    const next = input.length > limit ? input.slice(0, limit) : input;
+    onTitleChange?.(id, next);
   };
 
   const goDetail = () => {

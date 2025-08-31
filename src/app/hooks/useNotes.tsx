@@ -1,4 +1,3 @@
-// src/app/hooks/useNotes.ts
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -30,9 +29,12 @@ export function useNotes(opts: Options = {}) {
 
   useEffect(() => {
     if (!storageKey) return;
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(notes));
-    } catch {}
+    const t = setTimeout(() => {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(notes));
+      } catch {}
+    }, 300);
+    return () => clearTimeout(t);
   }, [notes, storageKey]);
 
   const addNote = useCallback(() => {
