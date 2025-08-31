@@ -1,9 +1,9 @@
 "use client";
 
-import Filter from "./Filter";
-import { FilterTagSelectModalTrigger as FilterTagSelect } from "@/app/components/Filter/FilterTag";
+import Filter from "../../components/Filter";
+import { FilterTagSelectModalTrigger as FilterTagSelect } from "@/app/company/components/FilterTag";
 import { useFilterDialog } from "@/app/hooks/useFilterDialog";
-import Refresh from "./Refresh";
+import Refresh from "../../components/Refresh";
 import {
   INDUSTRY,
   REGION,
