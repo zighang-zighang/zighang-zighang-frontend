@@ -10,5 +10,6 @@ reviews:
   auto_review:
     enabled: true
     drafts: false
+    branches: ["*"]
 chat:
   auto_reply: true
