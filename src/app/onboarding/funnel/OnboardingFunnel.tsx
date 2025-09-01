@@ -1,9 +1,11 @@
 import { useFunnel } from "@use-funnel/browser";
-import { JobCategoryStep } from "./steps/JobCategoryStep";
-import { JobStep } from "./steps/JobStep";
-import { ExperienceStep } from "./steps/ExperienceStep";
-import { EducationStep } from "./steps/EducationStep";
-import { LocationStep } from "./steps/LocationStep";
+import {
+  JobCategoryStep,
+  JobStep,
+  ExperienceStep,
+  EducationStep,
+  LocationStep,
+} from "./steps";
 import type {
   직군입력,
   직무입력,
