@@ -15,12 +15,12 @@ export function ProgressIndicator({
         <div
           key={i}
           className={`flex items-center justify-center ${
-            i < stepNumber
+            i === stepNumber - 1
               ? "w-[18px] h-[18px] bg-[#7951FF] rounded-full"
               : "w-2 h-2 bg-[#C5C5C8] rounded-full"
           }`}
         >
-          {i < stepNumber && (
+          {i === stepNumber - 1 && (
             <span className="text-Button3-14sb text-white">{i + 1}</span>
           )}
         </div>
