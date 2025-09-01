@@ -36,8 +36,8 @@ export interface ApiResponse<T> {
   message: string | null;
   data: T;
 }
-export interface GetRecruitmentsResponse
-  extends ApiResponse<RecruitmentPageData> {}
+
+export type GetRecruitmentsResponse = ApiResponse<RecruitmentPageData>;
 
 export interface GetRecruitmentsParams {
   page?: number;
