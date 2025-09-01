@@ -1,4 +1,4 @@
-export function JobFunnel({
+export function JobStep({
   jobGroup,
   onNext,
   onBack,

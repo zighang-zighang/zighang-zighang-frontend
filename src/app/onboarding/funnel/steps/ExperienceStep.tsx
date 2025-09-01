@@ -1,4 +1,4 @@
-export function ExperienceFunnel({
+export function ExperienceStep({
   onNext,
   onBack,
 }: {

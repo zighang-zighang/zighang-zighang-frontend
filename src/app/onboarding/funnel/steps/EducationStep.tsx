@@ -1,4 +1,4 @@
-export function EducationFunnel({
+export function EducationStep({
   onNext,
   onBack,
 }: {

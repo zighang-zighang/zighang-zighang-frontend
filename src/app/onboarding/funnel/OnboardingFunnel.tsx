@@ -1,9 +1,9 @@
 import { useFunnel } from "@use-funnel/browser";
-import { JobCategoryFunnel } from "./JobCategoryFunnel";
-import { JobFunnel } from "./JobFunnel";
-import { ExperienceFunnel } from "./ExperienceFunnel";
-import { EducationFunnel } from "./EducationFunnel";
-import { LocationFunnel } from "./LocationFunnel";
+import { JobCategoryStep } from "./steps/JobCategoryStep";
+import { JobStep } from "./steps/JobStep";
+import { ExperienceStep } from "./steps/ExperienceStep";
+import { EducationStep } from "./steps/EducationStep";
+import { LocationStep } from "./steps/LocationStep";
 import type {
   직군입력,
   직무입력,
@@ -30,7 +30,7 @@ function toApiPayload(context: 지역입력, 지역: string): ApiOnboardingPaylo
   } as ApiOnboardingPayload;
 }
 
-export default function MyFunnelApp() {
+export default function OnboardingFunnel() {
   const funnel = useFunnel<{
     직군입력: 직군입력;
     직무입력: 직무입력;
@@ -47,31 +47,31 @@ export default function MyFunnelApp() {
   return (
     <funnel.Render
       직군입력={({ history }) => (
-        <JobCategoryFunnel
+        <JobCategoryStep
           onNext={(직군) => history.push("직무입력", { 직군 })}
         />
       )}
       직무입력={({ context, history }) => (
-        <JobFunnel
+        <JobStep
           jobGroup={context.직군}
           onBack={() => history.back()}
           onNext={(직무) => history.push("경력입력", { ...context, 직무 })}
         />
       )}
       경력입력={({ context, history }) => (
-        <ExperienceFunnel
+        <ExperienceStep
           onBack={() => history.back()}
           onNext={(경력) => history.push("학력입력", { ...context, 경력 })}
         />
       )}
       학력입력={({ context, history }) => (
-        <EducationFunnel
+        <EducationStep
           onBack={() => history.back()}
           onNext={(학력) => history.push("지역입력", { ...context, 학력 })}
         />
       )}
       지역입력={({ context, history }) => (
-        <LocationFunnel
+        <LocationStep
           onBack={() => history.back()}
           onSubmit={(지역) => {
             const apiPayload = toApiPayload(context, 지역);

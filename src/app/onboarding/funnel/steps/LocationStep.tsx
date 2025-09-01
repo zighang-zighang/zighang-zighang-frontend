@@ -1,4 +1,4 @@
-export function LocationFunnel({
+export function LocationStep({
   onSubmit,
   onBack,
 }: {

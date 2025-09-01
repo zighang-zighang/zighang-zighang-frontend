@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import MyFunnelApp from "./components/MyFunnelApp";
+import OnboardingFunnel from "./funnel/OnboardingFunnel";
 
 export default function Page() {
   const [isMounted, setIsMounted] = useState(false);
@@ -12,5 +12,5 @@ export default function Page() {
 
   if (!isMounted) return null;
 
-  return <MyFunnelApp />;
+  return <OnboardingFunnel />;
 }
