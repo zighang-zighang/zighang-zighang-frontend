@@ -54,26 +54,6 @@ export default function FilterRange({ min, max, onChange }: Props) {
         <span>신입</span>
         <span>10년+</span>
       </div>
-
-      <style jsx>{`
-        .range-thumb::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          appearance: none;
-          width: 18px;
-          height: 18px;
-          border-radius: 9999px;
-          background: white;
-          border: 2px solid rgb(139 92 246); /* violet-500 */
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-        .range-thumb::-moz-range-thumb {
-          width: 18px;
-          height: 18px;
-          border-radius: 9999px;
-          background: white;
-          border: 2px solid rgb(139 92 246);
-        }
-      `}</style>
     </div>
   );
 }

@@ -4,31 +4,27 @@
 import { useMemo } from "react";
 import { useFilterDialog } from "@/app/hooks/useFilterDialog";
 import Card from "./Card";
+import { isAll } from "../Filter/FilterBar";
 
 type Job = {
   id: string;
   href: string;
   company: string;
   title: string;
-  location: string; // 예: "서울 강남구"
-  experience: string; // 예: "신입", "1~3년", "3년 이상", "경력 무관"
-  contractType: string; // 예: "정규직", "계약직", "전환형 인턴" ...
-  education: string; // 예: "학력 무관", "학사", "석사" ...
+  location: string;
+  experience: string;
+  contractType: string;
+  education: string;
   imageUrl: string;
   dday: string;
   views: number;
   hot?: boolean;
   bookmarked?: boolean;
-  // 있으면 더 정확하게 필터 가능
-  jobGroup?: string; // 예: "IT·개발"
-  jobRoles?: string[]; // 예: ["프론트엔드","웹풀스택"]
-  regionCode?: string; // 예: "서울"
-  deadlineType?: string; // 예: "상시 채용" | "채용 시 마감" | "기한 설정"
+  jobGroup?: string;
+  jobRoles?: string[];
+  regionCode?: string;
+  deadlineType?: string;
 };
-
-function isAll(arr: string[]) {
-  return arr.length === 1 && arr[0] === "전체";
-}
 
 /** 경력 문자열을 대략적인 [min,max]로 변환 (max=10은 10년+) */
 function parseYearsRange(exp: string): { min: number; max: number } {

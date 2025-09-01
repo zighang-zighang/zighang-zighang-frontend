@@ -4,6 +4,9 @@ import { useFilterDialog } from "@/app/hooks/useFilterDialog";
 import Refresh from "../Refresh";
 import Filter from "@/app/[category]/components/Filter";
 
+export const isAll = (arr: readonly string[]) =>
+  arr.length === 1 && arr[0] === "전체";
+
 function Chip({
   active,
   label,
@@ -30,9 +33,6 @@ function Chip({
 
 export default function FilterBar() {
   const { openDialog, filters, resetAll } = useFilterDialog();
-
-  const isAll = (arr: readonly string[] | string[]) =>
-    arr.length === 1 && arr[0] === "전체";
 
   const activeJobGroup = filters.jobGroup !== "전체";
   const activeJobRole = !isAll(filters.jobRoles);
