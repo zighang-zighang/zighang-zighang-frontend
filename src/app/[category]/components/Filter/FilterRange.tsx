@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { EXPERIENCE_MIN, EXPERIENCE_MAX } from "@/app/constants/filterOptions";
 
 type Props = {
@@ -10,6 +10,8 @@ type Props = {
 };
 
 export default function FilterRange({ min, max, onChange }: Props) {
+  const [active, setActive] = useState<"min" | "max" | null>(null);
+
   const clampMin = (v: number) => Math.min(Math.max(EXPERIENCE_MIN, v), max);
   const clampMax = (v: number) => Math.max(Math.min(EXPERIENCE_MAX, v), min);
 
@@ -31,6 +33,7 @@ export default function FilterRange({ min, max, onChange }: Props) {
           className="absolute h-[3px] bg-violet-500 rounded"
           style={{ left: `${leftPct}%`, right: `${rightPct}%` }}
         />
+
         <input
           type="range"
           min={EXPERIENCE_MIN}
@@ -38,8 +41,15 @@ export default function FilterRange({ min, max, onChange }: Props) {
           step={1}
           value={min}
           onChange={(e) => onChange(clampMin(+e.target.value), max)}
-          className="range-thumb absolute w-full appearance-none bg-transparent pointer-events-auto"
+          onPointerDown={() => setActive("min")}
+          onBlur={() => setActive((a) => (a === "min" ? null : a))}
+          className={[
+            "range-thumb absolute w-full appearance-none bg-transparent",
+            active === "min" ? "z-20" : "z-10",
+          ].join(" ")}
+          aria-label="최소 경력"
         />
+
         <input
           type="range"
           min={EXPERIENCE_MIN}
@@ -47,12 +57,19 @@ export default function FilterRange({ min, max, onChange }: Props) {
           step={1}
           value={max}
           onChange={(e) => onChange(min, clampMax(+e.target.value))}
-          className="range-thumb absolute w-full appearance-none bg-transparent pointer-events-auto"
+          onPointerDown={() => setActive("max")}
+          onBlur={() => setActive((a) => (a === "max" ? null : a))}
+          className={[
+            "range-thumb absolute w-full appearance-none bg-transparent",
+            active === "max" ? "z-20" : "z-10",
+          ].join(" ")}
+          aria-label="최대 경력"
         />
       </div>
+
       <div className="mt-1 flex justify-between text-sm text-zinc-600">
-        <span>신입</span>
-        <span>10년+</span>
+        <span>{min === 0 ? "신입" : `${min}년`}</span>
+        <span>{max === 10 ? "10년+" : `${max}년`}</span>
       </div>
     </div>
   );
