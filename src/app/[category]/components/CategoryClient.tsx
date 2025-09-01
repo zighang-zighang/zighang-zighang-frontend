@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import JobCardList from "./Card/JobCardList";
 import FilterBar from "./Filter/FilterBar";
 import FilterModal from "./Filter/FilterModal";
@@ -11,7 +11,7 @@ import {
   type FilterState,
 } from "@/app/hooks/useFilterDialog";
 
-type Job = {
+interface Job {
   id: string;
   href: string;
   company: string;
@@ -23,9 +23,9 @@ type Job = {
   imageUrl: string;
   dday: string;
   views: number;
-  hot?: boolean;
+  jobGroup: string;
   bookmarked?: boolean;
-};
+}
 
 export default function CategoryClient({
   slug,
@@ -34,9 +34,8 @@ export default function CategoryClient({
   slug: string;
   jobs: Job[];
 }) {
-  const slugToJobGroup = (slug: string): string =>
-    jobCategories.find((c) => c.href.slice(1) === slug)?.name ?? "전체";
-
+  const slugToJobGroup = (s: string) =>
+    jobCategories.find((c) => c.href.slice(1) === s)?.name ?? "전체";
   const initial = useMemo<FilterState>(
     () => ({ ...DEFAULT, jobGroup: slugToJobGroup(slug) }),
     [slug]

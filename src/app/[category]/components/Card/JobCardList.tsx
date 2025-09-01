@@ -1,12 +1,13 @@
 // app/[category]/components/Card/JobCardList.tsx
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useFilterDialog } from "@/app/hooks/useFilterDialog";
 import Card from "./Card";
 import { isAll } from "../Filter/FilterBar";
+import { toDisplayJob } from "@/app/_utils/jobFormat";
 
-type Job = {
+interface Job {
   id: string;
   href: string;
   company: string;
@@ -24,9 +25,8 @@ type Job = {
   jobRoles?: string[];
   regionCode?: string;
   deadlineType?: string;
-};
+}
 
-/** 경력 문자열을 대략적인 [min,max]로 변환 (max=10은 10년+) */
 function parseYearsRange(exp: string): { min: number; max: number } {
   const s = (exp || "").trim();
   if (!s || /신입|무관/.test(s)) return { min: 0, max: 0 };
@@ -46,7 +46,6 @@ function parseYearsRange(exp: string): { min: number; max: number } {
   return { min: 0, max: 10 };
 }
 
-/** 위치 문자열에서 광역권 키워드 추출 (대략 매칭) */
 const REGION_KEYS = [
   "서울",
   "경기",
@@ -96,7 +95,7 @@ export default function JobCardList({ jobs }: { jobs: Job[] }) {
   const filtered = useMemo(() => {
     return jobs.filter((job) => {
       if (filters.jobGroup !== "전체") {
-        const group = job.jobGroup || "기타";
+        const group = toDisplayJob(job.jobGroup ?? "기타");
         if (group !== filters.jobGroup) return false;
       }
 
