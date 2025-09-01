@@ -1,72 +1,110 @@
-// constants/filterOptions.ts
+export const JOB_GROUP = [
+  "전체",
+  "IT·개발",
+  "AI·데이터",
+  "게임",
+  "디자인",
+  "기획·전략",
+  "마케팅·광고",
+  "영업",
+  "무역·물류",
+  "운송·배송",
+  "법률·법무",
+  "HR·총무",
+  "회계·세무·재무",
+  "증권·운용",
+  "은행·보험·카드·캐피탈",
+  "엔지니어링·연구·R&D",
+  "건설·건축",
+  "생산·기능",
+  "의료·보건",
+  "공공·복지",
+  "교육",
+  "미디어·엔터",
+  "고객상담·TM",
+  "서비스",
+  "식음료",
+] as const;
 
-export type Option = { id: string; label: string };
+export const JOB_ROLE = [
+  "전체",
+  "서버·백엔드",
+  "프론트엔드",
+  "웹풀스택",
+  "안드로이드",
+  "iOS",
+  "크로스 플랫폼",
+  "DBA",
+  "DevOps·SRE",
+  "시스템·네트워크",
+  "시스템소프트웨어",
+  "소프트웨어 엔지니어",
+  "정보보호·보안",
+  "임베디드 소프트웨어",
+  "로봇SW",
+  "QA·테스트",
+  "사물인터넷(IoT)",
+  "응용 프로그래머",
+  "블록체인",
+  "개발PM",
+  "웹 퍼블리싱",
+  "VR·AR·3D",
+  "ERP·SAP",
+  "그래픽스",
+  "하드웨어엔지니어",
+  "기타IT·개발",
+] as const;
 
-export const INDUSTRY: Option[] = [
-  { id: "ALL", label: "전체" },
-  { id: "MEDICAL", label: "의료·제약·복지" },
-  { id: "MANUFACTURE", label: "제조·화학" },
-  { id: "DISTRIBUTION", label: "판매·유통·운송" },
-  { id: "IT", label: "IT·웹·통신" },
-  { id: "CONSTRUCTION", label: "건설업" },
-  { id: "EDUCATION", label: "교육업" },
-  { id: "MEDIA", label: "미디어·디자인" },
-  { id: "FINANCE", label: "은행·금융업" },
-  { id: "ORGANIZATION", label: "기관·협회" },
-  { id: "SERVICE", label: "서비스업" },
-  { id: "AGRICULTURE", label: "농업" },
-  { id: "MINING", label: "광업" },
-  { id: "OTHER", label: "기타" },
-];
+export const HIRE_TYPE = [
+  "전체",
+  "전환형 인턴",
+  "체험형 인턴",
+  "정규직",
+  "계약직",
+  "병역특례",
+  "일용직",
+] as const;
 
-export const REGION: Option[] = [
-  { id: "ALL", label: "전체" },
-  { id: "SEOUL", label: "서울" },
-  { id: "GYEONGGI", label: "경기" },
-  { id: "BUSAN", label: "부산" },
-];
+export const EDUCATION_LEVELS = [
+  "전체",
+  "학력 무관",
+  "고졸",
+  "초대졸",
+  "학사",
+  "석사",
+  "박사",
+] as const;
 
-export const COMPANY_SIZE: Option[] = [
-  { id: "ALL", label: "전체" },
-  { id: "STARTUP", label: "스타트업" },
-  { id: "SMB", label: "중소" },
-  { id: "MID", label: "중견" },
-  { id: "ENTERPRISE", label: "대기업" },
-];
+export const REGIONS = [
+  "전체",
+  "서울",
+  "경기",
+  "인천",
+  "부산",
+  "대구",
+  "광주",
+  "대전",
+  "울산",
+  "세종",
+  "강원",
+  "경남",
+  "경북",
+  "전남",
+  "전북",
+  "충남",
+  "충북",
+  "제주",
+  "해외",
+  "기타",
+] as const;
 
-export const TYPE: Option[] = [
-  { id: "ALL", label: "전체" },
-  { id: "FULLTIME", label: "정규직" },
-  { id: "CONTRACT", label: "계약직" },
-  { id: "INTERN_CONVERT", label: "전환형 인턴" },
-  { id: "INTERN", label: "체험형 인턴" },
-  { id: "PARTTIME", label: "아르바이트" },
-  { id: "FREELANCE", label: "프리랜서" },
-  { id: "MILITARY", label: "병역특례" },
-];
+export const DEADLINE_TYPES = [
+  "전체",
+  "상시 채용",
+  "채용 시 마감",
+  "기한 설정",
+] as const;
 
-export const EDUCATION: Option[] = [
-  { id: "ALL", label: "전체" },
-  { id: "NONE", label: "학력 무관" },
-  { id: "HIGH", label: "고졸" },
-  { id: "ASSOCIATE", label: "초대졸" },
-  { id: "BACHELOR", label: "학사" },
-  { id: "MASTER", label: "석사" },
-  { id: "DOCTOR", label: "박사" },
-];
-
-export const CAREER: Option[] = [
-  { id: "ALL", label: "전체" },
-  { id: "NEW", label: "신입" },
-  { id: "1_3", label: "1~3년" },
-  { id: "3_5", label: "3~5년" },
-  { id: "5_10", label: "5~10년" },
-  { id: "10_PLUS", label: "10년 이상" },
-];
-
-export const DEADLINE: Option[] = [
-  { id: "ALL", label: "전체" },
-  { id: "ALWAYS", label: "상시 채용" },
-  { id: "UNTIL_FILLED", label: "채용 시 마감" },
-  { id: "FIXED", label: "기한 설정" },
-];
+// 경력 범위(년) 기본값: 신입~10년+
+export const EXPERIENCE_MIN = 0;
+export const EXPERIENCE_MAX = 10; // 10 = 10년+ 표시 용
