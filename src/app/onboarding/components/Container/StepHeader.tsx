@@ -1,5 +1,6 @@
 import React from "react";
 import { ArrowLeft } from "../../../components/Icons";
+import { ProgressIndicator } from "./ProgressIndicator";
 
 interface StepHeaderProps {
   title: string;
@@ -27,22 +28,7 @@ export function StepHeader({
         {title}{" "}
         <span className="text-Subheading4-12m text-[#767678]">{subTitle}</span>
       </h1>
-      <div className="flex items-center gap-[6px]">
-        {Array.from({ length: totalSteps }, (_, i) => (
-          <div
-            key={i}
-            className={`flex items-center justify-center ${
-              i < stepNumber
-                ? "w-[18px] h-[18px] bg-[#7951FF] rounded-full"
-                : "w-2 h-2 bg-[#C5C5C8] rounded-full"
-            }`}
-          >
-            {i < stepNumber && (
-              <span className="text-Button3-14sb text-white">{i + 1}</span>
-            )}
-          </div>
-        ))}
-      </div>
+      <ProgressIndicator stepNumber={stepNumber} totalSteps={totalSteps} />
     </div>
   );
 }
