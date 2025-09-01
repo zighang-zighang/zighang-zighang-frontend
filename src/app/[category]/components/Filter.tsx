@@ -11,8 +11,8 @@ export default function Filter({ activated = false, onClick }: FilterProps) {
       className={`flex h-10 w-10 items-center justify-center rounded-lg md:h-11 md:w-11 active:bg-[#E4DAFF] md:hover:bg-gray-100
         ${
           activated
-            ? "border-2 border-[#EBDCF5] bg-[#F7F1FB] text-[#71717A]"
-            : "border border-[#EDEDED] bg-white hover:bg-gray-100 active:bg-gray-200 text-[#71717A]"
+            ? " bg-violet-100"
+            : "  bg-white hover:bg-gray-100 active:bg-gray-200 text-[#71717A]"
         }`}
     >
       <img
