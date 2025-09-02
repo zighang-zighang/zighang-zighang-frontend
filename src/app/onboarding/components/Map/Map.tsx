@@ -4,9 +4,17 @@ import { memo } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import type { RegionValue } from "@/app/onboarding/context/regionTypes";
 import { REGION_OPTIONS } from "@/app/onboarding/context/regionTypes";
+import type { FeatureCollection } from "geojson";
+
+interface RegionProperties {
+  CTP_KOR_NM?: string;
+  SIDO_KOR_NM?: string;
+  name?: string;
+  adm_nm?: string;
+}
 
 function normalizeToRegionValue(
-  props: Record<string, any>
+  props: RegionProperties
 ): Exclude<RegionValue, "전체" | "해외"> | null {
   const raw =
     props?.CTP_KOR_NM ||
@@ -49,7 +57,7 @@ function MapBase({
   onSelect,
   className,
 }: {
-  geographies: any | string;
+  geographies: FeatureCollection | string;
   value: RegionValue | null;
   onSelect: (next: Exclude<RegionValue, "전체" | "해외">) => void;
   className?: string;
