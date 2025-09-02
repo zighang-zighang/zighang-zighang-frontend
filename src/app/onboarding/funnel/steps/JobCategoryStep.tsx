@@ -11,8 +11,10 @@ import { JobCategoryItem } from "./JobCategoryItem";
 
 export function JobCategoryStep({
   onNext,
+  onSkip,
 }: {
   onNext: (직군: string) => void;
+  onSkip: () => void;
 }) {
  
 
@@ -43,7 +45,7 @@ export function JobCategoryStep({
         title="원하는 직군을 선택해주세요."
         subTitle="(최대 3개 선택)"
         stepNumber={1}
-        totalSteps={5}
+        totalSteps={4}
       />
 
       <div className="w-[613px] mt-[80px] mx-auto flex flex-wrap gap-2 mb-[98px] [&>*:nth-child(1)]:ml-3 [&>*:nth-child(20)]:ml-3">
@@ -58,8 +60,13 @@ export function JobCategoryStep({
       </div>
 
       <StepActions>
-        <SecondaryButton onClick={() => {}}>잘 모르겠어요</SecondaryButton>
-        <ActionButton onClick={handleNext}>다음</ActionButton>
+        <SecondaryButton onClick={onSkip}>잘 모르겠어요</SecondaryButton>
+        <ActionButton 
+          onClick={handleNext} 
+          state={selectedCategories.length === 0 ? "disabled" : "abled"}
+        >
+          다음
+        </ActionButton>
       </StepActions>
     </StepContainer>
   );

@@ -51,6 +51,7 @@ export default function OnboardingFunnel() {
       직군입력={({ history }) => (
         <JobCategoryStep
           onNext={(직군) => history.push("직무입력", { 직군 })}
+          onSkip={() => history.push("경력입력", { 직군: "미정", 직무: "미정" })}
         />
       )}
       직무입력={({ context, history }) => (
