@@ -15,9 +15,11 @@
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
     "@use-funnel/browser": "^0.0.15",
+    "d3-geo": "^3.1.1",
     "next": "15.4.6",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "react-simple-maps": "^3.0.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.1",
@@ -37,6 +39,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/react-simple-maps": "^3.0.6",
     "babel-jest": "^30.0.5",
     "eslint": "^9",
     "eslint-config-next": "15.4.6",

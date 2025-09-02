@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import { useState } from "react";
-import RegionButtonList, {
+import RegionButtonList from "../RegionButtonList";
+import {
   REGION_VALUES,
   type RegionValue,
-} from "../RegionButtonList";
+} from "@/app/onboarding/context/regionTypes";
 
 const meta: Meta<typeof RegionButtonList> = {
   title: "Onboarding/Region/RegionButtonList",

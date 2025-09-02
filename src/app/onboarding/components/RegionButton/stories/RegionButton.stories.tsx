@@ -1,4 +1,3 @@
-// components/RegionButton.stories.tsx
 import { Meta, StoryObj } from "@storybook/nextjs";
 import { RegionButton } from "../RegionButton";
 
