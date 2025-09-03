@@ -13,45 +13,8 @@ import {
 } from "@/app/hooks/useFilterDialog";
 import { mapFiltersToParams } from "@/app/_utils/mapFiltersToParams";
 import { useRecruitments } from "@/app/_api/recruitment/useRecruitments";
-import type { Recruitment } from "@/app/_types/recruitment/types";
-
-interface Job {
-  id: string;
-  href: string;
-  company: string;
-  title: string;
-  location: string;
-  experience: string;
-  contractType: string;
-  education: string;
-  imageUrl: string;
-  dday: string;
-  views: number;
-  jobGroup: string;
-  bookmarked?: boolean;
-}
-
-function adapt(r: Recruitment): Job {
-  const exp =
-    r.minExperience === 0 && r.maxExperience === 0
-      ? "무관"
-      : `${r.minExperience}–${r.maxExperience}년`;
-
-  return {
-    id: r.id,
-    href: r.recruitmentUrl ?? "#",
-    company: r.companyName ?? "",
-    title: r.title ?? "",
-    location: (r.locations ?? []).join(", "),
-    experience: exp,
-    contractType: (r.employmentTypes ?? []).join(", "),
-    education: (r.educations ?? []).join(", "),
-    imageUrl: r.imageUrl ?? r.companyImageUrl ?? "",
-    dday: r.deadlineType ?? "",
-    views: 0,
-    jobGroup: r.jobs?.[0] ?? "기타",
-  };
-}
+import Adapt from "@/app/_utils/adapt";
+import { Job } from "@/app/constants/jobs";
 
 export default function CategoryClient({ slug }: { slug: string }) {
   const slugToJobGroup = (s: string) =>
@@ -92,7 +55,7 @@ function Inner() {
     );
 
   const content = data?.data?.content ?? [];
-  const jobs: Job[] = content.map(adapt);
+  const jobs: Job[] = content.map(Adapt);
 
   return (
     <main className="p-4 space-y-4">

@@ -4,24 +4,10 @@ import { useState, useTransition, MouseEvent } from "react";
 import View from "./View";
 import Bookmark from "./BookMark";
 import { toggleBookmark } from "./toggleBookmark";
-export interface CardProps {
-  itemId: string;
-  href: string;
-  company: string;
-  title: string;
-  location: string;
-  experience: string;
-  contractType: string;
-  education: string;
-  imageUrl: string;
-  dday: string;
-  views: number;
-  hot?: boolean;
-  bookmarked?: boolean;
-}
+import { Job } from "@/app/constants/jobs";
 
 export default function Card({
-  itemId,
+  id,
   href,
   company,
   title,
@@ -34,7 +20,7 @@ export default function Card({
   views,
   hot = false,
   bookmarked: initialBookmarked = false,
-}: CardProps) {
+}: Job) {
   const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
   const [isPending, startTransition] = useTransition();
 
@@ -42,7 +28,7 @@ export default function Card({
     setIsBookmarked((b) => !b);
     startTransition(async () => {
       try {
-        await toggleBookmark(itemId, !isBookmarked);
+        await toggleBookmark(id, !isBookmarked);
       } catch {
         setIsBookmarked(initialBookmarked);
       }
@@ -53,7 +39,7 @@ export default function Card({
     <div className="relative w-full md:flex-1 md:flex-grow md:self-stretch min-w-full">
       <a
         target="_blank"
-        href={href}
+        href={`/recruitments/${id}`}
         className="flex flex-[1_0_0] items-center gap-2 rounded-[24px] border border-[#EDEDED] h-[120px] shadow-[0px_4px_30px_0px_#00000008] transition-shadow hover:shadow-[0px_6px_16px_rgba(0,0,0,0.08)] md:mx-0 md:h-[164px] md:pl-[20px]"
         rel="noreferrer"
       >
@@ -106,16 +92,27 @@ export default function Card({
         <div
           className="flex h-full flex-row items-center justify-center border-l border-[#EDEDED] pl-0"
           style={{ width: "48px" }}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
         >
           <div className="flex h-full w-full flex-col">
-            <Bookmark active={isBookmarked} disabled={isPending} />
+            <Bookmark
+              onClick={(e) => {
+                onToggle();
+              }}
+              active={isBookmarked}
+              disabled={isPending}
+            />
 
             <div className="h-[1px] w-full bg-[#EDEDED]" />
 
             <div className="flex h-1/2 items-center justify-center">
               <div className="text-[13px] font-medium leading-[20px] text-[#71717A]">
                 <div className="break-keep text-center ds-mobile-subtitle1">
-                  {dday}
+                  {/* {dday} */}
+                  D-3
                 </div>
               </div>
             </div>

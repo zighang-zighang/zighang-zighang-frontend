@@ -1,22 +1,7 @@
 "use client";
 
 import Card from "./Card";
-
-interface Job {
-  id: string;
-  href: string;
-  company: string;
-  title: string;
-  location: string;
-  experience: string;
-  contractType: string;
-  education: string;
-  imageUrl: string;
-  dday: string;
-  views: number;
-  hot?: boolean;
-  bookmarked?: boolean;
-}
+import { Job } from "@/app/constants/jobs";
 
 export default function JobCardList({ jobs }: { jobs: Job[] }) {
   if (!jobs.length) {
