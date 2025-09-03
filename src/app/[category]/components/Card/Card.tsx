@@ -70,7 +70,7 @@ export default function Card({
 
           <div className="flex flex-col gap-[6px] md:gap-3">
             <div className="flex flex-wrap items-center gap-[0px] text-[#71717A] ds-mobile-summary">
-              <span className="break-keep text-sm md:text-lg">{company}</span>
+              <span className="break-keep text-sm md:text-base">{company}</span>
             </div>
 
             <div className="flex items-center gap-2 break-all font-bold text-black">
@@ -106,8 +106,7 @@ export default function Card({
         </div>
 
         <div
-          className="flex h-full flex-row items-center justify-center border-l border-[#EDEDED] pl-0"
-          style={{ width: "48px" }}
+          className="flex w-12 h-full flex-row items-center justify-center border-l border-[#EDEDED] pl-0 md:w-20"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();

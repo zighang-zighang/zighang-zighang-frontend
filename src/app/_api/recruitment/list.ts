@@ -39,7 +39,6 @@ export async function fetchRecruitmentsClient({
   if (maxExperience != null) qs.set("maxExperience", String(maxExperience));
 
   const url = `/api/recruitments?${qs.toString()}`;
-  console.log("[fetchRecruitments] url =", url);
   const res = await fetch(url, {
     headers: { Accept: "application/json" },
     cache: "no-store",
