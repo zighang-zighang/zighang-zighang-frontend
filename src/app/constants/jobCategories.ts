@@ -85,6 +85,7 @@ export const jobCategories: JobCategory[] = [
     href: "/research",
     icon: "https://zighang.com/depth1-renew/architecture.svg",
   },
+
   {
     name: "건설·건축",
     href: "/construction",
@@ -131,3 +132,4 @@ export const jobCategories: JobCategory[] = [
     icon: "https://zighang.com/depth1-renew/restaurant-menu.svg",
   },
 ];
+
