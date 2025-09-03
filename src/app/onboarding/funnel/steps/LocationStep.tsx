@@ -1,17 +1,66 @@
+"use client";
+import { useState, useCallback, useMemo } from "react";
+import type { RegionValue } from "@/app/onboarding/context/regionTypes";
+import React from "react";
+import {
+  StepContainer,
+  StepHeader,
+  StepActions,
+  ActionButton,
+} from "../../components";
+import { Map } from "../../components/Map/Map";
+import RegionButtonList from "../../components/RegionButton/RegionButtonList";
+import sidoGeo from "@/app/onboarding/data/TL_SCCO_CTPRVN.json";
+
 export function LocationStep({
-  onSubmit,
   onBack,
+  onSubmit,
 }: {
-  onSubmit: (지역: string) => void;
   onBack: () => void;
+  onSubmit: (지역: string) => void;
 }) {
+  const [region, setRegion] = useState<RegionValue | null>(null);
+  const INVALIDS: RegionValue[] = ["전체", "해외"];
+
+  const isValid = useMemo(
+    () => !!region && !INVALIDS.includes(region),
+    [region]
+  );
+
+  const handleSelect = useCallback(
+    (next: Exclude<RegionValue, "전체" | "해외">) => {
+      setRegion(next);
+    },
+    []
+  );
+  const handleChange = useCallback((next: RegionValue) => {
+    setRegion(next);
+  }, []);
+
+  const handleSubmit = useCallback(() => {
+    if (!isValid || !region) return;
+    onSubmit(region);
+  }, [isValid, region, onSubmit]);
+
   return (
-    <div>
-      지역 선택
-      <button onClick={onBack}>이전</button>
-      <button onClick={() => onSubmit("서울")}>완료</button>
-    </div>
+    <StepContainer>
+      <StepHeader
+        title="원하는 근무 지역이 어떻게 되세요?"
+        stepNumber={5}
+        totalSteps={5}
+      />
+      <div className="flex items-center justify-center mt-6">
+        <Map geographies={sidoGeo} value={region} onSelect={handleSelect}></Map>
+        <div className="flex flex-col gap-2">
+          <RegionButtonList
+            value={region}
+            onChange={(next) => handleChange(next)}
+          ></RegionButtonList>
+          <StepActions>
+            <ActionButton onClick={handleSubmit}>다음</ActionButton>
+          </StepActions>
+        </div>
+      </div>
+    </StepContainer>
   );
 }
-
-

@@ -65,9 +65,11 @@ function MapBase({
   return (
     <div className={className}>
       <ComposableMap
+        width={400}
+        height={400}
         projection="geoMercator"
-        projectionConfig={{ scale: 3000, center: [127.8, 36.3] }}
-        style={{ width: 360, height: "auto" }}
+        projectionConfig={{ scale: 3000, center: [127.4, 35.8] }}
+        style={{ width: 400, height: "auto" }}
       >
         <Geographies geography={geographies}>
           {({ geographies }) =>
