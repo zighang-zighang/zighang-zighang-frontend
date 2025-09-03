@@ -4,7 +4,7 @@ import { useState, useTransition, MouseEvent } from "react";
 import View from "./View";
 import Bookmark from "./BookMark";
 import { toggleBookmark } from "./toggleBookmark";
-import { Job } from "@/app/constants/jobs";
+import { Job } from "@/app/_types/recruitment/jobs";
 
 export default function Card({
   id,

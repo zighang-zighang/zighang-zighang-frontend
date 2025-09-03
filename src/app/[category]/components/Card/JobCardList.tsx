@@ -1,7 +1,7 @@
 "use client";
 
 import Card from "./Card";
-import { Job } from "@/app/constants/jobs";
+import { Job } from "@/app/_types/recruitment/jobs";
 
 export default function JobCardList({ jobs }: { jobs: Job[] }) {
   if (!jobs.length) {
@@ -21,7 +21,7 @@ export default function JobCardList({ jobs }: { jobs: Job[] }) {
         {jobs.map((job) => (
           <Card
             key={job.id}
-            itemId={job.id}
+            id={job.id}
             href={job.href}
             company={job.company}
             title={job.title}

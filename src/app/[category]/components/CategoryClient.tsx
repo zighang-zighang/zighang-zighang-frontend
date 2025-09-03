@@ -14,7 +14,7 @@ import {
 import { mapFiltersToParams } from "@/app/_utils/mapFiltersToParams";
 import { useRecruitments } from "@/app/_api/recruitment/useRecruitments";
 import Adapt from "@/app/_utils/adapt";
-import { Job } from "@/app/constants/jobs";
+import { Job } from "@/app/_types/recruitment/jobs";
 
 export default function CategoryClient({ slug }: { slug: string }) {
   const slugToJobGroup = (s: string) =>

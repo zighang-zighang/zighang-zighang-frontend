@@ -1,4 +1,4 @@
-import type { Job } from "../constants/jobs";
+import type { Job } from "../_types/recruitment/jobs";
 import type { Recruitment } from "@/app/_types/recruitment/types";
 
 export default function Adapt(r: Recruitment): Job {
