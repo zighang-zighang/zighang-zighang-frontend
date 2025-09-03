@@ -12,6 +12,7 @@ export type Job = {
   views: number;
   hot?: boolean;
   bookmarked?: boolean;
+  jobGroup?: string;
 };
 
 export const JOBS: readonly Job[] = [

@@ -110,7 +110,7 @@ export default function FilterModal() {
             title="마감 유형"
             note="중복 선택 가능"
             options={DEADLINE_TYPES}
-            selected={(o) => filters.hireTypes.includes(o)}
+            selected={(o) => filters.deadlineTypes.includes(o)}
             onToggle={toggleHireType}
           />
         </div>
