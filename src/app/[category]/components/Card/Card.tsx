@@ -35,6 +35,16 @@ export default function Card({
     });
   };
 
+  // 배경색 랜덤 변경
+  const stringToColor = (str: string): string => {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash) % 360;
+    return `hsl(${hue}, 70%, 70%)`;
+  };
+
   return (
     <div className="relative w-full md:flex-1 md:flex-grow md:self-stretch min-w-full">
       <a
@@ -45,20 +55,26 @@ export default function Card({
       >
         <div className="flex flex-1 flex-row items-center gap-2.5 md:gap-6">
           <section className="relative flex aspect-[1/1] flex-shrink-0 items-center justify-center rounded-xl md:rounded-2xl ml-2 w-[60px] md:ml-0 md:w-[80px] overflow-hidden">
-            <img
+            {/* <img
               alt={`${company} 채용 이미지`}
               src={imageUrl}
               className="aspect-[1/1] rounded-xl object-cover md:rounded-2xl w-[60px] md:w-[80px] border border-black/10"
-            />
+            /> */}
+            <div
+              style={{ backgroundColor: stringToColor(company) }}
+              className="flex items-center justify-center w-full h-full bg-violet-200 text-sm font-bold text-white"
+            >
+              {company.slice(0, 3)}
+            </div>
           </section>
 
           <div className="flex flex-col gap-[6px] md:gap-3">
             <div className="flex flex-wrap items-center gap-[0px] text-[#71717A] ds-mobile-summary">
-              <span className="break-keep">{company}</span>
+              <span className="break-keep text-sm md:text-lg">{company}</span>
             </div>
 
             <div className="flex items-center gap-2 break-all font-bold text-black">
-              <p className="max-w-[240px] md:max-w-[356px] ds-mobile-title2 leading-[140%]">
+              <p className="max-w-[240px] text-sm md:text-lg md:max-w-[356px] ds-mobile-title2 leading-[140%]">
                 {title}
               </p>
             </div>
