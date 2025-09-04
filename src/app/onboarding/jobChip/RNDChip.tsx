@@ -3,6 +3,7 @@ interface RNDChipProps {
   width?: number;
   height?: number;
   className?: string;
+  backgroundless?: boolean;
 }
 
 export function RNDChip({
@@ -10,6 +11,7 @@ export function RNDChip({
   width = 28,
   height = 28,
   className,
+  backgroundless = false,
 }: RNDChipProps) {
   const backgroundColor = isSelected ? "#D3FFEE" : "#F1F1F5";
   const pathColor = isSelected ? "#05935C" : "#AAAAAD";
@@ -23,7 +25,9 @@ export function RNDChip({
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      <rect width="28" height="28" rx="14" fill={backgroundColor} />
+      {!backgroundless && (
+        <rect width="28" height="28" rx="14" fill={backgroundColor} />
+      )}
       <path
         d="M9.2959 19.65L9.50423 21.5L10.8542 20.2167L13.1626 13.8833C12.5959 13.7417 12.0959 13.4583 11.6876 13.0667L9.2959 19.65Z"
         fill={pathColor}

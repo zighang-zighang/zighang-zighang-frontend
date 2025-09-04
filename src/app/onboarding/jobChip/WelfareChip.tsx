@@ -3,6 +3,7 @@ interface WelfareChipProps {
   width?: number;
   height?: number;
   className?: string;
+  backgroundless?: boolean;
 }
 
 export function WelfareChip({
@@ -10,6 +11,7 @@ export function WelfareChip({
   width = 28,
   height = 28,
   className,
+  backgroundless = false,
 }: WelfareChipProps) {
   const backgroundColor = isSelected ? "#FFF2EC" : "#F1F1F5";
   const pathColor = isSelected ? "#EF5108" : "#AAAAAD";
@@ -23,7 +25,9 @@ export function WelfareChip({
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      <rect width="28" height="28" rx="14" fill={backgroundColor} />
+      {!backgroundless && (
+        <rect width="28" height="28" rx="14" fill={backgroundColor} />
+      )}
       <path
         d="M6.91667 13.1665C6 13.1665 5.25 13.9165 5.25 14.8332V20.6665C5.25 21.5832 6 22.3332 6.91667 22.3332C7.83333 22.3332 8.58333 21.5832 8.58333 20.6665V14.8332C8.58333 13.9165 7.83333 13.1665 6.91667 13.1665Z"
         fill={pathColor}
