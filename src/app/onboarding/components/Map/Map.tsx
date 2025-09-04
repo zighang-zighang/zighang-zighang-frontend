@@ -9,7 +9,12 @@ import {
 } from "react-simple-maps";
 import type { RegionValue } from "@/app/onboarding/context/regionTypes";
 import { REGION_OPTIONS } from "@/app/onboarding/context/regionTypes";
-import type { FeatureCollection } from "geojson";
+import type {
+  Feature,
+  Geometry,
+  GeoJsonProperties,
+  FeatureCollection,
+} from "geojson";
 import { geoCentroid } from "d3-geo";
 
 interface RegionProperties {
@@ -88,7 +93,9 @@ function MapBase({
                   ? !!region
                   : value !== "해외" && region === value;
 
-              const centroid = geoCentroid(geo as any) as [number, number];
+              const centroid = geoCentroid(
+                geo as Feature<Geometry, GeoJsonProperties>
+              ) as [number, number];
               const label = region ?? "";
 
               return (
