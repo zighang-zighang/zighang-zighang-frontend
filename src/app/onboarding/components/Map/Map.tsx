@@ -89,20 +89,43 @@ function MapBase({
         style={{ width: 400, height: "auto" }}
       >
         <Geographies geography={geographies}>
-          {({ geographies }) =>
-            geographies.map((geo) => {
-              const region = normalizeToRegionValue(geo.properties);
+          {({ geographies }) => {
+            // 라벨 정보 모으기 , 모았다가 한번에 렌더링
+            // 이렇게 하지 않으면 라벨이 지도 밑으로 겹쳐서 보임
+            const labelInfos: Array<{
+              key: string;
+              centroid: [number, number];
+              label: string;
+            }> = [];
 
-              // 전체 → 모든 시도 하이라이트, 해외 → 하이라이트 없음
+            // 각 지역 모양 렌더링
+            const shapes = geographies.map((geo) => {
+              const props = geo.properties as RegionProperties;
+              const region = normalizeToRegionValue(props);
+
+              // 전체 선택하면 다 선택되도록
               const selected =
                 value === "전체"
                   ? !!region
                   : value !== "해외" && region === value;
 
+              // 해당 지도의 중심 찾기
               const centroid = geoCentroid(
-                geo as Feature<Geometry, GeoJsonProperties>
+                geo as Feature<Geometry, RegionProperties>
               ) as [number, number];
+
+              // 라벨 지역
               const label = region ?? "";
+
+              // 전체 선택했을 때 라벨이 모두 표시되지 않게
+              // 단일 상태일 때만
+              if (value !== "전체" && selected && label) {
+                labelInfos.push({
+                  key: geo.rsmKey,
+                  centroid,
+                  label,
+                });
+              }
 
               return (
                 <Geography
@@ -126,34 +149,42 @@ function MapBase({
                   ].join(" ")}
                 />
               );
-            })
-          }
-        </Geographies>
-        {selected && (
-          <Annotation
-            subject={centroid}
-            dx={0}
-            dy={-24}
-            connectorProps={{
-              stroke: "transparent",
-              strokeWidth: 0,
-              strokeLinecap: "round",
-            }}
-          >
-            <foreignObject x={-30} y={0} width={56} height={22}>
-              <div
-                className="w-full h-full
-                                    flex items-center justify-center
-                                    border-2 border-violet-600 rounded-full
-                                    bg-white
-                                    text-[11px] font-semibold leading-[18px] text-violet-700
-                                    px-[6px]"
+            });
+
+            //라벨 렌더
+            const labels = labelInfos.map((info) => (
+              <Annotation
+                key={`label-${info.key}`}
+                subject={info.centroid}
+                dx={0}
+                dy={-15}
+                connectorProps={{
+                  stroke: "transparent",
+                  strokeWidth: 0,
+                  strokeLinecap: "round",
+                }}
               >
-                {label}
-              </div>
-            </foreignObject>
-          </Annotation>
-        )}
+                <foreignObject x={-30} y={0} width={56} height={22}>
+                  <div
+                    className="w-full h-full flex items-center justify-center
+                               border-2 border-violet-600 rounded-full bg-white
+                               text-[11px] font-semibold leading-[18px] text-violet-700
+                               px-[6px]"
+                  >
+                    {info.label}
+                  </div>
+                </foreignObject>
+              </Annotation>
+            ));
+
+            return (
+              <>
+                {shapes}
+                {labels}
+              </>
+            );
+          }}
+        </Geographies>
       </ComposableMap>
     </div>
   );
