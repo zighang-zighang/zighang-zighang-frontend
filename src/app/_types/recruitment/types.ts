@@ -44,12 +44,12 @@ export interface GetRecruitmentsParams {
   size?: number;
   jobs?: string[];
   jobCategories?: string[];
-  locations?: string[];
   employmentTypes?: string[];
   educations?: string[];
-  companySize?: string;
+  locations?: string[];
+  deadlineTypes?: string[];
   minExperience?: number;
   maxExperience?: number;
-  deadlineType?: string;
+  companySize?: string;
   q?: string;
 }
