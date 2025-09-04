@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useState } from "react";
 import {
   ComposableMap,
   Geographies,
@@ -73,6 +73,12 @@ function MapBase({
   onSelect: (next: Exclude<RegionValue, "전체" | "해외">) => void;
   className?: string;
 }) {
+  const [tooltip, setTooltip] = useState<{
+    name: string;
+    x: number;
+    y: number;
+  } | null>(null);
+
   return (
     <div className={className}>
       <ComposableMap
@@ -99,57 +105,55 @@ function MapBase({
               const label = region ?? "";
 
               return (
-                <g key={geo.rsmKey}>
-                  <Geography
-                    key={geo.rsmKey}
-                    geography={geo}
-                    onClick={() => region && onSelect(region)}
-                    tabIndex={region ? 0 : -1}
-                    role="button"
-                    aria-pressed={!!selected}
-                    onKeyDown={(e) => {
-                      if (region && (e.key === "Enter" || e.key === " ")) {
-                        onSelect(region);
-                      }
-                    }}
-                    className={[
-                      "stroke-[#303030] stroke-[0.9] outline-none transition-colors",
-                      region ? "cursor-pointer" : "cursor-default",
-                      selected
-                        ? "fill-violet-200  active:fill-violet-400"
-                        : "fill-white hover:fill-gray-50 active:fill-indigo-50",
-                    ].join(" ")}
-                  />
-                  {selected && (
-                    <Annotation
-                      subject={centroid}
-                      dx={0}
-                      dy={-24}
-                      connectorProps={{
-                        stroke: "transparent",
-                        strokeWidth: 0,
-                        strokeLinecap: "round",
-                      }}
-                    >
-                      <foreignObject x={-30} y={0} width={56} height={22}>
-                        <div
-                          className="w-full h-full
+                <Geography
+                  key={geo.rsmKey}
+                  geography={geo}
+                  onClick={() => region && onSelect(region)}
+                  tabIndex={region ? 0 : -1}
+                  role="button"
+                  aria-pressed={!!selected}
+                  onKeyDown={(e) => {
+                    if (region && (e.key === "Enter" || e.key === " ")) {
+                      onSelect(region);
+                    }
+                  }}
+                  className={[
+                    "stroke-[#303030] stroke-[0.9] outline-none transition-colors",
+                    region ? "cursor-pointer" : "cursor-default",
+                    selected
+                      ? "fill-violet-200  active:fill-violet-400"
+                      : "fill-white hover:fill-gray-50 active:fill-indigo-50",
+                  ].join(" ")}
+                />
+              );
+            })
+          }
+        </Geographies>
+        {selected && (
+          <Annotation
+            subject={centroid}
+            dx={0}
+            dy={-24}
+            connectorProps={{
+              stroke: "transparent",
+              strokeWidth: 0,
+              strokeLinecap: "round",
+            }}
+          >
+            <foreignObject x={-30} y={0} width={56} height={22}>
+              <div
+                className="w-full h-full
                                     flex items-center justify-center
                                     border-2 border-violet-600 rounded-full
                                     bg-white
                                     text-[11px] font-semibold leading-[18px] text-violet-700
                                     px-[6px]"
-                        >
-                          {label}
-                        </div>
-                      </foreignObject>
-                    </Annotation>
-                  )}
-                </g>
-              );
-            })
-          }
-        </Geographies>
+              >
+                {label}
+              </div>
+            </foreignObject>
+          </Annotation>
+        )}
       </ComposableMap>
     </div>
   );
