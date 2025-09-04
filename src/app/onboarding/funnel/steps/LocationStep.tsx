@@ -10,7 +10,7 @@ import {
 } from "../../components";
 import { Map } from "../../components/Map/Map";
 import RegionButtonList from "../../components/RegionButton/RegionButtonList";
-import sidoGeo from "@/app/onboarding/data/TL_SCCO_CTPRVN.json";
+import sidoGeo from "@/data/TL_SCCO_CTPRVN.json";
 
 export function LocationStep({
   onBack,
