@@ -3,15 +3,14 @@ import type { Meta, StoryObj } from "@storybook/nextjs";
 import { useState } from "react";
 import { Map } from "../Map";
 import type { RegionValue } from "@/app/onboarding/context/regionTypes";
-
-import sidoGeo from "@/app/onboarding/data/TL_SCCO_CTPRVN.json";
+import { SIDO_GEO } from "@/app/onboarding/context/map";
 
 const meta: Meta<typeof Map> = {
   title: "Onboarding/Map/Map",
   component: Map,
   parameters: { layout: "centered" },
   args: {
-    geographies: sidoGeo,
+    geographies: SIDO_GEO,
     className: "",
   },
   argTypes: {

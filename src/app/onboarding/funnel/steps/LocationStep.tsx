@@ -10,7 +10,7 @@ import {
 } from "../../components";
 import { Map } from "../../components/Map/Map";
 import RegionButtonList from "../../components/RegionButton/RegionButtonList";
-import sidoGeo from "@/data/TL_SCCO_CTPRVN.json";
+import { SIDO_GEO } from "@/app/onboarding/context/map";
 
 export function LocationStep({
   onBack,
@@ -50,7 +50,11 @@ export function LocationStep({
         totalSteps={5}
       />
       <div className="flex items-center justify-center mt-6">
-        <Map geographies={sidoGeo} value={region} onSelect={handleSelect}></Map>
+        <Map
+          geographies={SIDO_GEO}
+          value={region}
+          onSelect={handleSelect}
+        ></Map>
         <div className="flex flex-col gap-2">
           <RegionButtonList
             value={region}
