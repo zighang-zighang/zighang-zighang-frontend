@@ -25,7 +25,18 @@ export default function Card({
   const [isPending, startTransition] = useTransition();
 
   const onToggle = () => {
-    setIsBookmarked((b) => !b);
+    setIsBookmarked((prev) => {
+      const next = !prev;
+      startTransition(async () => {
+        try {
+          await toggleBookmark(id, next);
+        } catch {
+          setIsBookmarked(prev);
+          // 실패 시에 정확히 직전 상태로 롤백하도록 함
+        }
+      });
+      return next;
+    });
     startTransition(async () => {
       try {
         await toggleBookmark(id, !isBookmarked);
