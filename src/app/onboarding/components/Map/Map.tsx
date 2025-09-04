@@ -1,10 +1,16 @@
 "use client";
 
 import { memo } from "react";
-import { ComposableMap, Geographies, Geography } from "react-simple-maps";
+import {
+  ComposableMap,
+  Geographies,
+  Geography,
+  Annotation,
+} from "react-simple-maps";
 import type { RegionValue } from "@/app/onboarding/context/regionTypes";
 import { REGION_OPTIONS } from "@/app/onboarding/context/regionTypes";
 import type { FeatureCollection } from "geojson";
+import { geoCentroid } from "d3-geo";
 
 interface RegionProperties {
   CTP_KOR_NM?: string;
@@ -82,42 +88,57 @@ function MapBase({
                   ? !!region
                   : value !== "해외" && region === value;
 
+              const centroid = geoCentroid(geo as any) as [number, number];
+              const label = region ?? "";
+
               return (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  onClick={() => region && onSelect(region)}
-                  tabIndex={region ? 0 : -1}
-                  role="button"
-                  aria-pressed={!!selected}
-                  onKeyDown={(e) => {
-                    if (region && (e.key === "Enter" || e.key === " ")) {
-                      onSelect(region);
-                    }
-                  }}
-                  style={{
-                    default: {
-                      fill: selected ? "rgba(139, 92, 246, 0.2)" : "#ffffff",
-                      stroke: "#303030",
-                      strokeWidth: 0.9,
-                      outline: "none",
-                      cursor: region ? "pointer" : "default",
-                    },
-                    hover: {
-                      fill: selected ? "rgba(139, 92, 246, 0.28)" : "#f9fafb",
-                      stroke: "#303030",
-                      strokeWidth: 0.9,
-                      outline: "none",
-                      cursor: region ? "pointer" : "default",
-                    },
-                    pressed: {
-                      fill: selected ? "rgba(139, 92, 246, 0.32)" : "#eef2ff",
-                      stroke: "#303030",
-                      strokeWidth: 0.9,
-                      outline: "none",
-                    },
-                  }}
-                />
+                <g key={geo.rsmKey}>
+                  <Geography
+                    key={geo.rsmKey}
+                    geography={geo}
+                    onClick={() => region && onSelect(region)}
+                    tabIndex={region ? 0 : -1}
+                    role="button"
+                    aria-pressed={!!selected}
+                    onKeyDown={(e) => {
+                      if (region && (e.key === "Enter" || e.key === " ")) {
+                        onSelect(region);
+                      }
+                    }}
+                    className={[
+                      "stroke-[#303030] stroke-[0.9] outline-none transition-colors",
+                      region ? "cursor-pointer" : "cursor-default",
+                      selected
+                        ? "fill-violet-200  active:fill-violet-400"
+                        : "fill-white hover:fill-gray-50 active:fill-indigo-50",
+                    ].join(" ")}
+                  />
+                  {selected && (
+                    <Annotation
+                      subject={centroid}
+                      dx={0}
+                      dy={-24}
+                      connectorProps={{
+                        stroke: "transparent",
+                        strokeWidth: 0,
+                        strokeLinecap: "round",
+                      }}
+                    >
+                      <foreignObject x={-30} y={0} width={56} height={22}>
+                        <div
+                          className="w-full h-full
+                                    flex items-center justify-center
+                                    border-2 border-violet-600 rounded-full
+                                    bg-white
+                                    text-[11px] font-semibold leading-[18px] text-violet-700
+                                    px-[6px]"
+                        >
+                          {label}
+                        </div>
+                      </foreignObject>
+                    </Annotation>
+                  )}
+                </g>
               );
             })
           }
