@@ -8,7 +8,7 @@ import {
   StepActions,
   ActionButton,
 } from "../../components";
-import { Map } from "../../components/Map/Map";
+import { Map as OnboardingMap } from "../../components/Map/Map";
 import RegionButtonList from "../../components/RegionButton/RegionButtonList";
 import { SIDO_GEO } from "@/app/onboarding/context/map";
 
@@ -50,11 +50,11 @@ export function LocationStep({
         totalSteps={5}
       />
       <div className="flex items-center justify-center mt-6">
-        <Map
+        <OnboardingMap
           geographies={SIDO_GEO}
           value={region}
           onSelect={handleSelect}
-        ></Map>
+        ></OnboardingMap>
         <div className="flex flex-col gap-2">
           <RegionButtonList
             value={region}

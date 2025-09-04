@@ -1,13 +1,13 @@
 // Map.stories.tsx
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import { useState } from "react";
-import { Map } from "../Map";
+import { Map as OnboardingMap } from "../Map";
 import type { RegionValue } from "@/app/onboarding/context/regionTypes";
 import { SIDO_GEO } from "@/app/onboarding/context/map";
 
-const meta: Meta<typeof Map> = {
+const meta: Meta<typeof OnboardingMap> = {
   title: "Onboarding/Map/Map",
-  component: Map,
+  component: OnboardingMap,
   parameters: { layout: "centered" },
   args: {
     geographies: SIDO_GEO,
@@ -20,7 +20,7 @@ const meta: Meta<typeof Map> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof Map>;
+type Story = StoryObj<typeof OnboardingMap>;
 
 export const Interactive: Story = {
   render: (args) => {
@@ -28,7 +28,7 @@ export const Interactive: Story = {
 
     return (
       <div className="flex flex-col items-center gap-4">
-        <Map {...args} value={value} onSelect={(r) => setValue(r)} />
+        <OnboardingMap {...args} value={value} onSelect={(r) => setValue(r)} />
 
         <div className="text-sm text-zinc-700">선택: {value ?? "없음"}</div>
 
