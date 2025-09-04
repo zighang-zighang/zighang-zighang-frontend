@@ -1,98 +1,163 @@
+import React, { useState, useMemo, ComponentType } from "react";
+import { onboardingJobCategories } from "@/app/constants/onboardingJobCategories";
+import * as JobChips from "../../jobChip";
+import { getChipMainColor } from "@/app/constants/chipColors";
 import {
-  DesignChip,
-  GameChip,
-  AiChip,
-  ITChip,
-  StrategyChip,
-  ServiceChip,
-  EduChip,
-  TMChip,
-  MediaChip,
-  MedicalChip,
-  FoodChip,
-  WelfareChip,
-  MarketingChip,
-  ProductChip,
-  SalesChip,
-  BankingChip,
-  ConstructionChip,
-  FinanceChip,
-  HRChip,
-  LegalChip,
-  LogisticsChip,
-  ManufacturingChip,
-  RNDChip,
-  SecuritiesChip,
-  TradeChip,
-} from "../../jobChip";
+  StepContainer,
+  StepHeader,
+  StepActions,
+  SecondaryButton,
+  ActionButton,
+} from "../../components";
+import { SelectedJobGroupChips } from "./SelectedJobGroupChips";
+import { JobCategoryItem } from "./JobCategoryItem";
 
 export function JobStep({
   jobGroup,
   onNext,
   onBack,
 }: {
-  jobGroup: string;
-  onNext: (직무: string) => void;
+  jobGroup: string[];
+  onNext: (직무: string[]) => void;
   onBack: () => void;
 }) {
-  const chips = [
-    { Component: DesignChip, name: "디자인" },
-    { Component: GameChip, name: "게임" },
-    { Component: AiChip, name: "AI" },
-    { Component: ITChip, name: "IT" },
-    { Component: StrategyChip, name: "기획전략" },
-    { Component: ServiceChip, name: "서비스" },
-    { Component: EduChip, name: "교육" },
-    { Component: TMChip, name: "TM" },
-    { Component: MediaChip, name: "미디어" },
-    { Component: MedicalChip, name: "의료" },
-    { Component: FoodChip, name: "식품" },
-    { Component: WelfareChip, name: "공공복지" },
-    { Component: MarketingChip, name: "마케팅" },
-    { Component: ProductChip, name: "상품기획" },
-    { Component: SalesChip, name: "영업" },
-    { Component: BankingChip, name: "은행" },
-    { Component: ConstructionChip, name: "건설" },
-    { Component: FinanceChip, name: "회계재무" },
-    { Component: HRChip, name: "HR" },
-    { Component: LegalChip, name: "법률법무" },
-    { Component: LogisticsChip, name: "운송배송" },
-    { Component: ManufacturingChip, name: "생산" },
-    { Component: RNDChip, name: "R&D" },
-    { Component: SecuritiesChip, name: "증권" },
-    { Component: TradeChip, name: "무역" },
-  ];
+  type JobChipProps = {
+    isSelected?: boolean;
+    width?: number;
+    height?: number;
+    className?: string;
+    backgroundless?: boolean;
+  };
+
+  // 내부 퍼널: 직군을 순차적으로 돌며 직무를 선택
+  const [groupIndex, setGroupIndex] = useState(0);
+  const currentGroup = jobGroup?.[groupIndex];
+  const currentGroupLabel = currentGroup ?? "미정";
+
+  // 직군별 선택값을 저장
+  const [selectedJobsByGroup, setSelectedJobsByGroup] = useState<
+    Record<string, string[]>
+  >({});
+  const currentSelectedJobs =
+    (currentGroup && selectedJobsByGroup[currentGroup]) ?? [];
+  const isLastGroup = groupIndex >= (jobGroup?.length ?? 0) - 1;
+
+  const availableJobs = useMemo(() => {
+    const found = onboardingJobCategories.find(
+      (cat) => cat.name === currentGroup
+    );
+    return found?.jobs ?? [];
+  }, [currentGroup]);
+
+  const currentCategory = useMemo(
+    () => onboardingJobCategories.find((cat) => cat.name === currentGroup),
+    [currentGroup]
+  );
+  const CurrentChip = (
+    currentCategory
+      ? (
+          JobChips as unknown as Record<
+            string,
+            ComponentType<JobChipProps> | null | undefined
+          >
+        )[currentCategory.chip]
+      : null
+  ) as ComponentType<JobChipProps> | null | undefined;
+
+  const currentTextColor = currentCategory
+    ? getChipMainColor(currentCategory.chip)
+    : "#7951FF";
+
+  const toDisplay = (jobKey: string) => {
+    const display = jobKey.replace(/_/g, " · ").replace(/^·\s*/, "");
+    return display;
+  };
+
+  const toggleJob = (jobKey: string) => {
+    if (!currentGroup) return;
+    setSelectedJobsByGroup((prev) => {
+      const prevForGroup = prev[currentGroup] ?? [];
+      const nextForGroup = prevForGroup.includes(jobKey)
+        ? prevForGroup.filter((j) => j !== jobKey)
+        : [...prevForGroup, jobKey];
+      return { ...prev, [currentGroup]: nextForGroup };
+    });
+  };
+
+  const finalizeSelection = () => {
+    const aggregated = Array.from(
+      new Set(Object.values(selectedJobsByGroup).flat())
+    );
+    if (aggregated.length === 0) {
+      onNext(["미정"]);
+    } else {
+      onNext(aggregated);
+    }
+  };
+
+  const goNextGroup = () => {
+    if (isLastGroup) {
+      finalizeSelection();
+      return;
+    }
+    setGroupIndex((idx) => idx + 1);
+  };
+
+  const handleBack = () => {
+    if (groupIndex > 0) {
+      setGroupIndex((idx) => idx - 1);
+    } else {
+      onBack();
+    }
+  };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-6">직무 선택 (직군: {jobGroup})</h2>
+    <StepContainer>
+      <StepHeader
+        title="세부 직무를 선택할 시간이에요!"
+        subTitle="(중복 선택 가능)"
+        stepNumber={1}
+        totalSteps={4}
+        onBack={handleBack}
+      />
 
-      <div className="grid grid-cols-5 gap-4 mb-8">
-        {chips.map(({ Component, name }, index) => (
-          <div key={index} className="flex flex-col items-center space-y-2">
-            <div className="text-sm font-medium text-gray-700">{name}</div>
-            <div className="flex space-x-2">
-              <Component isSelected={false} width={32} height={32} />
-              <Component isSelected={true} width={32} height={32} />
-            </div>
-          </div>
-        ))}
-      </div>
+      <div className="w-full flex flex-col items-center h-[calc(500px-55px)]">
+        <div className="mt-[32px] mb-[16px]">
+          <SelectedJobGroupChips
+            selectedJobGroups={jobGroup}
+            active={currentGroup}
+          />
+        </div>
 
-      <div className="flex justify-between">
-        <button
-          onClick={onBack}
-          className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
-        >
-          이전
-        </button>
-        <button
-          onClick={() => onNext("프론트엔드")}
-          className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-        >
-          다음
-        </button>
+        <h3 className="text-Heading2-20sb text-center mb-[36.5px] flex items-center gap-1">
+          {CurrentChip ? (
+            <CurrentChip isSelected backgroundless width={24} height={24} />
+          ) : null}
+          <span style={{ color: currentTextColor }}>{currentGroupLabel}</span>
+          직군에서 어떤 직무에 관심 있으세요?
+        </h3>
+
+        <div className="w-[662px] max-w-full mx-auto flex flex-wrap gap-2 justify-center">
+          {availableJobs.map((job) => (
+            <JobCategoryItem
+              key={job}
+              onClick={() => toggleJob(job)}
+              isSelected={currentSelectedJobs.includes(job)}
+              name={toDisplay(job)}
+            />
+          ))}
+        </div>
+
+        <StepActions className="h-full flex items-end pb-[30px]">
+          <SecondaryButton onClick={goNextGroup}>여기 없어요</SecondaryButton>
+          <ActionButton
+            onClick={goNextGroup}
+            state={currentSelectedJobs.length === 0 ? "disabled" : "abled"}
+          >
+            {isLastGroup ? "완료" : "다음"}
+          </ActionButton>
+        </StepActions>
       </div>
-    </div>
+    </StepContainer>
   );
 }
