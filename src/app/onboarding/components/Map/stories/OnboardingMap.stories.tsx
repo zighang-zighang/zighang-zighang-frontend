@@ -1,7 +1,7 @@
 // Map.stories.tsx
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import { useState } from "react";
-import { Map as OnboardingMap } from "../Map";
+import { OnboardingMap } from "../OnboardingMap";
 import type { RegionValue } from "@/app/onboarding/context/regionTypes";
 import { SIDO_GEO } from "@/app/onboarding/context/map";
 

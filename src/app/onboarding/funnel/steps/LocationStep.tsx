@@ -8,7 +8,7 @@ import {
   StepActions,
   ActionButton,
 } from "../../components";
-import { Map as OnboardingMap } from "../../components/Map/Map";
+import { OnboardingMap } from "../../components/Map/OnboardingMap";
 import RegionButtonList from "../../components/RegionButton/RegionButtonList";
 import { SIDO_GEO } from "@/app/onboarding/context/map";
 
@@ -48,6 +48,7 @@ export function LocationStep({
         title="원하는 근무 지역이 어떻게 되세요?"
         stepNumber={5}
         totalSteps={5}
+        onBack={onBack}
       />
       <div className="flex items-center justify-center mt-6">
         <OnboardingMap
@@ -61,7 +62,12 @@ export function LocationStep({
             onChange={(next) => handleChange(next)}
           ></RegionButtonList>
           <StepActions>
-            <ActionButton onClick={handleSubmit}>다음</ActionButton>
+            <ActionButton
+              onClick={handleSubmit}
+              state={isValid ? "abled" : "disabled"}
+            >
+              다음
+            </ActionButton>
           </StepActions>
         </div>
       </div>

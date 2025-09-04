@@ -190,4 +190,4 @@ function MapBase({
   );
 }
 
-export const Map = memo(MapBase);
+export const OnboardingMap = memo(MapBase);
