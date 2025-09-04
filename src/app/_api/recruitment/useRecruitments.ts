@@ -1,16 +1,17 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import {
-  fetchRecruitmentsClient,
-  type FetchParams,
-} from "@/app/_api/recruitment/list";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { fetchRecruitmentsClient } from "@/app/_api/recruitment/list";
+import type {
+  GetRecruitmentsResponse,
+  RecruitmentPageData,
+  GetRecruitmentsParams,
+} from "@/app/_types/recruitment/types";
 
-export function useRecruitments(params: FetchParams = {}) {
-  return useQuery({
+export function useRecruitments(params: GetRecruitmentsParams = {}) {
+  return useSuspenseQuery<GetRecruitmentsResponse, Error, RecruitmentPageData>({
     queryKey: ["recruitments:single", params],
     queryFn: () => fetchRecruitmentsClient(params),
-    staleTime: 60_000,
-    gcTime: 5 * 60_000,
+    select: (res) => res.data,
   });
 }
