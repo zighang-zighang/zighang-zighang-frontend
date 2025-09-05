@@ -22,9 +22,10 @@
   --color-label-neutral: var(--label-neutral);
 
   /* Fonts → font-sans / font-heading 사용 */
-  --font-sans: "Pretendard Variable", "Pretendard", system-ui, -apple-system, "Segoe UI", Roboto,
-    "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-  --font-heading: "Pretendard Variable", "Pretendard", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Pretendard Variable", "Pretendard", system-ui, -apple-system,
+    "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --font-heading: "Pretendard Variable", "Pretendard", ui-sans-serif, system-ui,
+    sans-serif;
 
   /* 타입 스케일: Tailwind 네임스페이스에 맞춰 브리지 토큰 제공 */
   /* (네가 쓰던 --font-size-*도 그대로 쓸 수 있게 매핑) */
@@ -265,7 +266,6 @@ body {
 }
 
 /* 경력 선택 바 */
-
 .range-thumb {
   pointer-events: none;
 }
@@ -289,4 +289,9 @@ body {
   background: white;
   border: 2px solid rgb(139 92 246);
   pointer-events: auto;
+}
+
+/* 지역 선택 스크롤 바 숨김 */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

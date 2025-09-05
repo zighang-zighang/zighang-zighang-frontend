@@ -33,7 +33,7 @@ export default function RegionButtonList({
   return (
     <div
       ref={containerRef}
-      className="w-48 h-80 overflow-y-auto overflow-hidden rounded-2xl border border-zinc-200 bg-white flex flex-col"
+      className="w-48 h-80 overflow-y-auto scrollbar-hide overflow-hidden rounded-2xl border border-zinc-200 bg-white flex flex-col"
       role="listbox"
       aria-label="지역 선택"
     >
