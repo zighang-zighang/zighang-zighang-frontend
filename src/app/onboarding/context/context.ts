@@ -36,7 +36,7 @@ type 지역입력 = {
   직무: string[];
   경력: number;
   학력: string;
-  지역?: string;
+  지역?: string | null;
 };
 
 export type { 직군입력, 직무입력, 경력입력, 학력입력, 지역입력 };
