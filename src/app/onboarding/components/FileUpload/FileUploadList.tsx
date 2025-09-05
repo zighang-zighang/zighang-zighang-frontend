@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { FileUploadItem, type UploadedFileProps } from "./FileUploadItem";
+import { FileUploadItem } from "./FileUploadItem";
+import { UploadedFileProps } from "./types/type";
 
 export default function FileUploadList(props: UploadedFileProps) {
   const { file, onRemove } = props;

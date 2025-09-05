@@ -52,7 +52,7 @@ export const List_Default: Story = {
 export const Uploading: Story = {
   args: {
     file,
-    status: "uploading",
+    status: "loading",
     progress: 42,
     note: "3seconds lefts",
   },

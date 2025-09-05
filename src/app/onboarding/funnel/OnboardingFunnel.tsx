@@ -1,4 +1,5 @@
 import { useFunnel } from "@use-funnel/browser";
+import { useRouter } from "next/navigation";
 import {
   JobCategoryStep,
   JobStep,
@@ -49,6 +50,7 @@ export default function OnboardingFunnel() {
       context: {},
     },
   });
+  const router = useRouter();
   return (
     <funnel.Render
       직군입력={({ history }) => (
@@ -93,6 +95,7 @@ export default function OnboardingFunnel() {
             const apiPayload = toApiPayload(context, 지역);
             console.log("API 전송 payload:", apiPayload);
             // TODO: 제출 API 호출 (e.g., await postOnboarding(apiPayload))
+            router.push("/onboarding/funnel/upload");
           }}
         />
       )}

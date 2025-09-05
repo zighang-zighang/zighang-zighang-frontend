@@ -93,7 +93,7 @@ export default function FileUploadCard({
       aria-labelledby={`${liveId}-title`}
       aria-describedby={helper ? `${liveId}-desc` : undefined}
       className={[
-        "w-full max-w-[526px] min-h-[200px] mx-auto rounded-2xl border bg-white px-50 py-7.5",
+        "w-full max-w-[526px] min-h-[200px] rounded-2xl border bg-white px-50 py-7.5",
         "shadow-sm transition outline-none",
         disabled
           ? "opacity-60 cursor-not-allowed"

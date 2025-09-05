@@ -2,24 +2,7 @@
 
 import React from "react";
 import { FileIcon } from "./icons/fileIcon";
-
-export type UploadStatus = "uploading" | "success" | "error";
-
-export interface UploadedFile {
-  id: string;
-  name: string;
-  size?: number;
-  url?: string;
-  uploadedAt?: string;
-}
-
-export interface UploadedFileProps {
-  file?: UploadedFile;
-  status?: UploadStatus;
-  progress?: number;
-  note?: string;
-  onRemove?: (id: string) => void;
-}
+import { UploadedFileProps, UploadStatus } from "./types/type";
 
 export function FileUploadItem({
   file,
@@ -42,7 +25,7 @@ export function FileUploadItem({
   const pct = Math.min(100, Math.max(0, progress));
 
   const fromColor =
-    status === "uploading" ? "rgba(107,114,128,0.20)" : "rgba(139,92,246,0.30)";
+    status === "loading" ? "rgba(107,114,128,0.20)" : "rgba(139,92,246,0.30)";
   return (
     <div
       className="group h-20 w-full max-w-[526px] relative flex items-center gap-3 rounded-xl border border-white bg-white  shadow-sm overflow-hidden"
@@ -54,7 +37,7 @@ export function FileUploadItem({
       <div
         className={
           `absolute inset-0 rounded-xl bg-gradient-to-r to-white from-[0%] to-[70%] ` +
-          (status === "uploading"
+          (status === "loading"
             ? "from-gray-400/20"
             : status === "success"
             ? "from-violet-500/20"
@@ -70,7 +53,7 @@ export function FileUploadItem({
         <div className="flex w-full px-3 mb-1">
           <div
             className={
-              status === "uploading" ? "text-zinc-800" : "text-violet-500"
+              status === "loading" ? "text-zinc-800" : "text-violet-500"
             }
           >
             <FileIcon />
