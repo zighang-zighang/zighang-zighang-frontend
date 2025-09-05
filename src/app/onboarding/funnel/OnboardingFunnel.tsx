@@ -24,8 +24,8 @@ type ApiOnboardingPayload = {
 
 function toApiPayload(context: 지역입력, 지역: string): ApiOnboardingPayload {
   return {
-    jobCategory: [context.직군],
-    job: [context.직무],
+    jobCategory: context.직군,
+    job: context.직무,
     experience: [context.경력],
     education: context.학력,
     location: [지역],
@@ -50,22 +50,31 @@ export default function OnboardingFunnel() {
     <funnel.Render
       직군입력={({ history }) => (
         <JobCategoryStep
-          onNext={(직군) => history.push("직무입력", { 직군 })}
+          onNext={(직군) => history.push("직무입력", (prev) => ({ ...prev, 직군 }))}
+          onSkip={() =>
+            history.push("경력입력", () => ({ 직군: ["미정"], 직무: ["미정"] }))
+          }
         />
       )}
       직무입력={({ context, history }) => (
         <JobStep
           jobGroup={context.직군}
           onBack={() => history.back()}
-          onNext={(직무) => history.push("경력입력", { ...context, 직무 })}
+          onNext={(직무) => {
+            console.log("직무입력 onNext 전달값:", 직무);
+            history.push("경력입력", (prev) => ({ ...prev, 직무 }));
+          }}
         />
       )}
-      경력입력={({ context, history }) => (
-        <ExperienceStep
-          onBack={() => history.back()}
-          onNext={(경력) => history.push("학력입력", { ...context, 경력 })}
-        />
-      )}
+      경력입력={({ context, history }) => {
+        console.log("경력입력 context.직무:", context.직무);
+        return (
+          <ExperienceStep
+            onBack={() => history.back()}
+            onNext={(경력) => history.push("학력입력", { ...context, 경력 })}
+          />
+        );
+      }}
       학력입력={({ context, history }) => (
         <EducationStep
           onBack={() => history.back()}
