@@ -1,7 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CategoryClient from "./components/CategoryClient";
-import { getJobs } from "@/app/constants/jobs";
 
 export default async function CategoryPage({
   params,
@@ -9,12 +8,10 @@ export default async function CategoryPage({
   params: Promise<{ category: string }>;
 }) {
   const { category: slug } = await params;
-  const jobs = await getJobs();
 
   return (
     <div>
       <Header />
-
       <div className="relative w-full overflow-visible px-0 md:mx-auto md:max-w-screen-xl md:px-10">
         <button
           data-activate="True"
@@ -23,9 +20,7 @@ export default async function CategoryPage({
           전체공고
         </button>
       </div>
-
-      <CategoryClient slug={slug} jobs={jobs} />
-
+      <CategoryClient slug={slug} />
       <div className="relative w-full overflow-visible px-0 md:mx-auto md:max-w-screen-xl md:px-10" />
       <Footer />
     </div>

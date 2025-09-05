@@ -9,33 +9,16 @@ import {
   FilterDialogProvider,
   DEFAULT,
   type FilterState,
+  useFilterDialog,
 } from "@/app/hooks/useFilterDialog";
+import { mapFiltersToParams } from "@/app/_utils/mapFiltersToParams";
+import { useRecruitments } from "@/app/_api/recruitment/useRecruitments";
+import Adapt from "@/app/_utils/adapt";
+import { Job } from "@/app/_types/recruitment/jobs";
 
-type Job = {
-  id: string;
-  href: string;
-  company: string;
-  title: string;
-  location: string;
-  experience: string;
-  contractType: string;
-  education: string;
-  imageUrl: string;
-  dday: string;
-  views: number;
-  hot?: boolean;
-  bookmarked?: boolean;
-};
-
-export default function CategoryClient({
-  slug,
-  jobs,
-}: {
-  slug: string;
-  jobs: Job[];
-}) {
-  const slugToJobGroup = (slug: string): string =>
-    jobCategories.find((c) => c.href.slice(1) === slug)?.name ?? "전체";
+export default function CategoryClient({ slug }: { slug: string }) {
+  const slugToJobGroup = (s: string) =>
+    jobCategories.find((c) => c.href.slice(1) === s)?.name ?? "전체";
 
   const initial = useMemo<FilterState>(
     () => ({ ...DEFAULT, jobGroup: slugToJobGroup(slug) }),
@@ -45,12 +28,39 @@ export default function CategoryClient({
   return (
     <div className="relative w-full overflow-visible px-0 md:mx-auto md:max-w-screen-xl md:px-10">
       <FilterDialogProvider initial={initial}>
-        <main className="p-4 space-y-4">
-          <FilterBar />
-          <JobCardList jobs={jobs} />
-        </main>
+        <Inner />
         <FilterModal />
       </FilterDialogProvider>
     </div>
+  );
+}
+
+function Inner() {
+  const { filters } = useFilterDialog();
+  const params = useMemo(() => mapFiltersToParams(filters), [filters]);
+
+  const { data, status, error } = useRecruitments({
+    page: 0,
+    size: 20,
+    ...params,
+  });
+
+  if (status === "pending")
+    return <div className="p-4 text-center">Loading…</div>;
+  if (status === "error")
+    return (
+      <div className="p-4 text-center text-red-600">
+        {String((error as Error)?.message)}
+      </div>
+    );
+
+  const content = data?.data?.content ?? [];
+  const jobs: Job[] = content.map(Adapt);
+
+  return (
+    <main className="p-4 space-y-4">
+      <FilterBar />
+      <JobCardList jobs={jobs} />
+    </main>
   );
 }
