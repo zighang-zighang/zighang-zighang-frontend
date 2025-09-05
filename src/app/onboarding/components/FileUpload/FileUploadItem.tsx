@@ -1,6 +1,9 @@
 "use client";
 
 import React from "react";
+import { FileIcon } from "./icons/fileIcon";
+
+export type UploadStatus = "uploading" | "success" | "error";
 
 export interface UploadedFile {
   id: string;
@@ -10,55 +13,106 @@ export interface UploadedFile {
   uploadedAt?: string;
 }
 
+export interface UploadedFileProps {
+  file?: UploadedFile;
+  status?: UploadStatus;
+  progress?: number;
+  note?: string;
+  onRemove?: (id: string) => void;
+}
+
 export function FileUploadItem({
   file,
+  status = "success",
+  progress = 100,
+  note,
   onRemove,
-}: {
-  file: UploadedFile;
-  onRemove?: (id: string) => void;
-}) {
+}: UploadedFileProps) {
+  if (!file) {
+    return (
+      <div className="rounded-xl border border-dashed border-zinc-300 p-4 text-sm text-zinc-500">
+        업로드할 파일을 추가해 주세요
+      </div>
+    );
+  }
+
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
   const isPdf = ext === "pdf";
 
+  const pct = Math.min(100, Math.max(0, progress));
+
+  const fromColor =
+    status === "uploading" ? "rgba(107,114,128,0.20)" : "rgba(139,92,246,0.30)";
   return (
     <div
-      className="group relative flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-3 shadow-sm"
-      role="listitem"
+      className="group h-20 w-full max-w-[526px] relative flex items-center gap-3 rounded-xl border border-white bg-white  shadow-sm overflow-hidden"
       aria-label={`${file.name} 업로드됨`}
     >
+      {/* 체크무늬 배경 */}
+      <div className="absolute -top-1 bottom-0 right-0 -left-2 rounded-xl bg-[linear-gradient(90deg,#f1f1f1_1px,transparent_1px),linear-gradient(#f1f1f1_1px,transparent_1px)] bg-[size:16px_16px]" />
+      {/* 그라데이션 */}
       <div
-        className={[
-          "grid h-8 w-8 shrink-0 place-items-center rounded-md border text-xs font-semibold",
-          isPdf
-            ? "border-rose-200 bg-rose-50 text-rose-600"
-            : "border-indigo-200 bg-indigo-50 text-indigo-600",
-        ].join(" ")}
-        aria-hidden
-      >
-        {ext.toUpperCase()}
-      </div>
+        className={
+          `absolute inset-0 rounded-xl bg-gradient-to-r to-white from-[0%] to-[70%] ` +
+          (status === "uploading"
+            ? "from-gray-400/20"
+            : status === "success"
+            ? "from-violet-500/20"
+            : "")
+        }
+      />
+      <div
+        className="absolute inset-0 rounded-xl
+               bg-gradient-to-b from-transparent to-white
+               from-[0%] to-[90%]"
+      />
+      <div className="relative flex flex-col w-full">
+        <div className="flex w-full px-3 mb-1">
+          <div
+            className={
+              status === "uploading" ? "text-zinc-800" : "text-violet-500"
+            }
+          >
+            <FileIcon />
+          </div>
 
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
-          <span className="truncate font-medium">{file.name}</span>
+          <div className="min-w-0 flex-1 ml-1.5">
+            <div className="flex items-center gap-2">
+              <span className="font-semibold ">{file.name}</span>
+            </div>
+
+            <div className="flex items-center gap-1.5">
+              <p
+                className={` text-xs font-medium text-neutral-500${
+                  status === "error" && "text-rose-600"
+                }`}
+              >
+                {`${pct}%`}
+              </p>
+              <div className="w-0 h-1.5 outline-1 outline-offset-[-0.50px] outline-stone-300"></div>
+
+              <p className="text-zinc-400 text-xs font-medium">{note}</p>
+            </div>
+          </div>
+          {onRemove && (
+            <div className="ml-2 flex shrink-0 items-center gap-1">
+              <button
+                type="button"
+                aria-label="파일 삭제"
+                className="rounded-md p-1 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+                onClick={() => onRemove(file.id)}
+              >
+                ✕
+              </button>
+            </div>
+          )}
         </div>
-
         <div className="mt-2 h-[3px] w-full rounded bg-violet-200">
-          <div className="h-[3px] w-full rounded bg-violet-600" />
+          <div
+            className="h-[3px] rounded bg-violet-600 transition-all"
+            style={{ width: `${pct}%` }}
+          />
         </div>
-
-        <p className="mt-1 text-xs text-emerald-600">100% · Success</p>
-      </div>
-
-      <div className="ml-2 flex shrink-0 items-center gap-1">
-        <button
-          type="button"
-          aria-label="파일 삭제"
-          className="rounded-md p-1 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
-          onClick={() => onRemove?.(file.id)}
-        >
-          ✕
-        </button>
       </div>
     </div>
   );

@@ -1,28 +1,16 @@
 "use client";
 
 import React from "react";
-import { FileUploadItem, type UploadedFile } from "./FileUploadItem";
+import { FileUploadItem, type UploadedFileProps } from "./FileUploadItem";
 
-export default function UploadedFileList({
-  file,
-  onRemove,
-  emptyText = "업로드된 파일이 없습니다.",
-}: {
-  file: UploadedFile;
-  onRemove?: (id: string) => void;
-  emptyText?: string;
-}) {
-  if (!file) {
-    return (
-      <div className="rounded-xl border border-dashed border-zinc-300 p-6 text-center text-sm text-zinc-500">
-        {emptyText}
-      </div>
-    );
-  }
+export default function FileUploadList(props: UploadedFileProps) {
+  const { file, onRemove } = props;
 
-  return (
-    <div role="list" className="flex flex-col gap-3">
-      <FileUploadItem key={file.id} file={file} onRemove={onRemove} />
+  return !file ? (
+    <div className="flex h-20 w-full max-w-[526px] items-center justify-center rounded-xl border border-dashed border-zinc-300">
+      <p className="text-center text-sm text-zinc-500">파일이 없습니다.</p>
     </div>
+  ) : (
+    <FileUploadItem key={file.id} file={file} onRemove={onRemove} {...props} />
   );
 }

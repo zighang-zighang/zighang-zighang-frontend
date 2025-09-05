@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
-import UploadedFileList from "../FileUploadList";
-import { FileUploadItem } from "../FileUploadItem";
+import FileUploadList from "../FileUploadList";
 
 const meta = {
   title: "Onboarding/FileUpload/FileUploadItem",
-  component: UploadedFileList,
+  component: FileUploadList,
   parameters: {
     layout: "padded",
     backgrounds: {
@@ -19,7 +18,7 @@ const meta = {
   argTypes: {
     onRemove: { action: "remove" },
   },
-} satisfies Meta<typeof UploadedFileList>;
+} satisfies Meta<typeof FileUploadList>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -37,10 +36,24 @@ const file = {
 /* ---------- 리스트 스토리 ---------- */
 export const List_Empty: Story = {
   name: "Default",
-  args: { file },
+  args: {},
 };
 
 export const List_Default: Story = {
   name: "Success",
-  args: { file },
+  args: {
+    file,
+    status: "success",
+    progress: 100,
+    note: "Success",
+  },
+};
+
+export const Uploading: Story = {
+  args: {
+    file,
+    status: "uploading",
+    progress: 42,
+    note: "3seconds lefts",
+  },
 };
