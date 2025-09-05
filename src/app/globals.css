@@ -1,13 +1,5 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
 @import "tailwindcss";
-
-/* (선택) Pretendard 선언 — 실제 경로로 교체하세요 */
-@font-face {
-  font-family: "Pretendard";
-  src: url("https://fonts.gstatic.com/s/pretendard/v1/PretendardVariable.woff2") format("woff2-variations");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
 
 /* 디자인 토큰(프레임워크 비의존) */
 :root {
@@ -30,9 +22,9 @@
   --color-label-neutral: var(--label-neutral);
 
   /* Fonts → font-sans / font-heading 사용 */
-  --font-sans: "Pretendard", system-ui, -apple-system, "Segoe UI", Roboto,
+  --font-sans: "Pretendard Variable", "Pretendard", system-ui, -apple-system, "Segoe UI", Roboto,
     "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-  --font-heading: "Pretendard", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Pretendard Variable", "Pretendard", ui-sans-serif, system-ui, sans-serif;
 
   /* 타입 스케일: Tailwind 네임스페이스에 맞춰 브리지 토큰 제공 */
   /* (네가 쓰던 --font-size-*도 그대로 쓸 수 있게 매핑) */
@@ -232,7 +224,7 @@ body {
   font-family: var(--font-sans);
   font-weight: var(--font-weight-medium);
   font-size: var(--text-14);
-  line-height: var(--leading-14);
+  line-height: var(--leading-20);
 }
 @utility text-Badge2-12m {
   font-family: var(--font-sans);

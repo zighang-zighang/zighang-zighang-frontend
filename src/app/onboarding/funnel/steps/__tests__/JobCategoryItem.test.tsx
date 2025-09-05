@@ -25,7 +25,7 @@ describe("JobCategoryItem", () => {
 
     const button = screen.getByRole("button", { name: label });
     expect(button).toHaveClass(
-      "py-[10px]",
+      "py-[9px]",
       "px-[18px]",
       "rounded-lg",
       "border-[1px]",

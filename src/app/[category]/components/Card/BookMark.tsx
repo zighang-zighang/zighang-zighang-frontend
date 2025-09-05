@@ -1,7 +1,7 @@
 "use client";
 
 import { MouseEvent } from "react";
-
+import Icon from "../Icons/Icon";
 type BookmarkProps = {
   active: boolean;
   disabled?: boolean;
@@ -11,26 +11,23 @@ type BookmarkProps = {
 export default function Bookmark({ active, disabled, onClick }: BookmarkProps) {
   return (
     <div
-      className="flex h-1/2 items-center justify-center"
+      className={`flex h-1/2 items-center justify-center
+        ${active ? "bg-purple-50" : ""}`}
       style={{ borderTopRightRadius: "20px" }}
     >
       <button
         type="button"
         aria-pressed={active}
         aria-label={active ? "북마크 해제" : "북마크"}
-        className="text-40px flex h-9 w-9 items-center justify-center p-1 md:h-12 md:w-12 disabled:opacity-60"
+        className="flex h-9 w-9 items-center justify-center p-1 md:h-12 md:w-12 disabled:opacity-60"
         onClick={onClick}
         disabled={disabled}
       >
-        <img
-          alt="북마크 아이콘"
-          src={
-            active
-              ? "/icon/bookmark_on.svg"
-              : "	https://zighang.com/icon/bookmark_off.svg"
-          }
-          className="h-5 w-5 md:h-7 md:w-7"
-          style={{ color: "transparent" }}
+        <Icon
+          variant="bookmark"
+          className={`transition-transform w-5 h-5 md:w-7 md:h-7 ${
+            active ? "text-purple-800" : "text-gray-200"
+          }`}
         />
       </button>
     </div>

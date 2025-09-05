@@ -11,11 +11,11 @@ import { JobCategoryItem } from "./JobCategoryItem";
 
 export function JobCategoryStep({
   onNext,
+  onSkip,
 }: {
-  onNext: (직군: string) => void;
+  onNext: (직군: string[]) => void;
+  onSkip: () => void;
 }) {
- 
-
   const [selectedCategories, setSelectedCategories] = React.useState<string[]>(
     []
   );
@@ -33,7 +33,7 @@ export function JobCategoryStep({
 
   const handleNext = () => {
     if (selectedCategories.length > 0) {
-      onNext(selectedCategories[0]); // 현재는 첫 번째 선택된 직군만 전달
+      onNext(selectedCategories);
     }
   };
 
@@ -43,23 +43,28 @@ export function JobCategoryStep({
         title="원하는 직군을 선택해주세요."
         subTitle="(최대 3개 선택)"
         stepNumber={1}
-        totalSteps={5}
+        totalSteps={4}
       />
 
-      <div className="w-[613px] mt-[80px] mx-auto flex flex-wrap gap-2 mb-[98px] [&>*:nth-child(1)]:ml-3 [&>*:nth-child(20)]:ml-3">
+      <div className="w-[613px] mt-[80px] mx-auto flex flex-wrap gap-x-2 gap-y-3 mb-[98px] [&>*:nth-child(1)]:ml-3 [&>*:nth-child(20)]:ml-3">
         {onboardingJobCategories.map((category) => (
           <JobCategoryItem
-            key={category}
-            name={category}
-            isSelected={selectedCategories.includes(category)}
-            onClick={() => handleCategoryClick(category)}
+            key={category.name}
+            name={category.name}
+            isSelected={selectedCategories.includes(category.name)}
+            onClick={() => handleCategoryClick(category.name)}
           />
         ))}
       </div>
 
       <StepActions>
-        <SecondaryButton onClick={() => {}}>잘 모르겠어요</SecondaryButton>
-        <ActionButton onClick={handleNext}>다음</ActionButton>
+        <SecondaryButton onClick={onSkip}>잘 모르겠어요</SecondaryButton>
+        <ActionButton
+          onClick={handleNext}
+          state={selectedCategories.length === 0 ? "disabled" : "abled"}
+        >
+          다음
+        </ActionButton>
       </StepActions>
     </StepContainer>
   );
