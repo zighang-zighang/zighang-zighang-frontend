@@ -17,15 +17,10 @@ export function LocationStep({
   onSubmit,
 }: {
   onBack: () => void;
-  onSubmit: (지역: string) => void;
+  onSubmit: (지역: string | null) => void;
 }) {
   const [region, setRegion] = useState<RegionValue | null>(null);
-  const INVALIDS: RegionValue[] = ["전체", "해외"];
-
-  const isValid = useMemo(
-    () => !!region && !INVALIDS.includes(region),
-    [region]
-  );
+  const isValid = useMemo(() => !!region, [region]);
 
   const handleSelect = useCallback(
     (next: Exclude<RegionValue, "전체" | "해외">) => {
@@ -38,9 +33,16 @@ export function LocationStep({
   }, []);
 
   const handleSubmit = useCallback(() => {
-    if (!isValid || !region) return;
-    onSubmit(region);
-  }, [isValid, region, onSubmit]);
+    if (!region) return;
+
+    if (region === "전체") {
+      onSubmit(null);
+    } else if (region === "해외") {
+      onSubmit("해외");
+    } else {
+      onSubmit(region); // 나머지 지역
+    }
+  }, [region, onSubmit]);
 
   return (
     <StepContainer>

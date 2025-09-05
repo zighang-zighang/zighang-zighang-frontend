@@ -22,7 +22,10 @@ type ApiOnboardingPayload = {
   location: string[];
 };
 
-function toApiPayload(context: 지역입력, 지역: string): ApiOnboardingPayload {
+function toApiPayload(
+  context: 지역입력,
+  지역: string | null
+): ApiOnboardingPayload {
   return {
     jobCategory: context.직군,
     job: context.직무,
@@ -50,7 +53,9 @@ export default function OnboardingFunnel() {
     <funnel.Render
       직군입력={({ history }) => (
         <JobCategoryStep
-          onNext={(직군) => history.push("직무입력", (prev) => ({ ...prev, 직군 }))}
+          onNext={(직군) =>
+            history.push("직무입력", (prev) => ({ ...prev, 직군 }))
+          }
           onSkip={() =>
             history.push("경력입력", () => ({ 직군: ["미정"], 직무: ["미정"] }))
           }
