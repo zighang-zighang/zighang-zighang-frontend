@@ -2,7 +2,7 @@
 
 import {
   JOB_GROUP,
-  JOB_ROLE,
+  JOB_ROLE_BY_GROUP,
   HIRE_TYPE,
   EDUCATION_LEVELS,
   REGIONS,
@@ -11,7 +11,12 @@ import {
 import { useFilterDialog } from "@/app/hooks/useFilterDialog";
 import FilterSection from "./FilterSection";
 import FilterRange from "./FilterRange";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+
+const getRolesForGroupDisplay = (group: string): string[] => {
+  if (group === "전체") return ["전체"];
+  return ["전체", ...(JOB_ROLE_BY_GROUP[group] ?? [])];
+};
 
 export default function FilterModal() {
   const {
@@ -30,6 +35,11 @@ export default function FilterModal() {
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "auto";
   }, [open]);
+
+  const jobRoleOptions = useMemo(
+    () => getRolesForGroupDisplay(filters.jobGroup),
+    [filters.jobGroup]
+  );
   if (!open) return null;
 
   return (
@@ -56,7 +66,7 @@ export default function FilterModal() {
           <FilterSection
             title="직무"
             note="중복 선택 가능"
-            options={JOB_ROLE}
+            options={jobRoleOptions}
             selected={(o) => filters.jobRoles.includes(o)}
             onToggle={toggleJobRole}
           />
@@ -100,7 +110,7 @@ export default function FilterModal() {
             title="마감 유형"
             note="중복 선택 가능"
             options={DEADLINE_TYPES}
-            selected={(o) => filters.hireTypes.includes(o)}
+            selected={(o) => filters.deadlineTypes.includes(o)}
             onToggle={toggleHireType}
           />
         </div>
