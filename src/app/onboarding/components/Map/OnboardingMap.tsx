@@ -134,11 +134,12 @@ function MapBase({
                   onClick={() => region && onSelect(region)}
                   tabIndex={region ? 0 : -1}
                   role="button"
+                  aria-label={label || "비활성 지역"}
                   aria-pressed={!!selected}
                   onKeyDown={(e) => {
-                    if (region && (e.key === "Enter" || e.key === " ")) {
-                      onSelect(region);
-                    }
+                    if (!region) return;
+                    if (e.key === " ") e.preventDefault();
+                    if (e.key === "Enter" || e.key === " ") onSelect(region);
                   }}
                   className={[
                     "stroke-[#303030] stroke-[0.9] outline-none transition-colors",
