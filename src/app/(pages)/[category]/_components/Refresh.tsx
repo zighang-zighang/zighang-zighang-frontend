@@ -1,3 +1,4 @@
+import Image from "next/image";
 type RefreshProps = {
   activated?: boolean;
   onClick?: () => void;
@@ -15,16 +16,12 @@ export default function Refresh({ activated = false, onClick }: RefreshProps) {
         }
       `}
     >
-      <img
+      <Image
         alt="새로고침 아이콘"
-        loading="lazy"
-        width="0"
-        height="0"
-        decoding="async"
-        data-nimg="1"
+        width={24}
+        height={24}
         className="h-6 w-6"
         style={{
-          color: "transparent",
           filter: activated ? "none" : "grayscale(100%)",
         }}
         src="https://zighang.com/icon/refresh.svg"

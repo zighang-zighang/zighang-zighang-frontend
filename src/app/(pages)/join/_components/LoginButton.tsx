@@ -1,4 +1,5 @@
 'use client';
+import Image from "next/image";
 
 interface LoginButtonProps {
   provider: 'kakao' | 'naver' | 'google';
@@ -35,12 +36,10 @@ export default function LoginButton({ provider, onClick }: LoginButtonProps) {
       onClick={onClick}
     >
       <div className="mr-4 h-7 w-7">
-        <img
+        <Image
           alt={config.alt}
-          loading="lazy"
-          width="28"
-          height="28"
-          decoding="async"
+          width={28}
+          height={28}
           className={config.className}
           src={config.logo}
         />

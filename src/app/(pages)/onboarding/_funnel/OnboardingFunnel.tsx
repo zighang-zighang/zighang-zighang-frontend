@@ -1,4 +1,5 @@
 import { useFunnel } from "@use-funnel/browser";
+
 import {
   JobCategoryStep,
   JobStep,
@@ -54,7 +55,6 @@ export default function OnboardingFunnel() {
       context: {},
     },
   });
-
   return (
     <funnel.Render
       직군입력={({ history }) => (
