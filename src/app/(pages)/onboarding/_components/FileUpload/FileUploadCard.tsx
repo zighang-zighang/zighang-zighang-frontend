@@ -9,6 +9,7 @@ type Props = {
   accept?: string;
   maxSizeMB?: number;
   disabled?: boolean;
+  hasFile?: boolean;
 };
 
 export default function FileUploadCard({
@@ -18,6 +19,7 @@ export default function FileUploadCard({
   accept,
   maxSizeMB = 10,
   disabled = false,
+  hasFile,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setDragging] = useState(false);
@@ -93,13 +95,14 @@ export default function FileUploadCard({
       aria-labelledby={`${liveId}-title`}
       aria-describedby={helper ? `${liveId}-desc` : undefined}
       className={[
-        "w-full max-w-[526px] min-h-[200px] rounded-2xl border bg-white px-50 py-7.5",
+        "w-full max-w-[526px] rounded-2xl border bg-white px-50 py-7.5",
         "shadow-sm transition outline-none",
         disabled
           ? "opacity-60 cursor-not-allowed"
           : isDragging
           ? "border-violet-400 ring-4 ring-violet-100"
           : "border-zinc-200 hover:shadow",
+        hasFile ? "min-h-[200px]" : "min-h-[228px]",
       ].join(" ")}
       onDragEnter={(e) => {
         if (disabled) return;
