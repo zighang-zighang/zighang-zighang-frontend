@@ -49,8 +49,7 @@ export function UploadStep({ onNext }: { onNext: () => void }) {
     }, 200);
   };
 
-  const handleError = (msg: string) => {
-    console.error(msg);
+  const handleError = () => {
     setStatus("error");
   };
 
@@ -73,7 +72,7 @@ export function UploadStep({ onNext }: { onNext: () => void }) {
 
   return (
     <StepContainer>
-      <div className="flex flex-col justify-center items-center py-7.5">
+      <div className="flex flex-col h-full justify-between items-center py-7.5">
         <div className="px-3.5 py-1.5 bg-violet-50 rounded-lg inline-flex justify-center items-center gap-2.5">
           <p className="justify-start text-violet-500 text-sm font-semibold">
             기본 정보 입력이 완료됐어요!
@@ -94,6 +93,7 @@ export function UploadStep({ onNext }: { onNext: () => void }) {
             multiple={false} // 단일 파일
             accept=".pdf,.doc,.hwp,.hwpx"
             maxSizeMB={15}
+            hasFile={!!file}
           />
 
           {/* 업로드 리스트: 현재 상태 표시 */}
@@ -113,12 +113,27 @@ export function UploadStep({ onNext }: { onNext: () => void }) {
           />
         </div>
 
-        <button
-          onClick={onNext}
-          className="mt-6 rounded-lg px-12 py-2 font-semibold border-1 border-neutral-300 "
-        >
-          넘어가기
-        </button>
+        <div className="flex gap-2 h-full items-end mt-1">
+          <button
+            onClick={onNext}
+            className=" flex-1 min-w-[150px] rounded-lg py-2 font-semibold border border-neutral-300"
+          >
+            넘어가기
+          </button>
+
+          <button
+            disabled={!file}
+            onClick={onNext}
+            className={` flex-1 min-w-[150px] rounded-lg py-2 font-semibold transition-all duration-200
+    ${
+      file
+        ? "bg-violet-500 text-white"
+        : "bg-gray-100 text-gray-400 cursor-not-allowed"
+    }`}
+          >
+            다음
+          </button>
+        </div>
       </div>
     </StepContainer>
   );
