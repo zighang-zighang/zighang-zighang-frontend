@@ -1,4 +1,5 @@
 import { useFunnel } from "@use-funnel/browser";
+import { useRouter } from "next/navigation";
 import {
   JobCategoryStep,
   JobStep,
@@ -12,7 +13,10 @@ import type {
   경력입력,
   학력입력,
   지역입력,
+  파일업로드,
+  완료,
 } from "../context/context";
+import { UploadStep } from "./upload/UploadStep";
 
 type ApiOnboardingPayload = {
   jobCategory: string[];
@@ -42,6 +46,8 @@ export default function OnboardingFunnel() {
     경력입력: 경력입력;
     학력입력: 학력입력;
     지역입력: 지역입력;
+    파일업로드: 파일업로드;
+    완료: 완료;
   }>({
     id: "onboarding-funnel",
     initial: {
@@ -49,6 +55,7 @@ export default function OnboardingFunnel() {
       context: {},
     },
   });
+  const router = useRouter();
   return (
     <funnel.Render
       직군입력={({ history }) => (
@@ -93,8 +100,19 @@ export default function OnboardingFunnel() {
             const apiPayload = toApiPayload(context, 지역);
             console.log("API 전송 payload:", apiPayload);
             // TODO: 제출 API 호출 (e.g., await postOnboarding(apiPayload))
+            history.push("파일업로드", {});
           }}
         />
+      )}
+      파일업로드={({ history }) => (
+        <UploadStep onNext={() => history.push("완료", {})} />
+      )}
+      완료={() => (
+        <div className="p-6 text-center">
+          <h2 className="text-lg font-semibold text-emerald-600">
+            🎉 모든 과정이 완료되었습니다!
+          </h2>
+        </div>
       )}
     />
   );
