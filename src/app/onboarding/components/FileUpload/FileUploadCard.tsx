@@ -189,7 +189,7 @@ export default function FileUploadCard({
         {/* <div
           id={`${liveId}-desc`}
           aria-live="polite"
-          className="text-sm text-rose-600 min-h-[1.25rem]"
+        className="text-sm text-rose-600 min-h-[1.25rem]"
         >
           {helper}
         </div> */}

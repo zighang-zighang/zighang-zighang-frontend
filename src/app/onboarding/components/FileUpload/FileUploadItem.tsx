@@ -66,8 +66,8 @@ export function FileUploadItem({
 
             <div className="flex items-center gap-1.5">
               <p
-                className={` text-xs font-medium text-neutral-500${
-                  status === "error" && "text-rose-600"
+                className={` text-xs font-medium ${
+                  status === "error" ? "text-rose-600" : "text-neutral-500"
                 }`}
               >
                 {`${pct}%`}

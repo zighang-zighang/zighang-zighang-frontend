@@ -92,8 +92,8 @@ export function UploadStep({ onNext }: { onNext: () => void }) {
             onFiles={handleFiles}
             onError={handleError}
             multiple={false} // 단일 파일
-            accept=".pdf,.doc,.docx,.txt"
-            maxSizeMB={10}
+            accept=".pdf,.doc,.hwp,.hwpx"
+            maxSizeMB={15}
           />
 
           {/* 업로드 리스트: 현재 상태 표시 */}
