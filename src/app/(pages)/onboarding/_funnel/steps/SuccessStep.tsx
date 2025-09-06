@@ -101,7 +101,10 @@ export default function SuccessStep({ name }: { name: string }) {
         <section
           className="mx-auto w-full mt-7 relative overflow-hidden
     [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]
-    [mask-size:100%_100%] [mask-repeat:no-repeat]"
+    [mask-size:100%_100%] [mask-repeat:no-repeat]
+    [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]
+    [-webkit-mask-size:100%_100%] [-webkit-mask-repeat:no-repeat]
+    "
         >
           <RecruitmentCardList items={mock} />
         </section>
