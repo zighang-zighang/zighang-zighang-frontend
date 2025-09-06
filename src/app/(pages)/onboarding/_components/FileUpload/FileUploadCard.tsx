@@ -42,7 +42,8 @@ export default function FileUploadCard({
   const validateAndEmit = useCallback(
     (list: FileList | null) => {
       if (!list || list.length === 0) return;
-      const files = Array.from(list);
+      const rawFiles = Array.from(list);
+      const files = multiple ? rawFiles : rawFiles.slice(0, 1);
 
       // 파일 형식 검증
       if (accept) {
@@ -78,7 +79,7 @@ export default function FileUploadCard({
       clearError();
       onFiles?.(files);
     },
-    [accept, maxSizeMB, onFiles, showError, clearError]
+    [accept, maxSizeMB, multiple, onFiles, showError, clearError]
   );
 
   const handleDrop = useCallback(
@@ -132,10 +133,13 @@ export default function FileUploadCard({
           }
         }}
         onDrop={handleDrop}
-        tabIndex={disabled ? -1 : 0}
+        tabIndex={disabled || !!error ? -1 : 0}
+        aria-disabled={disabled || !!error}
+        aria-hidden={!!error}
         onKeyDown={(e) => {
-          if (disabled) return;
+          if (disabled || error) return;
           if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
             inputRef.current?.click();
           }
         }}
@@ -182,8 +186,18 @@ export default function FileUploadCard({
       </div>
       {error && (
         <div
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
           className="absolute inset-0 z-10 grid place-items-center cursor-pointer"
           onClick={clearError}
+          onKeyDown={(e) => {
+            if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              clearError();
+            }
+          }}
+          tabIndex={0}
           title="클릭해서 닫기"
         >
           <div className="px-4 py-2 rounded-md bg-white/85 backdrop-blur-sm border border-rose-200 shadow">

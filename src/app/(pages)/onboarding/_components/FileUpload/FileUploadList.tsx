@@ -13,7 +13,7 @@ export default function FileUploadList(props: UploadedFileProps) {
       <div className="flex gap-1">
         <CheckIcon></CheckIcon>
         <p className="text-xs font-medium text-zinc-400">
-          파일 형식은 PDF, HWP, DOCS로 올려주세요
+          파일 형식은 PDF, DOC, HWP, HWPX로 올려주세요
         </p>
       </div>
 
