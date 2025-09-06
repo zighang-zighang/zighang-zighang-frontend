@@ -16,7 +16,7 @@ export default function RecruitmentCard({
   location,
 }: RecruitmentCardProps) {
   return (
-    <div className="border border-gray-200 rounded-lg px-4 pb-2.5 pt-1 w-56 [box-shadow:0_4px_10px_rgba(0,0,0,0.1)]">
+    <div className="border border-gray-200 rounded-lg px-4 pb-2 w-56 [box-shadow:0_4px_10px_rgba(0,0,0,0.1)]">
       <p className="inline-flex px-1 py-0.5 text-[7.75px] text-blue-500  rounded-sm font-bold bg-blue-500/10">
         {experience}
       </p>
@@ -26,6 +26,8 @@ export default function RecruitmentCard({
             src={logo}
             alt={`${company} 로고`}
             className="max-w-full max-h-full"
+            width={48}
+            height={48}
           />
         </div>
         <div className="flex flex-col">

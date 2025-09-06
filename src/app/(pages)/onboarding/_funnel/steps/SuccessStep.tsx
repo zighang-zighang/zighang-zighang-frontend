@@ -92,27 +92,10 @@ export default function SuccessStep({ name }: { name: string }) {
   return (
     <StepContainer>
       <div className="flex flex-col items-center">
-        <button
-          className="w-9 h-9 bg-neutral-100 rounded-full flex justify-center items-center ml-auto mr-5 mt-4"
-          onClick={() => router.push("/")}
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12.0004 13.4L9.08339 16.325C8.89939 16.5084 8.66472 16.6 8.37939 16.6C8.09406 16.6 7.85939 16.5084 7.67539 16.325C7.49206 16.1417 7.40039 15.9084 7.40039 15.625C7.40039 15.3417 7.49206 15.1084 7.67539 14.925L10.6004 12L7.67539 9.10805C7.49206 8.92405 7.40039 8.68938 7.40039 8.40405C7.40039 8.11938 7.49206 7.88472 7.67539 7.70005C7.85872 7.51672 8.09206 7.42505 8.37539 7.42505C8.65872 7.42505 8.89206 7.51672 9.07539 7.70005L12.0004 10.625L14.8924 7.70005C15.0764 7.51672 15.3111 7.42505 15.5964 7.42505C15.8811 7.42505 16.1157 7.51672 16.3004 7.70005C16.5004 7.90005 16.6004 8.13738 16.6004 8.41205C16.6004 8.68672 16.5004 8.91605 16.3004 9.10005L13.3754 12L16.3004 14.917C16.4837 15.101 16.5754 15.3357 16.5754 15.621C16.5754 15.9064 16.4837 16.141 16.3004 16.325C16.1004 16.525 15.8631 16.625 15.5884 16.625C15.3137 16.625 15.0844 16.525 14.9004 16.325L12.0004 13.4Z"
-              fill="#4D4D4D"
-            />
-          </svg>
-        </button>
-        <div className="bg-violet-500 rounded-full w-20 h-20 mt-8"></div>
+        <div className="bg-violet-500 rounded-full w-20 h-20 mt-20"></div>
         <p className="text-2xl font-semibold mt-3.5">반가워요 {name}님!</p>
         <p className="text-neutral-500 text-lg font-semibold">
-          {name.slice(1)}님에게 딱 맞는 공고를 파악 완료했어요!
+          공고 탐색 페이지에서 응답 내용 기반 적합한 공고를 보여드릴게요!
         </p>
 
         <section
@@ -123,10 +106,10 @@ export default function SuccessStep({ name }: { name: string }) {
           <RecruitmentCardList items={mock} />
         </section>
         <button
-          className="text-white text-base font-semibold px-16 py-3 bg-violet-500 rounded-lg mt-11"
+          className="text-white text-base font-semibold px-10 py-3 bg-violet-500 rounded-lg mt-11"
           onClick={() => router.push("/")}
         >
-          맞춤 공고 바로가기
+          공고 탐색 시작
         </button>
       </div>
     </StepContainer>

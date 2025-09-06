@@ -29,7 +29,7 @@ export default function RecruitmentCardList({ items }: { items: Item[] }) {
           disableOnInteraction: false,
           pauseOnMouseEnter: true,
         }}
-        speed={3500}
+        speed={4000}
         slidesPerView="auto" // 카드 너비에 맞춰 유동
         spaceBetween={1}
         className="h-28"
