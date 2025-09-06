@@ -1,10 +1,6 @@
-import Image from 'next/image';
+import Image from "next/image";
 
-interface RecruitmentContentProps {
-  content: string;
-}
-
-export default function RecruitmentContent({ content }: RecruitmentContentProps) {
+export default function RecruitmentContent() {
   return (
     <div className="w-full">
       <Image
@@ -14,7 +10,7 @@ export default function RecruitmentContent({ content }: RecruitmentContentProps)
         height={0}
         className="w-full px-4"
         src="https://d2juy7qzamcf56.cloudfront.net/2025-08-14/a08240a0-e53f-4acc-b2b7-f928b92d3a2f.png"
-        style={{ color: 'transparent' }}
+        style={{ color: "transparent" }}
       />
       <div className="h-20"></div>
     </div>

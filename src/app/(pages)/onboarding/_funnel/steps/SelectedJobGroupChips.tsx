@@ -116,11 +116,9 @@ const chipMap = {
 function SelectedJobGroupChipsComponent({
   selectedJobGroups,
   active,
-  onSelect,
 }: {
   selectedJobGroups: string[];
   active?: string;
-  onSelect?: (name: string) => void;
 }) {
   const chips = selectedJobGroups
     .map((name) => onboardingJobCategories.find((c) => c.name === name))

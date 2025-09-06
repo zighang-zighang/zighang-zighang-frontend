@@ -16,14 +16,12 @@ export default function NotePad() {
   const {
     notes,
     selected,
-    selectedId,
     editMode,
     setEditMode,
     addNote,
     deleteNote,
     openDetail,
     updateContent,
-    updateTitle,
   } = notesHook;
   const frozenNotesRef = useRef<typeof notes | null>(null);
 

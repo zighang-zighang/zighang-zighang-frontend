@@ -94,7 +94,7 @@ export default function RecruitmentPage() {
             <div className="w-full"></div>
             <p className="hidden"></p>
             <div className="h-9"></div>
-            <RecruitmentContent content={mockRecruitment.content} />
+            <RecruitmentContent />
             <section className="w-full">
               <div className="h-9"></div>
             </section>
@@ -102,7 +102,6 @@ export default function RecruitmentPage() {
           <Separator />
           <div className="md:h-12"></div>
           <SimilarRecruitments
-            currentRecruitment={mockRecruitment}
             recruitments={mockSimilarRecruitments}
             recCount={mockRecCount}
           />

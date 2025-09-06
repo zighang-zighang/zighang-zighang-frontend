@@ -19,13 +19,8 @@ export function FileUploadItem({
     );
   }
 
-  const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
-  const isPdf = ext === "pdf";
-
   const pct = Math.min(100, Math.max(0, progress));
 
-  const fromColor =
-    status === "loading" ? "rgba(107,114,128,0.20)" : "rgba(139,92,246,0.30)";
   return (
     <div
       className="group h-20 w-full max-w-[526px] relative flex items-center gap-3 rounded-xl border border-white bg-white  shadow-sm overflow-hidden"

@@ -1,7 +1,6 @@
 // NotePadLarge.tsx
 "use client";
 
-import { useEffect } from "react";
 import HoverIcon from "../Icons/HoverIcon";
 import KebabMenu from "./KebabMenu";
 import NoteItem from "./NoteItem";
@@ -25,7 +24,6 @@ export default function NotePadLarge({
   const {
     notes,
     selected,
-    selectedId,
     editMode,
     setEditMode,
     addNote,

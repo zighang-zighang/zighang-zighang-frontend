@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, MouseEvent } from "react";
+import { useState, useTransition } from "react";
 import View from "./View";
 import Bookmark from "./BookMark";
 import { toggleBookmark } from "./toggleBookmark";
@@ -15,10 +15,7 @@ export default function Card({
   experience,
   contractType,
   education,
-  imageUrl,
-  dday,
   views,
-  hot = false,
   bookmarked: initialBookmarked = false,
 }: Job) {
   const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
@@ -125,7 +122,7 @@ export default function Card({
         >
           <div className="flex h-full w-full flex-col">
             <Bookmark
-              onClick={(e) => {
+              onClick={() => {
                 onToggle();
               }}
               active={isBookmarked}

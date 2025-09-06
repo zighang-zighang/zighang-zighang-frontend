@@ -1,5 +1,5 @@
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from "next/image";
+import Link from "next/link";
 
 interface SimilarRecruitment {
   uid: string;
@@ -9,21 +9,23 @@ interface SimilarRecruitment {
   };
   imageUrl: string;
   recruitmentJobs: {
-    'IT·개발': string[];
+    "IT·개발": string[];
   };
   types: number[];
   careers: number[];
 }
 
 interface SimilarRecruitmentsProps {
-  currentRecruitment: SimilarRecruitment;
   recruitments: SimilarRecruitment[];
   recCount: {
     count: number;
   };
 }
 
-export default function SimilarRecruitments({ currentRecruitment, recruitments, recCount }: SimilarRecruitmentsProps) {
+export default function SimilarRecruitments({
+  recruitments,
+  recCount,
+}: SimilarRecruitmentsProps) {
   return (
     <div className="flex w-full flex-col gap-2 border-t border-line py-9 md:gap-5 xl:border-none">
       <div className="sticky top-0 z-[40] cursor-pointer bg-white">
@@ -46,7 +48,9 @@ export default function SimilarRecruitments({ currentRecruitment, recruitments, 
               </div>
               <div className="flex items-center gap-1 text-xs text-[#5E5E5E]">
                 <div className="font-medium">
-                  <span className="font-semibold text-primary">{recCount.count}곳</span>
+                  <span className="font-semibold text-primary">
+                    {recCount.count}곳
+                  </span>
                   <span>에서 채용 중</span>
                 </div>
                 <svg
@@ -83,11 +87,15 @@ export default function SimilarRecruitments({ currentRecruitment, recruitments, 
               width={64}
               height={64}
               className="h-16 w-16 cursor-pointer rounded-xl border border-line object-cover"
-              style={{ color: 'transparent' }}
+              style={{ color: "transparent" }}
               src={recruitment.imageUrl}
             />
             <div className="flex flex-1 flex-col justify-center gap-2">
-              <div className={`break-all text-base font-semibold ${recruitment.title.includes('채용') ? '' : 'opacity-40'}`}>
+              <div
+                className={`break-all text-base font-semibold ${
+                  recruitment.title.includes("채용") ? "" : "opacity-40"
+                }`}
+              >
                 {recruitment.title}
               </div>
               <div className="flex items-center">
@@ -96,7 +104,7 @@ export default function SimilarRecruitments({ currentRecruitment, recruitments, 
                 </div>
               </div>
               <div className="flex items-center gap-[6px]">
-                {recruitment.recruitmentJobs['IT·개발']?.map((job, index) => (
+                {recruitment.recruitmentJobs["IT·개발"]?.map((job, index) => (
                   <div
                     key={index}
                     className="rounded-lg bg-[#F0F0F7] px-2 py-1 text-[10px] font-medium text-[#5E5E5E]"
@@ -108,7 +116,7 @@ export default function SimilarRecruitments({ currentRecruitment, recruitments, 
                   정규직
                 </div>
                 <div className="rounded-lg bg-[#F0F0F7] px-2 py-1 text-[10px] font-medium text-[#5E5E5E]">
-                  {recruitment.careers.includes(1) ? '1년차 이상' : '경력 무관'}
+                  {recruitment.careers.includes(1) ? "1년차 이상" : "경력 무관"}
                 </div>
               </div>
             </div>
