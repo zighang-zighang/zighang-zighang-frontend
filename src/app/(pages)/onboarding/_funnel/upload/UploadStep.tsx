@@ -125,7 +125,7 @@ export function UploadStep({ onNext }: { onNext: () => void }) {
           <button
             disabled={!file}
             onClick={onNext}
-            className={`mt-6 flex-1 min-w-[150px] rounded-lg py-2 font-semibold
+            className={`mt-6 flex-1 min-w-[150px] rounded-lg py-2 font-semibold transition-all duration-200
     ${
       file
         ? "bg-violet-500 text-white"
