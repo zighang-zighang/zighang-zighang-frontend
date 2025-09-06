@@ -39,4 +39,15 @@ type 지역입력 = {
   지역?: string | null;
 };
 
-export type { 직군입력, 직무입력, 경력입력, 학력입력, 지역입력 };
+type 파일업로드 = Record<string, never>;
+type 완료 = Record<string, never>;
+
+export type {
+  직군입력,
+  직무입력,
+  경력입력,
+  학력입력,
+  지역입력,
+  파일업로드,
+  완료,
+};
