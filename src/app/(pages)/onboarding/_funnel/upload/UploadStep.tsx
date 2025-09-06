@@ -49,8 +49,7 @@ export function UploadStep({ onNext }: { onNext: () => void }) {
     }, 200);
   };
 
-  const handleError = (msg: string) => {
-    console.error(msg);
+  const handleError = () => {
     setStatus("error");
   };
 
@@ -114,10 +113,10 @@ export function UploadStep({ onNext }: { onNext: () => void }) {
           />
         </div>
 
-        <div className="flex gap-2 h-full items-end ">
+        <div className="flex gap-2 h-full items-end mt-1">
           <button
             onClick={onNext}
-            className="mt-6 flex-1 min-w-[150px] rounded-lg py-2 font-semibold border border-neutral-300"
+            className=" flex-1 min-w-[150px] rounded-lg py-2 font-semibold border border-neutral-300"
           >
             넘어가기
           </button>
@@ -125,7 +124,7 @@ export function UploadStep({ onNext }: { onNext: () => void }) {
           <button
             disabled={!file}
             onClick={onNext}
-            className={`mt-6 flex-1 min-w-[150px] rounded-lg py-2 font-semibold transition-all duration-200
+            className={` flex-1 min-w-[150px] rounded-lg py-2 font-semibold transition-all duration-200
     ${
       file
         ? "bg-violet-500 text-white"

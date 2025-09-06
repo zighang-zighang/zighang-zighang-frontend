@@ -9,7 +9,7 @@ export default function FileUploadList(props: UploadedFileProps) {
   const { file, onRemove } = props;
 
   return !file ? (
-    <div className="flex flex-col gap-1 mt-2.5 mb-6">
+    <div className="flex flex-col gap-1 mt-2.5 mb-4">
       <div className="flex gap-1">
         <CheckIcon></CheckIcon>
         <p className="text-xs font-medium text-zinc-400">
