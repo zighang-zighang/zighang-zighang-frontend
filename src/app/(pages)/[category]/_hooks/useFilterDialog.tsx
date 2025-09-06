@@ -2,6 +2,7 @@
 import {
   createContext,
   useContext,
+  useCallback,
   useMemo,
   useState,
   type ReactNode,
@@ -56,6 +57,15 @@ export const DEFAULT: FilterState = {
   experience: { min: EXPERIENCE_MIN, max: EXPERIENCE_MAX },
 };
 
+const toggleIn = (list: string[], id: string) => {
+  if (id === "전체") return ["전체"];
+  const base = list.includes("전체") ? [] : [...list];
+  const i = base.indexOf(id);
+  if (i >= 0) base.splice(i, 1);
+  else base.push(id);
+  return base.length ? base : ["전체"];
+};
+
 export function FilterDialogProvider({
   children,
   initial = DEFAULT,
@@ -67,38 +77,55 @@ export function FilterDialogProvider({
   const [section, setSection] = useState<Section>("all");
   const [filters, setFilters] = useState<FilterState>(initial);
 
-  const openDialog = (s: Section = "all") => {
-    setSection(s);
-    setOpen(true);
-  };
-  const closeDialog = () => setOpen(false);
+  const openDialog = useCallback(
+    (s: Section = "all") => {
+      setSection(s);
+      setOpen(true);
+    },
+    [setSection, setOpen]
+  );
+  const closeDialog = useCallback(() => setOpen(false), [setOpen]);
 
-  const setJobGroup = (id: string) =>
-    setFilters((p) => ({ ...p, jobGroup: id }));
+  const setJobGroup = useCallback(
+    (id: string) => setFilters((p) => ({ ...p, jobGroup: id })),
+    [setFilters]
+  );
 
-  const toggleIn = (list: string[], id: string) => {
-    if (id === "전체") return ["전체"];
-    const base = list.includes("전체") ? [] : [...list];
-    const i = base.indexOf(id);
-    if (i >= 0) base.splice(i, 1);
-    else base.push(id);
-    return base.length ? base : ["전체"];
-  };
+  const toggleJobRole = useCallback(
+    (id: string) =>
+      setFilters((p) => ({ ...p, jobRoles: toggleIn(p.jobRoles, id) })),
+    [setFilters]
+  );
+  const toggleHireType = useCallback(
+    (id: string) =>
+      setFilters((p) => ({ ...p, hireTypes: toggleIn(p.hireTypes, id) })),
+    [setFilters]
+  );
+  const toggleEducation = useCallback(
+    (id: string) =>
+      setFilters((p) => ({ ...p, educations: toggleIn(p.educations, id) })),
+    [setFilters]
+  );
+  const toggleRegion = useCallback(
+    (id: string) =>
+      setFilters((p) => ({ ...p, regions: toggleIn(p.regions, id) })),
+    [setFilters]
+  );
+  const toggleDeadline = useCallback(
+    (id: string) =>
+      setFilters((p) => ({
+        ...p,
+        deadlineTypes: toggleIn(p.deadlineTypes, id),
+      })),
+    [setFilters]
+  );
+  const setExperience = useCallback(
+    (min: number, max: number) =>
+      setFilters((p) => ({ ...p, experience: { min, max } })),
+    [setFilters]
+  );
 
-  const toggleJobRole = (id: string) =>
-    setFilters((p) => ({ ...p, jobRoles: toggleIn(p.jobRoles, id) }));
-  const toggleHireType = (id: string) =>
-    setFilters((p) => ({ ...p, hireTypes: toggleIn(p.hireTypes, id) }));
-  const toggleEducation = (id: string) =>
-    setFilters((p) => ({ ...p, educations: toggleIn(p.educations, id) }));
-  const toggleRegion = (id: string) =>
-    setFilters((p) => ({ ...p, regions: toggleIn(p.regions, id) }));
-  const toggleDeadline = (id: string) =>
-    setFilters((p) => ({ ...p, deadlineTypes: toggleIn(p.deadlineTypes, id) }));
-  const setExperience = (min: number, max: number) =>
-    setFilters((p) => ({ ...p, experience: { min, max } }));
-
-  const resetAll = () => setFilters(DEFAULT);
+  const resetAll = useCallback(() => setFilters(DEFAULT), [setFilters]);
 
   const value: Ctx = useMemo(
     () => ({
@@ -116,7 +143,21 @@ export function FilterDialogProvider({
       setExperience,
       resetAll,
     }),
-    [open, section, filters]
+    [
+      open,
+      section,
+      filters,
+      openDialog,
+      closeDialog,
+      setJobGroup,
+      toggleJobRole,
+      toggleHireType,
+      toggleEducation,
+      toggleRegion,
+      toggleDeadline,
+      setExperience,
+      resetAll,
+    ]
   );
 
   return <FilterCtx.Provider value={value}>{children}</FilterCtx.Provider>;
