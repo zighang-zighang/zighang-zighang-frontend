@@ -7,15 +7,10 @@ import {
   Geography,
   Annotation,
 } from "react-simple-maps";
-import type { RegionValue } from "@/app/onboarding/context/regionTypes";
-import { REGION_OPTIONS } from "@/app/onboarding/context/regionTypes";
-import type {
-  Feature,
-  Geometry,
-  GeoJsonProperties,
-  FeatureCollection,
-} from "geojson";
+
+import type { Feature, Geometry, FeatureCollection } from "geojson";
 import { geoCentroid } from "d3-geo";
+import { REGION_OPTIONS, RegionValue } from "../../_types/regionTypes";
 
 interface RegionProperties {
   CTP_KOR_NM?: string;
@@ -73,12 +68,6 @@ function MapBase({
   onSelect: (next: Exclude<RegionValue, "전체" | "해외">) => void;
   className?: string;
 }) {
-  const [tooltip, setTooltip] = useState<{
-    name: string;
-    x: number;
-    y: number;
-  } | null>(null);
-
   return (
     <div className={className}>
       <ComposableMap

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { FileIcon } from "./icons/fileIcon";
-import { UploadedFileProps, UploadStatus } from "./types/type";
+import { UploadedFileProps } from "./types/type";
 
 export function FileUploadItem({
   file,

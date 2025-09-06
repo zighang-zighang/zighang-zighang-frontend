@@ -4,7 +4,7 @@ import RegionButtonList from "../RegionButtonList";
 import {
   REGION_VALUES,
   type RegionValue,
-} from "@/app/onboarding/context/regionTypes";
+} from "../../../_types/regionTypes";
 
 const meta: Meta<typeof RegionButtonList> = {
   title: "Onboarding/Region/RegionButtonList",

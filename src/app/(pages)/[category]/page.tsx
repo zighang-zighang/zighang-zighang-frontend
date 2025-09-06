@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import CategoryClient from "./components/CategoryClient";
+import CategoryClient from "./_components/CategoryClient";
 
 export default async function CategoryPage({
   params,

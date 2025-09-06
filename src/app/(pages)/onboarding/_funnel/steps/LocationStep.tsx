@@ -1,6 +1,6 @@
 "use client";
 import { useState, useCallback, useMemo } from "react";
-import type { RegionValue } from "@/app/onboarding/context/regionTypes";
+import { RegionValue } from "../../_types/regionTypes";
 import React from "react";
 import {
   StepContainer,
@@ -10,7 +10,7 @@ import {
 } from "../../_components";
 import { OnboardingMap } from "../../_components/Map/OnboardingMap";
 import RegionButtonList from "../../_components/RegionButton/RegionButtonList";
-import { SIDO_GEO } from "@/app/onboarding/context/map";
+import { SIDO_GEO } from "../../_types/onBoradingMap";
 
 export function LocationStep({
   onBack,

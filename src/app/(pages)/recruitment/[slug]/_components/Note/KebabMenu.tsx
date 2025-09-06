@@ -1,6 +1,6 @@
 "use client";
-import HoverIcon from "@/app/recruitment/[slug]/components/Icons/HoverIcon";
-import { useEffect, useRef, useState } from "react";
+import HoverIcon from "../Icons/HoverIcon";
+import { useState } from "react";
 import { type Note } from "@/app/(pages)/recruitment/[slug]/_hooks/useNotes";
 import DeleteMemo from "./DeleteMemo";
 

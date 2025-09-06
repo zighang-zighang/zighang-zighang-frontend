@@ -2,8 +2,9 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import { useState } from "react";
 import { OnboardingMap } from "../OnboardingMap";
-import type { RegionValue } from "@/app/onboarding/context/regionTypes";
-import { SIDO_GEO } from "@/app/onboarding/context/map";
+import { SIDO_GEO } from "../../../_types/onBoradingMap";
+import { RegionValue } from "../../../_types/regionTypes";
+
 
 const meta: Meta<typeof OnboardingMap> = {
   title: "Onboarding/Map/Map",

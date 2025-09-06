@@ -1,12 +1,13 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import FilterSection from "./components/FilterSection";
-import RecruitmentHeader from "./components/RecruitmentHeader";
-import RecruitmentInfo from "./components/RecruitmentInfo";
-import RecruitmentContent from "./components/RecruitmentContent";
-import SimilarRecruitments from "./components/SimilarRecruitments";
-import SidebarActions from "./components/SidebarActions";
-import Separator from "./components/Separator";
+import FilterSection from "./_components/FilterSection";
+import RecruitmentHeader from "./_components/RecruitmentHeader";
+import RecruitmentInfo from "./_components/RecruitmentInfo";
+import RecruitmentContent from "./_components/RecruitmentContent";
+import Separator from "./_components/Separator";
+import SimilarRecruitments from "./_components/SimilarRecruitments";
+import SidebarActions from "./_components/SidebarActions";
+
 const mockRecruitment = {
   uid: "13f8be02-f11b-4294-b6b6-d46e5a71e16b",
   title: "Solution Architect, Public sector",
