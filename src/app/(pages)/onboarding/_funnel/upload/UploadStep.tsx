@@ -113,12 +113,27 @@ export function UploadStep({ onNext }: { onNext: () => void }) {
           />
         </div>
 
-        <button
-          onClick={onNext}
-          className="mt-6 rounded-lg px-12 py-2 font-semibold border-1 border-neutral-300 "
-        >
-          넘어가기
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={onNext}
+            className="mt-6 flex-1 min-w-[150px] rounded-lg py-2 font-semibold border border-neutral-300"
+          >
+            넘어가기
+          </button>
+
+          <button
+            disabled={!file}
+            onClick={onNext}
+            className={`mt-6 flex-1 min-w-[150px] rounded-lg py-2 font-semibold
+    ${
+      file
+        ? "bg-violet-500 text-white"
+        : "bg-gray-100 text-gray-400 cursor-not-allowed"
+    }`}
+          >
+            다음
+          </button>
+        </div>
       </div>
     </StepContainer>
   );
