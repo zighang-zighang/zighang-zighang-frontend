@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useId, useRef, useState } from "react";
+import { FileUploadIcon } from "./icons/fileUploadIcon";
 
 type Props = {
   onFiles?: (files: File[]) => void;
@@ -105,7 +106,7 @@ export default function FileUploadCard({
         role="group"
         aria-labelledby={`${liveId}-title`}
         className={[
-          "w-full max-w-[526px] rounded-2xl border bg-white px-50 py-7.5",
+          "w-[526px] rounded-2xl border bg-white flex justify-center",
           "shadow-sm transition outline-none relative",
           disabled
             ? "opacity-60 cursor-not-allowed"
@@ -142,32 +143,11 @@ export default function FileUploadCard({
         <div className="flex flex-col items-center justify-center h-full text-center select-none">
           <div
             className={[
-              "rounded-xl border-2 border-dashed p-4",
               isDragging ? "border-violet-400" : "border-zinc-300",
             ].join(" ")}
             aria-hidden="true"
           >
-            <svg
-              width="36"
-              height="36"
-              viewBox="0 0 24 24"
-              className="opacity-70"
-            >
-              <path
-                d="M7 18h10a4 4 0 0 0 0-8 5 5 0 0 0-9.8-1.5A3.5 3.5 0 0 0 7 18z"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              />
-              <path
-                d="M12 9v7m0 0l-3-3m3 3l3-3"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <FileUploadIcon></FileUploadIcon>
           </div>
 
           <div id={`${liveId}-title`} className="text-sm font-semibold mt-2.5">
