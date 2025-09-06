@@ -22,9 +22,9 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
         with:
           source-directory: 'output'
-          destination-github-username: choihooo
+          destination-github-username: betteree
           destination-repository-name: zighang-zighang-frontend
-          user-email: ${{ secrets.EMAIL }}
+          user-email: ${{ secrets.NAEUN_EMAIL }}
           commit-message: ${{ github.event.commits[0].message }}
           target-branch: develop
 
