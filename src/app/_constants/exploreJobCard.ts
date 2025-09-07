@@ -39,7 +39,7 @@ export const EXPLORE_JOBS = [
   },
   {
     key: "field-execution",
-    category: "현장에서 실행하는 활동",
+    category: "현장에서 실행하는 활동\n\n",
     iconKey: "FieldExecutionIcon",
     jobs: ["생산·기능", "운송·배송", "물류 (실무·운영 측면)", "식음료"],
   },

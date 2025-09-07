@@ -1,70 +1,112 @@
 "use client";
 
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, A11y } from "swiper/modules";
+import type { Swiper as SwiperType } from "swiper";
+import { A11y } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 
 import type { ExploreJobKey } from "@/app/_constants/exploreJobCard";
 import { EXPLORE_JOBS_WITH_ICON } from "@/app/_utils/exploreJobs";
 import ExploreJobCard from "./ExploreJobCard";
+import { LeftButton } from "../Icons/LeftButton";
+import { RightButton } from "../Icons/RightButton";
+
+type Item = (typeof EXPLORE_JOBS_WITH_ICON)[number];
 
 interface Props {
   value?: ExploreJobKey | null;
   onChange?: (key: ExploreJobKey | null) => void;
-  maxJobs?: number;
   className?: string;
 }
 
 export default function ExploreJobCarousel({
   value,
   onChange,
-  maxJobs = 3,
   className,
 }: Props) {
-  const [selectedKey, setSelectedKey] = React.useState<ExploreJobKey | null>(
+  const [selectedKey, setSelectedKey] = useState<ExploreJobKey | null>(
     value ?? null
   );
+  const [atBeginning, setAtBeginning] = useState(true);
+  const [atEnd, setAtEnd] = useState(false);
+  const [swiper, setSwiper] = React.useState<SwiperType | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (value !== undefined) setSelectedKey(value);
-    console.log(value);
   }, [value]);
 
-  const set = (next: ExploreJobKey | null) =>
-    onChange ? onChange(next) : setSelectedKey(next);
+  const handleSelect = (item: Item, next: boolean) => {
+    const nextKey: ExploreJobKey | null = next ? item.key : null;
+    if (onChange) onChange(nextKey);
+    else setSelectedKey(nextKey);
+  };
 
   return (
-    <div className={["relative w-full", className || ""].join(" ")}>
-      <Swiper
-        modules={[Navigation, A11y]}
-        navigation
-        loop
-        spaceBetween={16}
-        slidesPerView={4.5}
-        className="!pb-8 overflow-visible"
+    <div className={["w-full", className || ""].join(" ")}>
+      {/* 커스텀 내비게이션 */}
+      <button
+        type="button"
+        onClick={() => swiper?.slidePrev()}
+        disabled={atBeginning}
+        className={`absolute left-10 top-77 z-10 ${
+          atBeginning ? "cursor-not-allowed " : ""
+        }`}
+        aria-label="이전"
       >
-        {EXPLORE_JOBS_WITH_ICON.map(({ key, category, jobs, Icon }) => {
-          const selected = selectedKey === key;
-          return (
-            <SwiperSlide key={key} className="!h-auto overflow-visible">
-              <div className="flex justify-center overflow-visible">
-                <ExploreJobCard
-                  jobKey={key}
-                  category={category}
-                  jobs={jobs as unknown as string[]}
-                  Icon={Icon}
-                  selected={selected}
-                  maxJobs={maxJobs}
-                  onSelect={(k, next) => set(next ? k : null)}
-                />
-              </div>
-            </SwiperSlide>
-          );
-        })}
-      </Swiper>
+        <LeftButton disabled={atBeginning} />
+      </button>
+
+      <button
+        type="button"
+        onClick={() => swiper?.slideNext()}
+        disabled={atEnd}
+        className={`absolute right-10 top-77 z-10 ${
+          atEnd ? "cursor-not-allowed " : ""
+        }`}
+        aria-label="다음"
+      >
+        <RightButton disabled={atEnd} />
+      </button>
+
+      {/* 가로 마스크는 유지 */}
+      <div
+        className="mx-auto w-full relative overflow-hidden
+          [mask-image:linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]
+          [mask-size:100%_100%] [mask-repeat:no-repeat]
+          [-webkit-mask-image:linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]
+          [-webkit-mask-size:100%_100%] [-webkit-mask-repeat:no-repeat]"
+      >
+        <Swiper
+          modules={[A11y]}
+          onSwiper={setSwiper}
+          slidesPerGroup={1}
+          spaceBetween={16}
+          slidesPerView={4.5}
+          onSlideChange={(s) => {
+            setAtBeginning(s.isBeginning);
+            setAtEnd(s.isEnd);
+          }}
+          className="!py-2 overflow-visible"
+        >
+          {EXPLORE_JOBS_WITH_ICON.map((item) => {
+            const isSelected = selectedKey === item.key;
+            return (
+              <SwiperSlide key={item.key} className="!h-auto overflow-visible">
+                <div className="flex justify-center overflow-visible">
+                  <ExploreJobCard
+                    jobKey={item.key}
+                    category={item.category}
+                    Icon={item.Icon}
+                    selected={isSelected}
+                    onSelect={(_, next) => handleSelect(item, next)}
+                  />
+                </div>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      </div>
     </div>
   );
 }

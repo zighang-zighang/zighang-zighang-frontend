@@ -13,10 +13,8 @@ const meta: Meta<typeof ExploreJobCard> = {
   args: {
     jobKey: "problem-solving",
     category: "문제를 해결하고\n답을 찾는 활동",
-    jobs: ["IT·개발", "AI·데이터", "엔지니어링·연구·R&D", "건설·건축"],
     Icon: ProblemSolvingIcon,
     selected: false,
-    maxJobs: 3,
   },
   argTypes: {
     jobKey: {
@@ -33,10 +31,8 @@ const meta: Meta<typeof ExploreJobCard> = {
       ],
     },
     category: { control: "text" },
-    jobs: { control: "object" },
     Icon: { control: false },
     selected: { control: "boolean" },
-    maxJobs: { control: { type: "number", min: 1, max: 8, step: 1 } },
     className: { control: false },
     onSelect: { action: "onSelect" },
   },

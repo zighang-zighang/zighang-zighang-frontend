@@ -5,10 +5,8 @@ import type { IconType } from "@/app/_utils/exploreJobs";
 export interface ExploreJobCardProps {
   jobKey: ExploreJobKey; // React의 key 예약어 충돌 방지
   category: string;
-  jobs: string[];
   Icon: IconType;
   selected?: boolean;
-  maxJobs?: number;
   className?: string;
   onSelect?: (key: ExploreJobKey, next: boolean) => void;
 }
@@ -16,16 +14,11 @@ export interface ExploreJobCardProps {
 export default function ExploreJobCard({
   jobKey,
   category,
-  jobs,
   Icon,
   selected = false,
-  maxJobs = 3,
   className,
   onSelect,
 }: ExploreJobCardProps) {
-  const shown = jobs.slice(0, maxJobs);
-  const more = Math.max(0, jobs.length - shown.length);
-
   const handleClick = () => onSelect?.(jobKey, !selected);
 
   return (
@@ -38,6 +31,7 @@ export default function ExploreJobCard({
         "border-gray-200 bg-white hover:border-gray-300",
         "p-4 cursor-pointer",
         "shadow-[0_0_12px_rgba(0,0,0,0.08)]",
+        selected ? " border-gray-400" : "",
         className || "",
       ].join(" ")}
     >
