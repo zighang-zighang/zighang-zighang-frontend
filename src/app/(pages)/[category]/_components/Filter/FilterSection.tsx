@@ -1,5 +1,5 @@
 import FilterOptionButton from "./FilterButton";
-
+import { toApiJob } from "@/app/_utils/jobFormat";
 type Props = {
   title: string;
   options: readonly string[];
@@ -26,8 +26,8 @@ export default function FilterSection({
           <FilterOptionButton
             key={opt}
             label={opt}
-            selected={selected(opt)}
-            onClick={() => onToggle(opt)}
+            selected={selected(toApiJob(opt))}
+            onClick={() => onToggle(toApiJob(opt))}
           />
         ))}
       </div>
