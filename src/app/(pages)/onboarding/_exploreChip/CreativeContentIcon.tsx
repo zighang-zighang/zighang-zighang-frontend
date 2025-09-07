@@ -11,6 +11,8 @@ export function CreativeContentIcon({
       viewBox="0 0 51 50"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      focusable="false"
       className={
         isSelected
           ? "[filter:drop-shadow(0_0_8px_rgba(255,235,169,0.85))_drop-shadow(0_0_16px_rgba(255,235,169,0.45))]"

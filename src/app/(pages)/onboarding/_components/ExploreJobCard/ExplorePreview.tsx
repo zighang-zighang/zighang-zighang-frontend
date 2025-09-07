@@ -9,9 +9,10 @@ export function ExplorePreview({
   selectedKey: ExploreJobKey;
 }) {
   const meta = React.useMemo(
-    () => EXPLORE_JOBS_WITH_ICON.find((i) => i.key === selectedKey)!,
+    () => EXPLORE_JOBS_WITH_ICON.find((i) => i.key === selectedKey),
     [selectedKey]
   );
+  if (!meta) return null;
   const Icon = meta.Icon;
   const selectedCategory = meta.category;
   const selectedJobs = EXPLORE_JOB_BY_KEY[selectedKey].jobs;

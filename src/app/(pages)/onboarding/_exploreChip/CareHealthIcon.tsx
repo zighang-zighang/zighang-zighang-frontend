@@ -20,7 +20,7 @@ export function CareHealthIcon({
     >
       <g clipPath="url(#clip0_2920_13865)">
         <rect x="0.459717" width="50" height="50" rx="8.33333" fill="#FFE0D8" />
-        <g filter={isSelected ? "url(#glow)" : undefined}>
+        <g>
           <rect
             x="9.05823"
             y="20.4551"
@@ -37,7 +37,6 @@ export function CareHealthIcon({
         </g>
       </g>
       <defs>
-        {/* 발광 효과 정의 */}
         <filter
           id="glow"
           x="-50%"
@@ -53,7 +52,6 @@ export function CareHealthIcon({
           </feMerge>
         </filter>
 
-        {/* 기존 dropShadow는 필요시 남겨둠 */}
         <filter
           id="filter0_d_2920_13865"
           x="-7.39136"

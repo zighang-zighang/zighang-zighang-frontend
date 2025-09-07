@@ -79,7 +79,11 @@ export default function ExploreJobCarousel({
       >
         <Swiper
           modules={[A11y]}
-          onSwiper={setSwiper}
+          onSwiper={(s) => {
+            setSwiper(s);
+            setAtBeginning(s.isBeginning);
+            setAtEnd(s.isEnd);
+          }}
           slidesPerGroup={1}
           spaceBetween={16}
           slidesPerView={4.5}

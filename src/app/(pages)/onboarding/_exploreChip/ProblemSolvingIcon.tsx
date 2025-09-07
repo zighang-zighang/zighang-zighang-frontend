@@ -13,6 +13,8 @@ export function ProblemSolvingIcon({
       viewBox="0 0 50 50"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      focusable="false"
       className={
         isSelected
           ? "[filter:drop-shadow(0_0_8px_rgba(181,238,232,0.8))_drop-shadow(0_0_16px_rgba(181,238,232,0.5))]"
