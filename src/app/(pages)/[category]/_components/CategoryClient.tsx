@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import JobCardList from "./Card/JobCardList";
 import FilterBar from "./Filter/FilterBar";
 import FilterModal from "./Filter/FilterModal";
@@ -12,7 +12,7 @@ import {
   useFilterDialog,
 } from "@/app/(pages)/[category]/_hooks/useFilterDialog";
 import { mapFiltersToParams } from "@/app/_utils/mapFiltersToParams";
-import { useRecruitments } from "@/app/_api/recruitment/useRecruitments";
+import { useInfiniteRecruitments } from "@/app/_api/recruitment/useRecruitments";
 import { Job } from "@/app/_types/jobs";
 import filterAdapt from "@/app/_utils/filterAdapt";
 
@@ -39,11 +39,14 @@ function Inner() {
   const { filters } = useFilterDialog();
   const params = useMemo(() => mapFiltersToParams(filters), [filters]);
 
-  const { data, status, error } = useRecruitments({
-    page: 0,
-    size: 20,
-    ...params,
-  });
+  const {
+    data,
+    status,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteRecruitments({ ...params });
 
   if (status === "pending")
     return <div className="p-4 text-center">Loading…</div>;
@@ -54,13 +57,53 @@ function Inner() {
       </div>
     );
 
-  const content = data?.data?.content ?? [];
+  const pages = data?.pages ?? [];
+  const content = pages.flatMap((p) => p.data.content);
   const jobs: Job[] = content.map(filterAdapt);
 
   return (
     <main className="p-4 space-y-4">
       <FilterBar />
       <JobCardList jobs={jobs} />
+      <AutoLoader
+        canLoad={!!hasNextPage}
+        loading={!!isFetchingNextPage}
+        onLoad={() => fetchNextPage()}
+      />
     </main>
+  );
+}
+
+function AutoLoader({
+  canLoad,
+  loading,
+  onLoad,
+}: {
+  canLoad: boolean;
+  loading: boolean;
+  onLoad: () => void;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting && canLoad && !loading) onLoad();
+      },
+      { root: null, rootMargin: "200px", threshold: 0 }
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, [canLoad, loading, onLoad]);
+
+  return (
+    <div ref={ref} className="flex justify-center py-6 text-sm text-zinc-500">
+      {loading ? "불러오는 중…" : canLoad ? "더 불러오는 중" : ""}
+    </div>
   );
 }
