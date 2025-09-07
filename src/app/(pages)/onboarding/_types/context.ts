@@ -26,7 +26,7 @@ type 경력입력 = {
 type 학력입력 = {
   직군: string[];
   직무?: string[];
-  경력: number;
+  경력?: number;
   학력?: string;
   지역?: string;
 };
@@ -34,8 +34,8 @@ type 학력입력 = {
 type 지역입력 = {
   직군: string[];
   직무?: string[];
-  경력: number;
-  학력: string;
+  경력?: number;
+  학력?: string;
   지역?: string | null;
 };
 

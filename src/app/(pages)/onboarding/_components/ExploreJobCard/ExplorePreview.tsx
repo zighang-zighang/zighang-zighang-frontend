@@ -19,7 +19,7 @@ export function ExplorePreview({
   return (
     <section className="flex flex-col items-center">
       <div className="flex items-center justify-center w-11 h-11 mb-4 rounded-full bg-violet-50">
-        <Icon />
+        <Icon isSelected />
       </div>
       <h2 className="text-xl font-semibold mb-1">
         {selectedCategory}을 선호하는군요!
@@ -32,7 +32,7 @@ export function ExplorePreview({
         {selectedJobs.map((job) => (
           <button
             key={job}
-            className="rounded-lg border border-neutral-100 shadow-md text-lg font-semibold px-7 py-3 bg-white hover:shadow-lg transition"
+            className="rounded-lg border border-neutral-100 shadow-md text-lg font-semibold px-7 py-3 bg-white"
           >
             {job}
           </button>

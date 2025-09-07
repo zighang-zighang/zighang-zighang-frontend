@@ -4,6 +4,7 @@ interface ProblemSolvingIconProps {
 
 export function ProblemSolvingIcon({
   isSelected = false,
+  ...props
 }: ProblemSolvingIconProps) {
   return (
     <svg
@@ -12,14 +13,13 @@ export function ProblemSolvingIcon({
       viewBox="0 0 50 50"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      overflow="visible" // 🔸 빛 번짐이 잘리지 않도록
-      aria-hidden="true"
-      focusable="false"
+      className={
+        isSelected
+          ? "[filter:drop-shadow(0_0_8px_rgba(181,238,232,0.8))_drop-shadow(0_0_16px_rgba(181,238,232,0.5))]"
+          : ""
+      }
+      {...props}
     >
-      {/* 바깥 글로우: 화이트 하이라이트 + 에메랄드 글로우 2겹 */}
-
-      {/* 안쪽 자체 밝기 업: 색을 더 환하게/선명하게 */}
-
       <rect
         x="-0.00366211"
         width="50"

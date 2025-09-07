@@ -11,14 +11,16 @@ export function CareHealthIcon({
       viewBox="0 0 51 50"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={
+        isSelected
+          ? "[filter:drop-shadow(0_0_8px_rgba(255,224,216,0.85))_drop-shadow(0_0_16px_rgba(255,224,216,0.45))]"
+          : ""
+      }
       {...props}
     >
-      <g
-        clipPath="url(#clip0_2920_13865)"
-        filter={isSelected ? "url(#glow)" : undefined}
-      >
+      <g clipPath="url(#clip0_2920_13865)">
         <rect x="0.459717" width="50" height="50" rx="8.33333" fill="#FFE0D8" />
-        <g filter="url(#filter0_d_2920_13865)">
+        <g filter={isSelected ? "url(#glow)" : undefined}>
           <rect
             x="9.05823"
             y="20.4551"
@@ -35,6 +37,23 @@ export function CareHealthIcon({
         </g>
       </g>
       <defs>
+        {/* 발광 효과 정의 */}
+        <filter
+          id="glow"
+          x="-50%"
+          y="-50%"
+          width="200%"
+          height="200%"
+          colorInterpolationFilters="sRGB"
+        >
+          <feGaussianBlur stdDeviation="6" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+
+        {/* 기존 dropShadow는 필요시 남겨둠 */}
         <filter
           id="filter0_d_2920_13865"
           x="-7.39136"
@@ -70,6 +89,7 @@ export function CareHealthIcon({
             result="shape"
           />
         </filter>
+
         <clipPath id="clip0_2920_13865">
           <rect x="0.459717" width="50" height="50" rx="8.33333" fill="white" />
         </clipPath>

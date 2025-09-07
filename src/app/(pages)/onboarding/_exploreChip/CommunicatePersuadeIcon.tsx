@@ -11,9 +11,14 @@ export function CommunicatePersuadeIcon({
       viewBox="0 0 51 50"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={
+        isSelected
+          ? "[filter:drop-shadow(0_0_8px_rgba(255,232,239,0.85))_drop-shadow(0_0_16px_rgba(255,232,239,0.45))]"
+          : ""
+      }
       {...props}
     >
-      <g filter={isSelected ? "url(#glow)" : undefined}>
+      <g>
         <rect x="0.5" y="0" width="50" height="50" rx="10" fill="#FFE8EF" />
 
         <g opacity="0.35">
@@ -29,7 +34,6 @@ export function CommunicatePersuadeIcon({
           fill="#FF3F76"
         />
 
-        {/* 말풍선 점 */}
         <rect
           x="17.8"
           y="18.6"
