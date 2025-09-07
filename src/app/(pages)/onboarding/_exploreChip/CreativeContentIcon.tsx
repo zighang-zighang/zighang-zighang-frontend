@@ -13,23 +13,7 @@ export function CreativeContentIcon({
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      {/* glow filter 정의 */}
-      {isSelected && (
-        <defs>
-          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="4" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-      )}
-
-      <g
-        clipPath="url(#clip0_2920_13872)"
-        filter={isSelected ? "url(#glow)" : undefined}
-      >
+      <g clipPath="url(#clip0_2920_13872)">
         <rect x="0.152588" width="50" height="50" rx="8.33333" fill="#FFEBA9" />
         <g filter="url(#filter0_d_2920_13872)">
           <path

@@ -13,18 +13,6 @@ export function CommunicatePersuadeIcon({
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      {isSelected && (
-        <defs>
-          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="3.5" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-      )}
-
       <g filter={isSelected ? "url(#glow)" : undefined}>
         <rect x="0.5" y="0" width="50" height="50" rx="10" fill="#FFE8EF" />
 

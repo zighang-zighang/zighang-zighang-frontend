@@ -13,18 +13,6 @@ export function CareHealthIcon({
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      {isSelected && (
-        <defs>
-          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="4" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-      )}
-
       <g
         clipPath="url(#clip0_2920_13865)"
         filter={isSelected ? "url(#glow)" : undefined}
