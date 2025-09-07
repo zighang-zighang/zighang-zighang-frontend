@@ -2,17 +2,50 @@
 
 import LoginButton from "./LoginButton";
 
+function buildAuthorizeUrl(provider: "kakao" | "naver" | "google"): string {
+  const isBrowser = typeof window !== "undefined";
+  const devRedirectOrigin = "http://localhost:3000";
+  const prodRedirectOrigin = process.env.NEXT_PUBLIC_REDIRECT_ORIGIN;
+
+  const currentOrigin = isBrowser ? window.location.origin : "";
+  const isDev = isBrowser
+    ? currentOrigin.includes("localhost:3000")
+    : process.env.NODE_ENV !== "production";
+
+  const redirectOrigin = isDev
+    ? devRedirectOrigin
+    : prodRedirectOrigin || currentOrigin;
+
+  const base = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+
+  const redirectParam = encodeURIComponent(`${redirectOrigin}/`);
+  const path = `/oauth2/authorization/${provider}?redirect_uri=${redirectParam}`;
+
+  if (
+    base &&
+    (base.startsWith("http://") ||
+      base.startsWith("https://") ||
+      base.startsWith("/"))
+  ) {
+    return `${base}${path}`;
+  }
+  return path;
+}
+
 export default function LoginButtons() {
   const handleKakaoLogin = () => {
-    console.log("카카오 로그인");
+    const url = buildAuthorizeUrl("kakao");
+    window.location.href = url;
   };
 
   const handleNaverLogin = () => {
-    console.log("네이버 로그인");
+    const url = buildAuthorizeUrl("naver");
+    window.location.href = url;
   };
 
   const handleGoogleLogin = () => {
-    console.log("구글 로그인");
+    const url = buildAuthorizeUrl("google");
+    window.location.href = url;
   };
 
   return (
