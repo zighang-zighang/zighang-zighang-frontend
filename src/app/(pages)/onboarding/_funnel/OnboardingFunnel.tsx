@@ -19,6 +19,7 @@ import type {
   모르겠어요,
 } from "../_types/context";
 import { UploadStep } from "./upload/UploadStep";
+import SuccessStep from "./steps/SuccessStep";
 
 type ApiOnboardingPayload = {
   jobCategory: string[];
@@ -120,13 +121,7 @@ export default function OnboardingFunnel() {
       파일업로드={({ history }) => (
         <UploadStep onNext={() => history.push("완료", {})} />
       )}
-      완료={() => (
-        <div className="p-6 text-center">
-          <h2 className="text-lg font-semibold text-emerald-600">
-            🎉 모든 과정이 완료되었습니다!
-          </h2>
-        </div>
-      )}
+      완료={() => <SuccessStep name="김나은" />}
     />
   );
 }
