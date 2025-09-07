@@ -78,7 +78,7 @@ export default function OnboardingFunnel() {
         <ExploreJobStep
           onBack={() => history.back()}
           onNext={(직군) =>
-            history.push("경력입력", (prev) => ({ ...prev, 직군 }))
+            history.push("학력입력", (prev) => ({ ...prev, 직군 }))
           }
         />
       )}

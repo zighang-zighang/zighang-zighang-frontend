@@ -43,13 +43,13 @@ export default function ExploreJobCarousel({
   };
 
   return (
-    <div className={["w-full", className || ""].join(" ")}>
+    <div className={["w-full relative", className || ""].join(" ")}>
       {/* 커스텀 내비게이션 */}
       <button
         type="button"
         onClick={() => swiper?.slidePrev()}
         disabled={atBeginning}
-        className={`absolute left-10 top-77 z-10 ${
+        className={`absolute left-7 top-25 z-10 ${
           atBeginning ? "cursor-not-allowed " : ""
         }`}
         aria-label="이전"
@@ -61,7 +61,7 @@ export default function ExploreJobCarousel({
         type="button"
         onClick={() => swiper?.slideNext()}
         disabled={atEnd}
-        className={`absolute right-10 top-77 z-10 ${
+        className={`absolute right-7 top-25 z-10 ${
           atEnd ? "cursor-not-allowed " : ""
         }`}
         aria-label="다음"
@@ -72,9 +72,9 @@ export default function ExploreJobCarousel({
       {/* 가로 마스크는 유지 */}
       <div
         className="mx-auto w-full relative overflow-hidden
-          [mask-image:linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]
+          [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]
           [mask-size:100%_100%] [mask-repeat:no-repeat]
-          [-webkit-mask-image:linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]
+          [-webkit-mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]
           [-webkit-mask-size:100%_100%] [-webkit-mask-repeat:no-repeat]"
       >
         <Swiper
@@ -87,7 +87,7 @@ export default function ExploreJobCarousel({
             setAtBeginning(s.isBeginning);
             setAtEnd(s.isEnd);
           }}
-          className="!py-2 overflow-visible"
+          className="!py-2 overflow-visible "
         >
           {EXPLORE_JOBS_WITH_ICON.map((item) => {
             const isSelected = selectedKey === item.key;

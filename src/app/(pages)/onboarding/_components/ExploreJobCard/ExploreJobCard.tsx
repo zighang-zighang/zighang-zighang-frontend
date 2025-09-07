@@ -27,16 +27,19 @@ export default function ExploreJobCard({
       onClick={handleClick}
       aria-pressed={selected}
       className={[
-        "group w-[168px] h-[228px] text-left rounded-2xl border transition-colors",
-        "border-gray-200 bg-white hover:border-gray-300",
+        "group w-[168px] h-[228px] text-left rounded-2xl border",
+        "border-gray-200 bg-white",
         "p-4 cursor-pointer",
         "shadow-[0_0_12px_rgba(0,0,0,0.08)]",
-        selected ? " border-gray-400" : "",
+        "transition-all duration-300",
+        selected
+          ? " shadow-[0_0_12px_rgba(216,180,254,0.9)]"
+          : "hover:shadow-[0_0_12px_rgba(216,180,254,0.6)]",
         className || "",
       ].join(" ")}
     >
       <div className="flex items-center gap-4 flex-col">
-        <Icon isSelected={selected} className="w-13 h-13 shrink-0" />
+        <Icon className="w-13 h-13 shrink-0" />
         <div className="min-w-0">
           <p className="font-semibold whitespace-pre-line text-gray-900 truncate text-center text-sm">
             {category}
