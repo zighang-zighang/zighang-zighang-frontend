@@ -19,14 +19,14 @@ jobs:
         id: push_directory
         uses: cpina/github-action-push-to-another-repository@main
         env:
-          API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
+          API_TOKEN_GITHUB: ${{ secrets.NAEUN_TOKEN }}
         with:
           source-directory: 'output'
           destination-github-username: betteree
           destination-repository-name: zighang-zighang-frontend
           user-email: ${{ secrets.NAEUN_EMAIL }}
           commit-message: ${{ github.event.commits[0].message }}
-          target-branch: develop
+          target-branch: main
 
       - name: Test get variable exported by push-to-another-repository
         run: echo $DESTINATION_CLONED_DIRECTORY
