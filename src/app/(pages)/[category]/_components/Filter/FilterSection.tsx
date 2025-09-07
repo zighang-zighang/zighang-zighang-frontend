@@ -26,8 +26,8 @@ export default function FilterSection({
           <FilterOptionButton
             key={opt}
             label={opt}
-            selected={selected(toApiJob(opt))}
-            onClick={() => onToggle(toApiJob(opt))}
+            selected={selected(opt)}
+            onClick={() => onToggle(opt)}
           />
         ))}
       </div>
