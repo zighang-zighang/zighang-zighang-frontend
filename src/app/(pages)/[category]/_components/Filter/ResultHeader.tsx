@@ -61,7 +61,6 @@ export default function ResultHeader({ total, className = "" }: Props) {
             setSortKey((k) => (k === "views" ? "latest" : "views"))
           }
           className="ds-mobile-listoption ml-auto flex items-center gap-1 rounded-lg py-3 text-sm font-bold text-[#7D7D7D] focus:outline-none active:bg-zinc-100 md:gap-2"
-          aria-haspopup="dialog"
         >
           <Image
             src="https://zighang.com/icon/sort.svg"
