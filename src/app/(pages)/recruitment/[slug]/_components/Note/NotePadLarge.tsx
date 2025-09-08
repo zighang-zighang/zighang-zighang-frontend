@@ -86,7 +86,9 @@ export default function NotePadLarge({
             />
             <div className="border-t border-gray-300 pt-2.5">
               <p className="text-[10px] font-medium text-neutral-400">
-                {selected?.date ?? new Date().toISOString().slice(0, 10)}
+                {selected?.createdAt
+                  ? new Date(selected.createdAt).toISOString().slice(0, 10)
+                  : new Date().toISOString().slice(0, 10)}
               </p>
             </div>
           </div>

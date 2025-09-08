@@ -11,7 +11,7 @@ import { useNotes } from "@/app/(pages)/recruitment/[slug]/_hooks/useNotes";
 export default function NotePad() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLargeOpen, setIsLargeOpen] = useState(false);
-  const notesHook = useNotes({ storageKey: "notes" });
+  const notesHook = useNotes();
 
   const {
     notes,
@@ -103,7 +103,9 @@ export default function NotePad() {
             />
             <div className="border-t border-gray-300 pt-2.5">
               <p className="text-[10px] font-medium text-neutral-400">
-                {selected?.date ?? new Date().toISOString().slice(0, 10)}
+                {selected?.createdAt
+                  ? new Date(selected.createdAt).toISOString().slice(0, 10)
+                  : new Date().toISOString().slice(0, 10)}
               </p>
             </div>
           </div>
