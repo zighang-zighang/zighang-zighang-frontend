@@ -54,11 +54,14 @@ export default function Card({
     return `hsl(${hue}, 70%, 70%)`;
   };
 
+  // 첫번째 지역만 렌더링
+  const firstlocation = location.split(",")[0]?.trim() ?? "";
+
   return (
     <div className="relative w-full md:flex-1 md:flex-grow md:self-stretch min-w-full">
       <a
         target="_blank"
-        href={href?.trim() ? href : `/recruitments/${encodeURIComponent(id)}`}
+        href={`/recruitment/${id}`}
         className="flex flex-[1_0_0] items-center gap-2 rounded-[24px] border border-[#EDEDED] h-[120px] shadow-[0px_4px_30px_0px_#00000008] transition-shadow hover:shadow-[0px_6px_16px_rgba(0,0,0,0.08)] md:mx-0 md:h-[164px] md:pl-[20px]"
         rel="noopener noreferrer"
       >
@@ -99,7 +102,7 @@ export default function Card({
                 <span>·</span>
                 <span>{education}</span>
                 <span>·</span>
-                <span className="break-keep">{location}</span>
+                <span className="break-keep">{firstlocation}</span>
 
                 <span>
                   <div
