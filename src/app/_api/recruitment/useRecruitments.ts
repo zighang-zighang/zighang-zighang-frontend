@@ -24,8 +24,8 @@ export function useInfiniteRecruitments(
       fetchRecruitmentsClient({ page: pageParam ?? 0, size: 20, ...params }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
-      const current = lastPage.data.page.page;
-      const totalPage = lastPage.data.page.totalPage;
+      const current = lastPage?.data?.page?.page ?? 0;
+      const totalPage = lastPage?.data?.page?.totalPage ?? 0;
       const hasNext = current + 1 < totalPage;
       return hasNext ? current + 1 : undefined;
     },

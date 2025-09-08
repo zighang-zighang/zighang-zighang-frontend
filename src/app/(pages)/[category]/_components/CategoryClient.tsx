@@ -62,8 +62,7 @@ function Inner() {
     );
 
   const pages = data?.pages ?? [];
-  console.log(pages);
-  const content = pages.flatMap((p) => p.data.content);
+  const content = pages.flatMap((p) => p?.data?.content ?? []);
   const jobs: Job[] = content.map(filterAdapt);
 
   return (

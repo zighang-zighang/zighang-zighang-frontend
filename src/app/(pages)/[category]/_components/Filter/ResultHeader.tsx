@@ -30,9 +30,7 @@ export default function ResultHeader({ total, className = "" }: Props) {
           </span>
         </div>
 
-        <div className="mx-2 h-4 w-px border border-[#d4d4d8] md:mx-3" />
-
-        <div className="mx-2 hidden h-4 w-px border border-[#d4d4d8] md:mx-3 md:block" />
+        <div className="h-4 w-px border border-[#d4d4d8] md:mx-3" />
 
         <label className="flex items-center gap-2 text-sm text-gray-700">
           <span>채용중인 기업만</span>
