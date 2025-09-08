@@ -25,7 +25,9 @@ export default function ResultHeader({ total, className = "" }: Props) {
         <div className="flex items-baseline text-sm md:text-base">
           <span className="flex items-baseline">
             <span>총</span>
-            <span className="ml-2 font-semibold text-[#7a52ff]">{total}</span>
+            <span className="ml-2 font-semibold text-[#7a52ff]">
+              {total ?? 0}
+            </span>
             <span className="ml-1">개</span>
           </span>
         </div>
