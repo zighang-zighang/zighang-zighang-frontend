@@ -11,31 +11,9 @@ type Props = {
   className?: string;
 };
 
-export default function ResultHeader({
-  total,
-  showTodayBadge = true,
-  className = "",
-}: Props) {
+export default function ResultHeader({ total, className = "" }: Props) {
   const [onlyHiring, setOnlyHiring] = React.useState(false);
   const [sortKey, setSortKey] = React.useState<SortKey>("views");
-  const [localTotal, setLocalTotal] = React.useState<number | null>(
-    typeof total === "number" ? total : null
-  );
-
-  React.useEffect(() => {
-    if (typeof total === "number") return;
-    if (typeof window !== "undefined" && (window as any).__RECRUIT_TOTAL__) {
-      const n = Number((window as any).__RECRUIT_TOTAL__);
-      if (!Number.isNaN(n)) setLocalTotal(n);
-    }
-  }, [total]);
-
-  const displayTotal = React.useMemo(() => {
-    const n = typeof total === "number" ? total : localTotal;
-    return typeof n === "number"
-      ? new Intl.NumberFormat("ko-KR").format(n)
-      : "-";
-  }, [total, localTotal]);
 
   const sortLabel = sortKey === "views" ? "조회수 높은 순" : "최신순";
 
@@ -47,9 +25,7 @@ export default function ResultHeader({
         <div className="flex items-baseline text-sm md:text-base">
           <span className="flex items-baseline">
             <span>총</span>
-            <span className="ml-2 font-semibold text-[#7a52ff]">
-              {displayTotal}
-            </span>
+            <span className="ml-2 font-semibold text-[#7a52ff]">{total}</span>
             <span className="ml-1">개</span>
           </span>
         </div>

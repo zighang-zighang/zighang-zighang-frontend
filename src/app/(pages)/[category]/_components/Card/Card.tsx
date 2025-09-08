@@ -5,6 +5,7 @@ import View from "./View";
 import Bookmark from "./BookMark";
 import { toggleBookmark } from "./toggleBookmark";
 import { Job } from "@/app/_types/jobs";
+import Image from "next/image";
 
 export default function Card({
   id,
@@ -68,9 +69,11 @@ export default function Card({
         <div className="flex flex-1 flex-row items-center gap-2.5 md:gap-6">
           <section className="relative flex aspect-[1/1] flex-shrink-0 items-center justify-center rounded-xl md:rounded-2xl ml-2 w-[60px] md:ml-0 md:w-[80px] overflow-hidden">
             {companyImageUrl ? (
-              <img
+              <Image
                 alt={`${company} 로고`}
                 src={companyImageUrl}
+                width={80}
+                height={80}
                 className="aspect-[1/1] rounded-xl object-cover md:rounded-2xl w-[60px] md:w-[80px] border border-black/10"
               />
             ) : (

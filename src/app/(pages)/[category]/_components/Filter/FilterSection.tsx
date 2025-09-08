@@ -1,5 +1,4 @@
 import FilterOptionButton from "./FilterButton";
-import { toApiJob } from "@/app/_utils/jobFormat";
 type Props = {
   title: string;
   options: readonly string[];
