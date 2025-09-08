@@ -28,6 +28,7 @@ export default function CategoryClient({ slug }: { slug: string }) {
   return (
     <div className="relative w-full overflow-visible px-0 md:mx-auto md:max-w-screen-xl md:px-10">
       <FilterDialogProvider initial={initial}>
+        <FilterBar />
         <Inner />
         <FilterModal />
       </FilterDialogProvider>
@@ -35,6 +36,7 @@ export default function CategoryClient({ slug }: { slug: string }) {
   );
 }
 
+// 데이터 받아오는 쪽
 function Inner() {
   const { filters } = useFilterDialog();
   const params = useMemo(() => mapFiltersToParams(filters), [filters]);
@@ -58,12 +60,12 @@ function Inner() {
     );
 
   const pages = data?.pages ?? [];
+  console.log(pages);
   const content = pages.flatMap((p) => p.data.content);
   const jobs: Job[] = content.map(filterAdapt);
 
   return (
     <main className="p-4 space-y-4">
-      <FilterBar />
       <JobCardList jobs={jobs} />
       <AutoLoader
         canLoad={!!hasNextPage}
@@ -74,6 +76,7 @@ function Inner() {
   );
 }
 
+// 무한 스크롤
 function AutoLoader({
   canLoad,
   loading,

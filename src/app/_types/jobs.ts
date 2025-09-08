@@ -2,6 +2,7 @@ export interface Job {
   id: string;
   href: string;
   company: string;
+  companyImageUrl: string | null;
   title: string;
   location: string;
   experience: string;

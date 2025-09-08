@@ -16,6 +16,7 @@ export default function Card({
   contractType,
   education,
   views,
+  companyImageUrl,
   bookmarked: initialBookmarked = false,
 }: Job) {
   const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
@@ -63,17 +64,20 @@ export default function Card({
       >
         <div className="flex flex-1 flex-row items-center gap-2.5 md:gap-6">
           <section className="relative flex aspect-[1/1] flex-shrink-0 items-center justify-center rounded-xl md:rounded-2xl ml-2 w-[60px] md:ml-0 md:w-[80px] overflow-hidden">
-            {/* <img
-              alt={`${company} 채용 이미지`}
-              src={imageUrl}
-              className="aspect-[1/1] rounded-xl object-cover md:rounded-2xl w-[60px] md:w-[80px] border border-black/10"
-            /> */}
-            <div
-              style={{ backgroundColor: stringToColor(company) }}
-              className="flex items-center justify-center w-full h-full bg-violet-200 text-sm font-bold text-white"
-            >
-              {company.slice(0, 3)}
-            </div>
+            {companyImageUrl ? (
+              <img
+                alt={`${company} 로고`}
+                src={companyImageUrl}
+                className="aspect-[1/1] rounded-xl object-cover md:rounded-2xl w-[60px] md:w-[80px] border border-black/10"
+              />
+            ) : (
+              <div
+                style={{ backgroundColor: stringToColor(company) }}
+                className="flex items-center justify-center w-full h-full bg-violet-200 text-sm font-bold text-white"
+              >
+                {company.slice(0, 3)}
+              </div>
+            )}
           </section>
 
           <div className="flex flex-col gap-[6px] md:gap-3">
