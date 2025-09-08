@@ -8,7 +8,6 @@ import { Job } from "@/app/_types/jobs";
 
 export default function Card({
   id,
-  href,
   company,
   title,
   location,
@@ -17,6 +16,7 @@ export default function Card({
   education,
   views,
   companyImageUrl,
+  deadlineType,
   bookmarked: initialBookmarked = false,
 }: Job) {
   const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
@@ -141,8 +141,7 @@ export default function Card({
             <div className="flex h-1/2 items-center justify-center">
               <div className="text-[13px] font-medium leading-[20px] text-[#71717A]">
                 <div className="break-keep text-center ds-mobile-subtitle1">
-                  {/* {dday} */}
-                  D-3
+                  {deadlineType}
                 </div>
               </div>
             </div>

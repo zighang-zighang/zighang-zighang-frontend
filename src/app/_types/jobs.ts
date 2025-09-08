@@ -9,8 +9,8 @@ export interface Job {
   contractType: string;
   education: string;
   imageUrl: string;
-  dday: string;
   views: number;
+  deadlineType: string;
   hot?: boolean;
   bookmarked?: boolean;
   jobGroup?: string;

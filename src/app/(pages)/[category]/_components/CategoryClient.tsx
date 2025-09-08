@@ -15,6 +15,7 @@ import { mapFiltersToParams } from "@/app/_utils/mapFiltersToParams";
 import { useInfiniteRecruitments } from "@/app/_api/recruitment/useRecruitments";
 import { Job } from "@/app/_types/jobs";
 import filterAdapt from "@/app/_utils/filterAdapt";
+import ResultHeaderConnector from "./Filter/ResultHeaderConnector";
 
 export default function CategoryClient({ slug }: { slug: string }) {
   const slugToJobGroup = (s: string) =>
@@ -29,6 +30,7 @@ export default function CategoryClient({ slug }: { slug: string }) {
     <div className="relative w-full overflow-visible px-0 md:mx-auto md:max-w-screen-xl md:px-10">
       <FilterDialogProvider initial={initial}>
         <FilterBar />
+        <ResultHeaderConnector />
         <Inner />
         <FilterModal />
       </FilterDialogProvider>
@@ -36,7 +38,7 @@ export default function CategoryClient({ slug }: { slug: string }) {
   );
 }
 
-// 데이터 받아오는 쪽
+// 공고 카드 데이터 받아오는 쪽
 function Inner() {
   const { filters } = useFilterDialog();
   const params = useMemo(() => mapFiltersToParams(filters), [filters]);

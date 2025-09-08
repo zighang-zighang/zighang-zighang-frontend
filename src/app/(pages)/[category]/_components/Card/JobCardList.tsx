@@ -31,8 +31,8 @@ export default function JobCardList({ jobs }: { jobs: Job[] }) {
             contractType={job.contractType}
             education={job.education}
             imageUrl={job.imageUrl}
-            dday={job.dday}
             views={job.views}
+            deadlineType={job.deadlineType}
             hot={job.hot ?? false}
             bookmarked={job.bookmarked ?? false}
           />

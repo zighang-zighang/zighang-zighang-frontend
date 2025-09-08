@@ -15,7 +15,7 @@ export function mapFiltersToParams(f: FilterState): FetchParams {
   if (f.educations?.length && !isAll(f.educations)) p.educations = f.educations;
   if (f.regions?.length && !isAll(f.regions)) p.locations = f.regions;
   if (f.deadlineTypes?.length && !isAll(f.deadlineTypes))
-    p.deadlineTypes = f.deadlineTypes;
+    p.deadlineTypes = f.deadlineTypes.map(toApiJob);
 
   const { min, max } = f.experience ?? {};
   if (typeof min === "number" && min !== EXPERIENCE_MIN) p.minExperience = min;
