@@ -9,19 +9,19 @@ import React, {
 } from "react";
 import { cn } from "@/app/_utils/cn";
 
-type DropdownOption = {
+interface DropdownOption {
   value: string;
   label: string;
-};
+}
 
-export type DropdownProps = {
+export interface DropdownProps {
   placeholder: string;
   options: Array<string | DropdownOption>;
   value: string | null;
   onChange: (next: string) => void;
   className?: string;
   disabled?: boolean;
-};
+}
 
 const PANEL_MAX_HEIGHT_PX = 508;
 
