@@ -111,14 +111,18 @@ export function useNotes(recruitmentId?: string) {
   // 디바운스
   useEffect(() => {
     if (!selected) return;
+    const serverContent = selected.content ?? "";
 
+    if (draft === serverContent || draft === lastSentRef.current) {
+      return;
+    }
     if (debounceRef.current) clearTimeout(debounceRef.current);
-
-    if (draft === lastSentRef.current) return;
 
     setSaveStatus("saving");
 
     debounceRef.current = setTimeout(() => {
+      if (draft === serverContent || draft === lastSentRef.current) return;
+
       const [firstLine, ...rest] = draft.replace(/\r\n/g, "\n").split("\n");
       const newTitle = (firstLine ?? "").trim();
       const newContent = [firstLine, ...rest].join("\n");
@@ -129,7 +133,6 @@ export function useNotes(recruitmentId?: string) {
           onSuccess: () => {
             lastSentRef.current = draft;
             setSaveStatus("success");
-            setTimeout(() => setSaveStatus("idle"), 2000);
           },
           onError: () => {
             setSaveStatus("error");

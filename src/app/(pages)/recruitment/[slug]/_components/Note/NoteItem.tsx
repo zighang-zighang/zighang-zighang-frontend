@@ -18,14 +18,12 @@ export default function NoteItem({
   id,
   title,
   onClick,
-  editMode = true,
   onToggleEdit,
   onOpenDetail,
   onTitleChange,
   onTitleBlur,
 }: NoteItemProps) {
   const [localTitle, setLocalTitle] = useState(title);
-  const [isComposing, setIsComposing] = useState(false);
 
   // 부모 title 변경 시 동기화
   useEffect(() => {
