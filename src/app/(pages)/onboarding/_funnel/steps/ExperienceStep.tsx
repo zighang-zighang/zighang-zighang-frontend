@@ -3,11 +3,12 @@
 import React from "react";
 import { ExperienceWheel } from "./ExperienceWheel";
 import { RecruitCountBadge } from "./RecruitCountBadge";
+import { InfoCircle } from "../../_components/Icons/InfoCircle";
+import { InfoTooltip } from "../../_components/Tooltip/InfoTooltip";
 import {
   StepContainer,
   StepHeader,
   StepActions,
-  SecondaryButton,
   ActionButton,
 } from "../../_components";
 const MIN_EXPERIENCE_YEARS = 0; // 0=신입
@@ -161,6 +162,19 @@ export function ExperienceStep({ onNext, onBack, jobs = [] }: Props) {
     <StepContainer>
       <StepHeader
         title="가고 싶은 직군의 경력이 어떻게 되세요?"
+        subTitle={
+          <InfoTooltip
+            content={
+              <div className="text-Body2-12r whitespace-pre-wrap leading-[17px] w-[252px]">
+                총 경력 연차는 지금까지 근무한 모든 기간의 합
+                (정규직·계약직·프리랜서 포함, 인턴)이며, 추후 언제든 수정할 수
+                있습니다.
+              </div>
+            }
+          >
+            <InfoCircle />
+          </InfoTooltip>
+        }
         stepNumber={2}
         totalSteps={4}
         onBack={onBack}
