@@ -99,7 +99,7 @@ export default function Dropdown({
       {open && !disabled && (
         <div
           role="listbox"
-          className="absolute left-0 right-0 top-full mt-2 z-50 w-full overflow-hidden rounded-xl border border-line bg-white shadow-md"
+          className="absolute left-0 right-0 top-full mt-2 z-50 w-full overflow-hidden rounded-xl border border-line border-[#C5C5C8] bg-white"
           style={{ maxHeight: PANEL_MAX_HEIGHT_PX, overflowY: "auto" }}
           aria-label={placeholder}
         >

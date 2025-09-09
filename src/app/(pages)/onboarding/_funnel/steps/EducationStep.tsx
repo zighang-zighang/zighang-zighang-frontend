@@ -11,8 +11,6 @@ import Dropdown from "../../_components/Dropdown/Dropdown";
 import { SchoolChip } from "../../_components/Chip/SchoolChip";
 import { GraduationChip } from "../../_components/Chip/GraduationChip";
 
-import { EDUCATION_LEVELS } from "@/app/_constants/filterOptions";
-
 export function EducationStep({
   onNext,
   onBack,
@@ -21,11 +19,19 @@ export function EducationStep({
   onBack: () => void;
 }) {
   const SCHOOL_OPTIONS = useMemo(
-    () => EDUCATION_LEVELS.filter((v) => v !== "전체" && v !== "학력 무관"),
+    () => [
+      "초등학교",
+      "중학교",
+      "고등학교",
+      "대학교(2,3년)",
+      "대학교(4년)",
+      "대학원(석사)",
+      "대학원(박사)",
+    ],
     []
   );
   const GRADUATION_OPTIONS = useMemo(
-    () => ["졸업", "재학", "휴학", "수료", "중퇴"],
+    () => ["재학 중", "휴학 중", "졸업유예", "졸업"],
     []
   );
 
