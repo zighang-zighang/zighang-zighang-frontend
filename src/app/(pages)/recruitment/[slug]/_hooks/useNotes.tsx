@@ -42,7 +42,7 @@ export function useNotes(recruitmentId?: string) {
     setDraft(next);
     lastSentRef.current = next;
     setSaveStatus("idle");
-  }, [selected?.id]);
+  }, [selected?.id, selected?.content]);
 
   // 최신/중복 전송 방지
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -121,7 +121,10 @@ export function useNotes(recruitmentId?: string) {
     setSaveStatus("saving");
 
     debounceRef.current = setTimeout(() => {
-      if (draft === serverContent || draft === lastSentRef.current) return;
+      if (draft === serverContent || draft === lastSentRef.current) {
+        setSaveStatus("idle");
+        return;
+      }
 
       const [firstLine, ...rest] = draft.replace(/\r\n/g, "\n").split("\n");
       const newTitle = (firstLine ?? "").trim();
@@ -147,32 +150,36 @@ export function useNotes(recruitmentId?: string) {
   }, [draft, selected?.id, updateMemoMutation]);
 
   //본문 즉시 저장
-  const flushDraft = useCallback(() => {
+  const flushDraft = useCallback(async () => {
     if (!selected) return;
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    if (draft === lastSentRef.current) return;
+
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+      debounceRef.current = null;
+    }
+
+    const serverContent = selected.content ?? "";
+
+    if (draft === lastSentRef.current || draft === serverContent) {
+      return;
+    }
 
     const [firstLine, ...rest] = draft.replace(/\r\n/g, "\n").split("\n");
     const newTitle = (firstLine ?? "").trim();
     const newContent = [firstLine, ...rest].join("\n");
 
-    setSaveStatus("saving");
+    try {
+      await updateMemoMutation.mutateAsync({
+        memoId: selected.id,
+        data: { title: newTitle, content: newContent },
+      });
 
-    updateMemoMutation.mutate(
-      { memoId: selected.id, data: { title: newTitle, content: newContent } },
-      {
-        onSuccess: () => {
-          lastSentRef.current = draft;
-          setSaveStatus("success");
-          setTimeout(() => setSaveStatus("idle"), 2000);
-        },
-        onError: (err) => {
-          console.error("flush 실패!", err);
-          setSaveStatus("idle");
-        },
-      }
-    );
-  }, [draft, selected, updateMemoMutation]);
+      lastSentRef.current = draft;
+      setSaveStatus("success");
+    } catch (err) {
+      setSaveStatus("error");
+    }
+  }, [draft, selected?.id, updateMemoMutation]);
 
   // 본문 편집
   const openDetail = useCallback((id: string) => {

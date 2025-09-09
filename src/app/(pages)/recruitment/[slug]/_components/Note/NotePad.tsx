@@ -132,7 +132,7 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
                     <NoteIcon status="error" />
                     저장 실패!
                   </span>
-                ) : selected?.createdAt ? (
+                ) : saveStatus === "idle" && selected ? (
                   new Date(selected.createdAt).toISOString().slice(0, 10)
                 ) : (
                   new Date().toISOString().slice(0, 10)
