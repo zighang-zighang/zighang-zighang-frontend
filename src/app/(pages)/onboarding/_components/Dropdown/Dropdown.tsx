@@ -7,6 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { cn } from "@/app/_utils/cn";
 
 type DropdownOption = {
   value: string;
@@ -80,9 +81,11 @@ export default function Dropdown({
         aria-expanded={open}
         aria-disabled={disabled}
         disabled={disabled}
-        className={`w-full flex items-center justify-between rounded-xl border border-line bg-white px-4 py-3 text-left ${
-          disabled ? "opacity-50 cursor-not-allowed" : ""
-        }`}
+        className={cn(
+          "w-full flex items-center justify-between rounded-xl border bg-white px-4 py-3 text-left",
+          open ? "border-[#303030]" : "border-line",
+          disabled && "opacity-50 cursor-not-allowed"
+        )}
       >
         <span
           className={
@@ -99,7 +102,7 @@ export default function Dropdown({
       {open && !disabled && (
         <div
           role="listbox"
-          className="absolute left-0 right-0 top-full mt-2 z-50 w-full overflow-hidden rounded-xl border border-line border-[#C5C5C8] bg-white"
+          className="absolute left-0 right-0 top-full mt-2 z-50 w-full overflow-hidden rounded-[8px] border border-[#C5C5C8] bg-white"
           style={{ maxHeight: PANEL_MAX_HEIGHT_PX, overflowY: "auto" }}
           aria-label={placeholder}
         >
