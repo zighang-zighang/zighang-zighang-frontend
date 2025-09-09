@@ -35,13 +35,14 @@ export function useNotes(recruitmentId?: string) {
   const [saveStatus, setSaveStatus] = useState<
     "idle" | "saving" | "success" | "error"
   >("idle");
+  const skipNextAutosaveRef = useRef(false);
 
   // 선택 변경 시 draft 동기화
   useEffect(() => {
     const next = selected?.content ?? "";
     setDraft(next);
     lastSentRef.current = next;
-    setSaveStatus("idle");
+    skipNextAutosaveRef.current = true;
   }, [selected?.id, selected?.content]);
 
   // 최신/중복 전송 방지
@@ -111,20 +112,23 @@ export function useNotes(recruitmentId?: string) {
   // 디바운스
   useEffect(() => {
     if (!selected) return;
+
+    if (skipNextAutosaveRef.current) {
+      skipNextAutosaveRef.current = false;
+      return;
+    }
+
     const serverContent = selected.content ?? "";
 
     if (draft === serverContent || draft === lastSentRef.current) {
       return;
     }
-    if (debounceRef.current) clearTimeout(debounceRef.current);
 
+    if (debounceRef.current) clearTimeout(debounceRef.current);
     setSaveStatus("saving");
 
     debounceRef.current = setTimeout(() => {
-      if (draft === serverContent || draft === lastSentRef.current) {
-        setSaveStatus("idle");
-        return;
-      }
+      if (draft === serverContent || draft === lastSentRef.current) return;
 
       const [firstLine, ...rest] = draft.replace(/\r\n/g, "\n").split("\n");
       const newTitle = (firstLine ?? "").trim();
@@ -136,6 +140,7 @@ export function useNotes(recruitmentId?: string) {
           onSuccess: () => {
             lastSentRef.current = draft;
             setSaveStatus("success");
+            setTimeout(() => setSaveStatus("idle"), 3000);
           },
           onError: () => {
             setSaveStatus("error");
@@ -147,38 +152,6 @@ export function useNotes(recruitmentId?: string) {
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [draft, selected?.id, updateMemoMutation]);
-
-  //본문 즉시 저장
-  const flushDraft = useCallback(async () => {
-    if (!selected) return;
-
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-      debounceRef.current = null;
-    }
-
-    const serverContent = selected.content ?? "";
-
-    if (draft === lastSentRef.current || draft === serverContent) {
-      return;
-    }
-
-    const [firstLine, ...rest] = draft.replace(/\r\n/g, "\n").split("\n");
-    const newTitle = (firstLine ?? "").trim();
-    const newContent = [firstLine, ...rest].join("\n");
-
-    try {
-      await updateMemoMutation.mutateAsync({
-        memoId: selected.id,
-        data: { title: newTitle, content: newContent },
-      });
-
-      lastSentRef.current = draft;
-      setSaveStatus("success");
-    } catch (err) {
-      setSaveStatus("error");
-    }
   }, [draft, selected?.id, updateMemoMutation]);
 
   // 본문 편집
@@ -257,7 +230,6 @@ export function useNotes(recruitmentId?: string) {
     deleteNote,
     openDetail,
     updateContent,
-    flushDraft,
     updateTitle,
     flushTitle,
     setSelectedId,

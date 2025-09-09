@@ -27,7 +27,6 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
     deleteNote,
     openDetail,
     updateContent,
-    flushDraft,
     saveStatus,
     draft,
     isLoading,
@@ -53,7 +52,7 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
 
   return (
     <>
-      <div className="w-56 h-96 inline-flex flex-col justify-start items-start">
+      <div className="h-96 inline-flex flex-col justify-start items-start">
         {!isLargeOpen && editMode && isLoggedIn && selected ? (
           <div className="self-stretch h-11 pl-2.5 pr-3.5 py-2.5 bg-white rounded-tl-lg rounded-tr-lg outline outline-1 outline-offset-[-1px] outline-zinc-200 inline-flex justify-between items-center">
             <div className="flex items-center gap-2.5">
@@ -99,10 +98,9 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
               placeholder={"첫 줄이 제목이 됩니다.\n내용을 입력하세요…"}
               value={selected ? draft : ""}
               onChange={(e) => updateContent(e.target.value)}
-              onBlur={flushDraft}
               disabled={!isLoggedIn || !selected}
             />
-            <div className="border-t border-gray-300 pt-2.5 pb-3">
+            <div className="border-t border-gray-300 pt-2.5 pb-3 flex">
               <p
                 className={[
                   "text-[10px] font-medium",
@@ -132,10 +130,12 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
                     <NoteIcon status="error" />
                     저장 실패!
                   </span>
-                ) : saveStatus === "idle" && selected ? (
-                  new Date(selected.createdAt).toISOString().slice(0, 10)
                 ) : (
-                  new Date().toISOString().slice(0, 10)
+                  <span className="text-neutral-400 text-[10px] ml-auto">
+                    {selected?.createdAt
+                      ? new Date(selected.createdAt).toISOString().slice(0, 10)
+                      : new Date().toISOString().slice(0, 10)}
+                  </span>
                 )}
               </p>
             </div>

@@ -32,7 +32,6 @@ export default function NotePadLarge({
     openDetail,
     draft,
     updateContent,
-    flushDraft,
     saveStatus,
   } = notesHook;
 
@@ -93,7 +92,6 @@ export default function NotePadLarge({
               placeholder={"첫 줄이 제목이 됩니다.\n내용을 입력하세요…"}
               value={selected ? draft : ""}
               onChange={(e) => updateContent(e.target.value)}
-              onBlur={flushDraft}
               disabled={!isLoggedIn || !selected}
             />
 
@@ -127,10 +125,12 @@ export default function NotePadLarge({
                     <NoteIcon status="error" />
                     저장 실패!
                   </span>
-                ) : selected?.createdAt ? (
-                  new Date(selected.createdAt).toISOString().slice(0, 10)
                 ) : (
-                  new Date().toISOString().slice(0, 10)
+                  <span className="text-neutral-400 text-[10px] ml-auto">
+                    {selected?.createdAt
+                      ? new Date(selected.createdAt).toISOString().slice(0, 10)
+                      : new Date().toISOString().slice(0, 10)}
+                  </span>
                 )}
               </p>
             </div>

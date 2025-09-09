@@ -21,7 +21,6 @@ export default function NoteItem({
   onToggleEdit,
   onOpenDetail,
   onTitleChange,
-  onTitleBlur,
 }: NoteItemProps) {
   const [localTitle, setLocalTitle] = useState(title);
 
@@ -37,10 +36,6 @@ export default function NoteItem({
     const next = input.length > limit ? input.slice(0, limit) : input;
     setLocalTitle(next);
     onTitleChange?.(id, next);
-  };
-
-  const handleBlur = () => {
-    onTitleBlur?.(id, localTitle); // 즉시 저장
   };
 
   const goDetail = () => {
@@ -64,7 +59,6 @@ export default function NoteItem({
           value={localTitle}
           className="w-full min-w-0 truncate text-sm outline-none"
           onChange={handleChange}
-          onBlur={handleBlur}
           placeholder="제목을 입력해주세요"
         />
         <button
