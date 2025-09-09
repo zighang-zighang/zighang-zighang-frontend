@@ -141,17 +141,17 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
             </div>
           </div>
         ) : (
-          <div className="relative overflow-y-auto overflow-x-hidden self-stretch h-96 px-3.5 py-3 bg-white rounded-bl-lg rounded-br-lg border-l border-r border-b border-zinc-200 inline-flex justify-center items-start gap-2.5">
+          <div className="relative  overflow-y-auto overflow-x-hidden self-stretch h-96 px-3.5 py-3 bg-white rounded-bl-lg rounded-br-lg border-l border-r border-b border-zinc-200 inline-flex justify-center items-start gap-2.5">
             {!isLoggedIn && (
               <div className="absolute inset-0 z-10 bg-gradient-to-b from-violet-50/20 via-violet-50/60 to-violet-50/80 rounded-bl-lg rounded-br-lg backdrop-blur-[1px]" />
             )}
 
-            <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
+            <div className=" flex-1 inline-flex flex-col justify-start items-start gap-2">
               {isLoggedIn && (
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 w-full">
                   <div
                     className={[
-                      "w-50 border-2 border-dotted border-zinc-300 rounded-lg",
+                      "w-full border-2 border-dotted border-zinc-300 rounded-lg",
                       "transition filter",
                     ].join(" ")}
                   >
