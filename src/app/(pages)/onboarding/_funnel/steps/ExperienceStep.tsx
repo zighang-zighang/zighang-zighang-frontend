@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import Picker from "react-mobile-picker";
+import { ExperienceWheel } from "./ExperienceWheel";
+import { RecruitCountBadge } from "./RecruitCountBadge";
 import {
   StepContainer,
   StepHeader,
@@ -12,22 +13,16 @@ import {
 const MIN_EXPERIENCE_YEARS = 0; // 0=신입
 const DEFAULT_EXPERIENCE_YEARS = 1; // 초기 표시 값
 const MAX_EXPERIENCE_YEARS = 10; // 10년+
-const ITEM_HEIGHT_PX = 40; // 각 아이템 높이
-const VIEWPORT_HEIGHT_PX = 160; // 뷰포트 높이(가운데 1개를 선택 영역으로)
 
-export function ExperienceStep({
-  onNext,
-  onBack,
-}: {
+type Props = {
   onNext: (경력: number) => void;
   onBack: () => void;
-}) {
+  jobs?: string[]; // 직무 키 배열
+};
+
+export function ExperienceStep({ onNext, onBack, jobs = [] }: Props) {
   const [selectedYears, setSelectedYears] = React.useState<number>(
     DEFAULT_EXPERIENCE_YEARS
-  );
-  const pickerValue = React.useMemo(
-    () => ({ years: String(selectedYears) }),
-    [selectedYears]
   );
 
   // 화면(휠 바깥) 스와이프로 연차 변경을 위한 refs
@@ -43,7 +38,7 @@ export function ExperienceStep({
   const pointerActiveRef = React.useRef(false);
   const stopPointerDrag = (e?: React.PointerEvent<HTMLDivElement>) => {
     try {
-      (e?.currentTarget as Element & { releasePointerCapture?: any })?.releasePointerCapture?.(
+      e?.currentTarget?.releasePointerCapture?.(
         (e as React.PointerEvent<HTMLDivElement>)?.pointerId
       );
     } catch {}
@@ -52,48 +47,63 @@ export function ExperienceStep({
     accumDeltaRef.current = 0;
   };
 
-  const options = React.useMemo(
-    () => Array.from({ length: MAX_EXPERIENCE_YEARS - MIN_EXPERIENCE_YEARS + 1 }, (_, i) => i + MIN_EXPERIENCE_YEARS),
-    []
-  );
+  // 스와이프/드래그 공통 증감 처리
+  const adjustByDelta = (deltaY: number) => {
+    const now = performance.now();
+    if (now - lastTickRef.current < SWIPE_COOLDOWN_MS) return;
+    accumDeltaRef.current += deltaY;
 
-  const handlePickerChange = (next: { years: string }) => {
-    const value = Number(next?.years ?? DEFAULT_EXPERIENCE_YEARS);
-    setSelectedYears(value);
+    while (accumDeltaRef.current <= -SWIPE_STEP_PX) {
+      let stepped = false;
+      setSelectedYears((y) => {
+        if (y >= MAX_EXPERIENCE_YEARS) return y;
+        stepped = true;
+        return Math.min(MAX_EXPERIENCE_YEARS, y + 1);
+      });
+      if (!stepped) break;
+      accumDeltaRef.current += SWIPE_STEP_PX;
+      lastTickRef.current = now;
+    }
+    while (accumDeltaRef.current >= SWIPE_STEP_PX) {
+      let stepped = false;
+      setSelectedYears((y) => {
+        if (y <= MIN_EXPERIENCE_YEARS) return y;
+        stepped = true;
+        return Math.max(MIN_EXPERIENCE_YEARS, y - 1);
+      });
+      if (!stepped) break;
+      accumDeltaRef.current -= SWIPE_STEP_PX;
+      lastTickRef.current = now;
+    }
   };
+
+  const handleWheelChange = (value: number) => setSelectedYears(value);
 
   const canProceed = true; // 기본값 선택(1년)으로 바로 진행 가능
   const handleNext = () => onNext(selectedYears);
 
   // 화면 스와이프(휠 바깥에서만 동작)
   const onTouchStartPage: React.TouchEventHandler<HTMLDivElement> = (e) => {
-    if (pickerAreaRef.current && pickerAreaRef.current.contains(e.target as Node)) return;
+    if (
+      pickerAreaRef.current &&
+      pickerAreaRef.current.contains(e.target as Node)
+    )
+      return;
     touchStartYRef.current = e.touches[0].clientY;
     accumDeltaRef.current = 0;
     lastTickRef.current = performance.now();
   };
   const onTouchMovePage: React.TouchEventHandler<HTMLDivElement> = (e) => {
-    if (pickerAreaRef.current && pickerAreaRef.current.contains(e.target as Node)) return;
+    if (
+      pickerAreaRef.current &&
+      pickerAreaRef.current.contains(e.target as Node)
+    )
+      return;
     if (touchStartYRef.current == null) return;
-    const now = performance.now();
-    if (now - lastTickRef.current < SWIPE_COOLDOWN_MS) return;
     const currentY = e.touches[0].clientY;
     const dy = currentY - touchStartYRef.current;
     touchStartYRef.current = currentY;
-    accumDeltaRef.current += dy;
-
-    // 위로 스와이프(음수): +1년
-    while (accumDeltaRef.current <= -SWIPE_STEP_PX && selectedYears < MAX_EXPERIENCE_YEARS) {
-      setSelectedYears((y) => Math.min(MAX_EXPERIENCE_YEARS, y + 1));
-      accumDeltaRef.current += SWIPE_STEP_PX;
-      lastTickRef.current = now;
-    }
-    // 아래로 스와이프(양수): -1년
-    while (accumDeltaRef.current >= SWIPE_STEP_PX && selectedYears > MIN_EXPERIENCE_YEARS) {
-      setSelectedYears((y) => Math.max(MIN_EXPERIENCE_YEARS, y - 1));
-      accumDeltaRef.current -= SWIPE_STEP_PX;
-      lastTickRef.current = now;
-    }
+    adjustByDelta(dy);
   };
   const onTouchEndPage: React.TouchEventHandler<HTMLDivElement> = () => {
     touchStartYRef.current = null;
@@ -104,7 +114,9 @@ export function ExperienceStep({
   const onPointerDownPage: React.PointerEventHandler<HTMLDivElement> = (e) => {
     if (e.pointerType === "touch") return; // 터치는 기존 핸들러 사용
     // 마우스 드래그: 휠 영역 포함 전체에서 동작
-    try { (e.currentTarget as Element & { setPointerCapture?: any }).setPointerCapture?.(e.pointerId); } catch {}
+    try {
+      e.currentTarget.setPointerCapture?.(e.pointerId);
+    } catch {}
     e.preventDefault();
     containerRef.current = e.currentTarget;
     pointerActiveRef.current = true;
@@ -118,28 +130,18 @@ export function ExperienceStep({
     const rect = containerRef.current?.getBoundingClientRect();
     if (
       rect &&
-      (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom)
+      (e.clientX < rect.left ||
+        e.clientX > rect.right ||
+        e.clientY < rect.top ||
+        e.clientY > rect.bottom)
     ) {
       stopPointerDrag(e);
       return;
     }
-    const now = performance.now();
-    if (now - lastTickRef.current < SWIPE_COOLDOWN_MS) return;
     const currentY = e.clientY;
     const dy = currentY - (pointerStartYRef.current ?? currentY);
     pointerStartYRef.current = currentY;
-    accumDeltaRef.current += dy;
-
-    while (accumDeltaRef.current <= -SWIPE_STEP_PX && selectedYears < MAX_EXPERIENCE_YEARS) {
-      setSelectedYears((y) => Math.min(MAX_EXPERIENCE_YEARS, y + 1));
-      accumDeltaRef.current += SWIPE_STEP_PX;
-      lastTickRef.current = now;
-    }
-    while (accumDeltaRef.current >= SWIPE_STEP_PX && selectedYears > MIN_EXPERIENCE_YEARS) {
-      setSelectedYears((y) => Math.max(MIN_EXPERIENCE_YEARS, y - 1));
-      accumDeltaRef.current -= SWIPE_STEP_PX;
-      lastTickRef.current = now;
-    }
+    adjustByDelta(dy);
   };
   const onPointerUpPage: React.PointerEventHandler<HTMLDivElement> = (e) => {
     stopPointerDrag(e);
@@ -148,7 +150,9 @@ export function ExperienceStep({
     if (!pointerActiveRef.current) return;
     stopPointerDrag(e);
   };
-  const onPointerCancelPage: React.PointerEventHandler<HTMLDivElement> = (e) => {
+  const onPointerCancelPage: React.PointerEventHandler<HTMLDivElement> = (
+    e
+  ) => {
     if (!pointerActiveRef.current) return;
     stopPointerDrag(e);
   };
@@ -175,67 +179,27 @@ export function ExperienceStep({
         ref={containerRef}
       >
         {/* 선택 영역 */}
-        <div className="flex flex-col items-center justify-center flex-1">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-Heading3-18sb text-black">내 경력은</span>
+        <div className="flex flex-col items-center justify-center flex-1 relative w-full">
+          <div className="flex items-center gap-2 mb-3 mt-[108px]">
+            <span className="text-Heading2-20sb text-black">내 경력은</span>
 
-            {/* 스와이프 휠 */}
-            <div className="relative" ref={pickerAreaRef}>
-              {/* 가운데 선택 가이드 라인 */}
-              <div
-                className="pointer-events-none absolute left-0 right-0 top-1/2 -translate-y-1/2 rounded-[8px] border border-[#7951FF]"
-                style={{ height: ITEM_HEIGHT_PX }}
-              />
-
-              {/* 상/하단 페이드 마스크 */}
-              <div className="pointer-events-none absolute left-0 right-0 top-0 h-[40px]" style={{
-                background: "linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0))"
-              }} />
-              <div className="pointer-events-none absolute left-0 right-0 bottom-0 h-[40px]" style={{
-                background: "linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,0))"
-              }} />
-
-              <div className="w-[140px] rounded-[8px] bg-white">
-                <Picker
-                  value={pickerValue}
-                  onChange={handlePickerChange}
-                  height={VIEWPORT_HEIGHT_PX}
-                  itemHeight={ITEM_HEIGHT_PX}
-                  wheelMode="normal"
-                >
-                  <Picker.Column name="years">
-                    {options.map((opt: number) => (
-                      <Picker.Item key={opt} value={String(opt)}>
-                        {({ selected }: { selected: boolean }) => (
-                          <div
-                            className={`flex items-center justify-center select-none text-Heading3-18sb ${
-                              selected ? "text-[#7951FF]" : "text-[#303030]"
-                            }`}
-                            style={{ height: ITEM_HEIGHT_PX }}
-                          >
-                            {opt === 0 ? "신입" : `${opt}년 이상`}
-                          </div>
-                        )}
-                      </Picker.Item>
-                    ))}
-                  </Picker.Column>
-                </Picker>
-              </div>
-            </div>
-
-            <span className="text-Heading3-18sb text-black">이다.</span>
+            <ExperienceWheel
+              ref={pickerAreaRef}
+              selected={selectedYears}
+              onChange={handleWheelChange}
+            />
+            <span className="text-Heading2-20sb text-black">이다.</span>
           </div>
 
-          {/* 안내 배지 */}
-          <div className="mt-2 px-4 py-2 rounded-[10px] bg-white border border-[#E5D8FF] shadow-[0_4px_12px_rgba(121,81,255,0.15)] text-[#6B47E6] text-Body2-14m">
-            ✨ 경력 {selectedYears === 0 ? 0 : selectedYears}년 이상은 직행에서 <span className="underline">180개 공고</span>를 보유하고 있어요!
-          </div>
+          <RecruitCountBadge years={selectedYears} jobs={jobs} />
         </div>
 
         {/* 하단 액션 */}
         <StepActions className="h-full flex items-end pb-[30px]">
-          <SecondaryButton onClick={onBack}>이전</SecondaryButton>
-          <ActionButton onClick={handleNext} state={canProceed ? "abled" : "disabled"}>
+          <ActionButton
+            onClick={handleNext}
+            state={canProceed ? "abled" : "disabled"}
+          >
             다음
           </ActionButton>
         </StepActions>
@@ -243,4 +207,3 @@ export function ExperienceStep({
     </StepContainer>
   );
 }
-
