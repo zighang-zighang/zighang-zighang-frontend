@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useEffect, useRef } from "react";
 import {
   useMemos,
   useCreateMemo,
@@ -12,6 +12,8 @@ import { fetchMemos } from "@/app/_api/memos/memoApi";
 import type { Memo } from "@/app/_types/memos";
 
 export type Note = Memo;
+
+const AUTOSAVE_DEBOUNCE_MS = 600;
 
 export function useNotes(recruitmentId?: string) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -29,12 +31,36 @@ export function useNotes(recruitmentId?: string) {
     [notes, selectedId]
   );
 
+  const [draft, setDraft] = useState<string>("");
+  const [saveStatus, setSaveStatus] = useState<
+    "idle" | "saving" | "success" | "error"
+  >("idle");
+
+  // 선택 변경 시 draft 동기화
+  useEffect(() => {
+    const next = selected?.content ?? "";
+    setDraft(next);
+    lastSentRef.current = next;
+    setSaveStatus("idle");
+  }, [selected?.id]);
+
+  // 최신/중복 전송 방지
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastSentRef = useRef<string>("");
+
+  // 제목 디바운스용 레퍼런스
+  const titleTimersRef = useRef<
+    Record<string, ReturnType<typeof setTimeout> | undefined>
+  >({});
+  const lastSentTitleRef = useRef<Record<string, string>>({});
+
   const pickNewest = (list: Memo[]) => {
     if (!list.length) return null;
     const ts = (m: Memo) => new Date(m.updatedAt ?? m.createdAt ?? 0).getTime();
     return [...list].sort((a, b) => ts(b) - ts(a))[0];
   };
 
+  // 메모추가
   const addNote = useCallback(async () => {
     try {
       await createMemoMutation.mutateAsync({
@@ -43,22 +69,6 @@ export function useNotes(recruitmentId?: string) {
         ...(recruitmentId ? { recruitmentId } : {}),
       });
 
-      // 응답에 id가 있으면 바로 선택
-      // const createdId =
-      //   (res &&
-      //     typeof res === "object" &&
-      //     "memo" in (res as any) &&
-      //     (res as any).memo?.id) ||
-      //   (res && typeof (res as any).id === "string" && (res as any).id) ||
-      //   null;
-
-      // if (createdId) {
-      //   setSelectedId(createdId);
-      //   setEditMode(false);
-      //   return;
-      // }
-
-      // 없으면 스코프 refetch
       const fresh = await queryClient.fetchQuery({
         queryKey: ["memos", { recruitmentId }],
         queryFn: () => fetchMemos(recruitmentId),
@@ -77,6 +87,7 @@ export function useNotes(recruitmentId?: string) {
     }
   }, [createMemoMutation, queryClient, recruitmentId]);
 
+  // 메모 삭제
   const deleteNote = useCallback(
     (id: string) => {
       deleteMemoMutation.mutate(id, {
@@ -92,32 +103,133 @@ export function useNotes(recruitmentId?: string) {
     [selectedId, deleteMemoMutation]
   );
 
+  /** draft만 갱신 , 저장은 디바운스 이펙트에서 처리 */
+  const updateContent = useCallback((value: string) => {
+    setDraft(value);
+  }, []);
+
+  // 디바운스
+  useEffect(() => {
+    if (!selected) return;
+
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    if (draft === lastSentRef.current) return;
+
+    setSaveStatus("saving");
+
+    debounceRef.current = setTimeout(() => {
+      const [firstLine, ...rest] = draft.replace(/\r\n/g, "\n").split("\n");
+      const newTitle = (firstLine ?? "").trim();
+      const newContent = [firstLine, ...rest].join("\n");
+
+      updateMemoMutation.mutate(
+        { memoId: selected.id, data: { title: newTitle, content: newContent } },
+        {
+          onSuccess: () => {
+            lastSentRef.current = draft;
+            setSaveStatus("success");
+            setTimeout(() => setSaveStatus("idle"), 2000);
+          },
+          onError: () => {
+            setSaveStatus("error");
+          },
+        }
+      );
+    }, AUTOSAVE_DEBOUNCE_MS);
+
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [draft, selected?.id, updateMemoMutation]);
+
+  //본문 즉시 저장
+  const flushDraft = useCallback(() => {
+    if (!selected) return;
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (draft === lastSentRef.current) return;
+
+    const [firstLine, ...rest] = draft.replace(/\r\n/g, "\n").split("\n");
+    const newTitle = (firstLine ?? "").trim();
+    const newContent = [firstLine, ...rest].join("\n");
+
+    setSaveStatus("saving");
+
+    updateMemoMutation.mutate(
+      { memoId: selected.id, data: { title: newTitle, content: newContent } },
+      {
+        onSuccess: () => {
+          lastSentRef.current = draft;
+          setSaveStatus("success");
+          setTimeout(() => setSaveStatus("idle"), 2000);
+        },
+        onError: (err) => {
+          console.error("flush 실패!", err);
+          setSaveStatus("idle");
+        },
+      }
+    );
+  }, [draft, selected, updateMemoMutation]);
+
+  // 본문 편집
   const openDetail = useCallback((id: string) => {
     setSelectedId(id);
     setEditMode(true);
   }, []);
 
-  const updateContent = useCallback(
-    (value: string) => {
-      if (!selected) return;
-      const [firstLine, ...rest] = value.replace(/\r\n/g, "\n").split("\n");
-      const newTitle = (firstLine ?? "").trim();
-      const newContent = [firstLine, ...rest].join("\n");
-      updateMemoMutation.mutate(
-        { memoId: selected.id, data: { title: newTitle, content: newContent } },
-        { onError: (err) => console.error("updateContent 실패!", err) }
-      );
-    },
-    [selected, updateMemoMutation]
-  );
-
+  //제목 수정
   const updateTitle = useCallback(
     (id: string, title: string) => {
+      // 타이머 초기화
+      const t = titleTimersRef.current[id];
+      if (t) clearTimeout(t);
+
+      // 디바운스 타이머 설정
+      titleTimersRef.current[id] = setTimeout(() => {
+        const note = notes.find((n) => n.id === id);
+        if (!note) return;
+
+        // 중복 전송 방지
+        if (lastSentTitleRef.current[id] === title) return;
+
+        updateMemoMutation.mutate(
+          { memoId: id, data: { title, content: note.content } },
+          {
+            onSuccess: () => {
+              lastSentTitleRef.current[id] = title;
+            },
+            onError: (err) => {
+              console.error("updateTitle(디바운스) 실패!", err);
+            },
+          }
+        );
+      }, 300);
+    },
+    [notes, updateMemoMutation]
+  );
+
+  // 제목 즉시 저장
+  const flushTitle = useCallback(
+    (id: string, title: string) => {
+      // 타이머 제거
+      const t = titleTimersRef.current[id];
+      if (t) clearTimeout(t);
+
       const note = notes.find((n) => n.id === id);
       if (!note) return;
+
+      if (lastSentTitleRef.current[id] === title) return;
+
       updateMemoMutation.mutate(
         { memoId: id, data: { title, content: note.content } },
-        { onError: (err) => console.error("updateTitle 실패!", err) }
+        {
+          onSuccess: () => {
+            lastSentTitleRef.current[id] = title;
+          },
+          onError: (err) => {
+            console.error("flushTitle 실패!", err);
+          },
+        }
       );
     },
     [notes, updateMemoMutation]
@@ -135,7 +247,11 @@ export function useNotes(recruitmentId?: string) {
     deleteNote,
     openDetail,
     updateContent,
+    flushDraft,
     updateTitle,
+    flushTitle,
     setSelectedId,
+    draft,
+    saveStatus,
   };
 }

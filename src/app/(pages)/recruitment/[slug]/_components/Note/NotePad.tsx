@@ -26,6 +26,11 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
     deleteNote,
     openDetail,
     updateContent,
+    flushDraft,
+    updateTitle,
+    flushTitle,
+    saveStatus,
+    draft,
     isLoading,
   } = notesHook;
 
@@ -93,15 +98,58 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
             <textarea
               className="w-full h-full resize-none text-xs font-medium overflow-y-auto overflow-x-hidden outline-none"
               placeholder={"첫 줄이 제목이 됩니다.\n내용을 입력하세요…"}
-              value={selected?.content ?? ""}
+              value={selected ? draft : ""}
               onChange={(e) => updateContent(e.target.value)}
+              onBlur={flushDraft}
               disabled={!isLoggedIn || !selected}
             />
-            <div className="border-t border-gray-300 pt-2.5">
-              <p className="text-[10px] font-medium text-neutral-400">
-                {selected?.createdAt
-                  ? new Date(selected.createdAt).toISOString().slice(0, 10)
-                  : new Date().toISOString().slice(0, 10)}
+            <div className="border-t border-gray-300 pt-2.5 pb-3">
+              <p
+                className={[
+                  "text-[10px] font-medium",
+                  saveStatus === "saving"
+                    ? "text-neutral-400"
+                    : saveStatus === "success"
+                    ? "text-emerald-300"
+                    : saveStatus === "error"
+                    ? "text-rose-300"
+                    : "text-neutral-400", // 기본(날짜)
+                ].join(" ")}
+                aria-live="polite"
+                role="status"
+              >
+                {saveStatus === "saving" ? (
+                  <span className="inline-flex items-center gap-1.5">
+                    <svg
+                      className="inline-block animate-spin h-3 w-3"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                      />
+                    </svg>
+                    저장 중…
+                  </span>
+                ) : saveStatus === "success" ? (
+                  "저장 완료!"
+                ) : saveStatus === "error" ? (
+                  "저장 실패"
+                ) : selected?.createdAt ? (
+                  new Date(selected.createdAt).toISOString().slice(0, 10)
+                ) : (
+                  new Date().toISOString().slice(0, 10)
+                )}
               </p>
             </div>
           </div>
@@ -131,18 +179,7 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
                   {isLoading && (
                     <p className="text-xs text-neutral-400">불러오는 중…</p>
                   )}
-                  {/* {!isLoading && error && (
-                    <p className="text-xs text-red-500">
-                      메모를 불러오지 못했어요.
-                    </p>
-                  )}
-                  {!isLoading && !error && listFrozen.length === 0 && (
-                    <p className="text-xs text-neutral-400">
-                      메모가 없어요. 추가해보세요!
-                    </p>
-                  )} */}
 
-                  {/* 목록 */}
                   {listFrozen.map((note) => (
                     <NoteItem
                       key={note.id}
@@ -152,7 +189,12 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
                       editMode={false}
                       onToggleEdit={() => setEditMode((v) => !v)}
                       onOpenDetail={() => openDetail(note.id)}
-                      onTitleChange={notesHook.updateTitle}
+                      onTitleChange={(id, title) =>
+                        notesHook.updateTitle(id, title)
+                      }
+                      onTitleBlur={(id, title) =>
+                        notesHook.flushTitle(id, title)
+                      }
                     />
                   ))}
                 </div>
