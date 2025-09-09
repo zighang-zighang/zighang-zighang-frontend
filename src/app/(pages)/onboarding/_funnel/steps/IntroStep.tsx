@@ -18,19 +18,19 @@ export function IntroStep({
           src="/Onboardingbackground.png"
           alt="background"
           fill
-          className="object-cover"
+          className="object-cover rounded-[16px]"
           priority
         />
 
-        <div className="w-full h-full absolute inset-0 flex flex-col items-center pt-[62px] pb-[30px]">
-          <p className="text-Heading3-18sb mb-1 text-[#5E5E5F]">
+        <div className="w-full h-full absolute inset-0 flex flex-col items-center desktop:pt-[62px] tablet:pt-[42px]">
+          <p className="desktop:text-Heading3-18sb tablet:text-Heading4-16sb mobile:text-Heading5-14sb mb-1 text-[#5E5E5F]">
             직행, 뻔한 채용공고 사이트 아니에요.
           </p>
-          <h2 className="text-Heading1-24sb text-black mb-[255px]">
+          <h2 className="desktop:text-Heading1-24sb mobile:text-Heading2-20sb text-black desktop:mb-[255px] tablet:mb-[238px]">
             오직 당신 ‘키워드’의 맞춤형 공고를 빠르게 찾아드려요!
           </h2>
 
-          <label className="flex items-center gap-2 text-[#363636] text-[16px] mb-6">
+          <label className="flex items-center gap-2 text-[#363636] desktop:text-[16px] tablet:text-Body1-14r desktop:mb-6 tablet:mb-4">
             <input
               type="checkbox"
               className="w-5 h-5"
@@ -39,9 +39,11 @@ export function IntroStep({
             />
             최근 설정한 필터 적용
           </label>
-          <ActionButton onClick={() => onNext(applyRecent)} state="abled">
-            시작하기
-          </ActionButton>
+          <div className="desktop:mb-[30px] tablet:mb-[24px]">
+            <ActionButton onClick={() => onNext(applyRecent)} state="abled">
+              시작하기
+            </ActionButton>
+          </div>
         </div>
       </div>
     </StepContainer>

@@ -45,7 +45,7 @@ function toApiPayload(
 
 export default function OnboardingFunnel() {
   const funnel = useFunnel<{
-    인트로: {};
+    인트로: Record<string, never>;
     직군입력: 직군입력;
     직무입력: 직무입력;
     경력입력: 경력입력;
