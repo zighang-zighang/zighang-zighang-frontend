@@ -11,6 +11,7 @@ import {
   type Note,
 } from "@/app/(pages)/recruitment/[slug]/_hooks/useNotes";
 import { useAuthState } from "@/app/_api/auth/useAuthState";
+import { NoteIcon } from "../Icons/NoteIcon";
 
 export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
   const { isLoggedIn } = useAuthState();
@@ -27,8 +28,6 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
     openDetail,
     updateContent,
     flushDraft,
-    updateTitle,
-    flushTitle,
     saveStatus,
     draft,
     isLoading,
@@ -119,32 +118,20 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
                 role="status"
               >
                 {saveStatus === "saving" ? (
-                  <span className="inline-flex items-center gap-1.5">
-                    <svg
-                      className="inline-block animate-spin h-3 w-3"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                      />
-                    </svg>
+                  <span className="inline-flex items-center gap-1 text-[10px]">
+                    <NoteIcon status="saving" />
                     저장 중…
                   </span>
                 ) : saveStatus === "success" ? (
-                  "저장 완료!"
+                  <span className="inline-flex items-center gap-1 text-[10px]">
+                    <NoteIcon status="success" />
+                    저장 완료!
+                  </span>
                 ) : saveStatus === "error" ? (
-                  "저장 실패"
+                  <span className="inline-flex items-center gap-1 text-[10px]">
+                    <NoteIcon status="error" />
+                    저장 실패!
+                  </span>
                 ) : selected?.createdAt ? (
                   new Date(selected.createdAt).toISOString().slice(0, 10)
                 ) : (
