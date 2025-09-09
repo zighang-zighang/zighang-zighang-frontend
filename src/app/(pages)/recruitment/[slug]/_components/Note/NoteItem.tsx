@@ -3,13 +3,13 @@
 import HoverIcon from "../Icons/HoverIcon";
 
 type NoteItemProps = {
-  id: number;
+  id: string;
   title: string;
   onClick?: () => void;
   editMode?: boolean;
   onToggleEdit?: () => void;
-  onOpenDetail?: (id: number) => void;
-  onTitleChange?: (id: number, next: string) => void;
+  onOpenDetail?: (id: string) => void;
+  onTitleChange?: (id: string, next: string) => void;
 };
 
 export default function NoteItem({

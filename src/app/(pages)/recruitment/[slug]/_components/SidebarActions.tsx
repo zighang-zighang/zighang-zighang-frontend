@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import NotePad from "./Note/NotePad";
-export default function SidebarActions() {
+export default function SidebarActions({ slug }: { slug: string }) {
   return (
     <>
       {/* 데스크톱 사이드바 */}
@@ -51,7 +51,7 @@ export default function SidebarActions() {
               />
             </div>
           </Link>
-          <NotePad></NotePad>
+          <NotePad recruitmentId={slug}></NotePad>
         </div>
       </div>
 

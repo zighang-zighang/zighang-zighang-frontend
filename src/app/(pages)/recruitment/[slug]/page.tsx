@@ -79,7 +79,12 @@ const mockRecCount = {
   count: 43,
 };
 
-export default function RecruitmentPage() {
+export default async function RecruitmentPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
   return (
     <main className="flex min-h-screen flex-col items-center">
       <Header />
@@ -106,7 +111,7 @@ export default function RecruitmentPage() {
             recCount={mockRecCount}
           />
         </div>
-        <SidebarActions />
+        <SidebarActions slug={slug} />
       </div>
       <Footer />
     </main>
