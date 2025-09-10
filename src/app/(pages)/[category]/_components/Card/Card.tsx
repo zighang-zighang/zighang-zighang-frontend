@@ -20,19 +20,19 @@ export default function Card({
   deadlineType,
   bookmarked,
 }: Job) {
-  const { isBookmarked, mutate, isPending } = useBookmark(
-    id,
-    bookmarked ?? false
-  );
+  const { isBookmarked, mutate, isPending } = useBookmark(id, !!bookmarked);
 
-  const handleClick = () => {
-    mutate(!isBookmarked, {
-      onError: (err) => {
-        if ((err as Error).message === "UNAUTHORIZED") {
-          alert("로그인이 필요합니다.");
-        }
-      },
-    });
+  const handleClick = async () => {
+    const next = !isBookmarked;
+    try {
+      await mutate(next);
+    } catch (err) {
+      if ((err as Error).message === "UNAUTHORIZED") {
+        alert("로그인이 필요합니다.");
+      } else {
+        alert("북마크 처리에 실패했습니다.");
+      }
+    }
   };
 
   // 배경색 랜덤 변경

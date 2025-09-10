@@ -1,45 +1,37 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useCallback, useState } from "react";
 import { addBookmark, removeBookmark } from "./client";
 
 export function useBookmark(recruitmentId: string | number, initial: boolean) {
-  const queryClient = useQueryClient();
+  const [isBookmarked, setIsBookmarked] = useState<boolean>(!!initial);
+  const [isPending, setIsPending] = useState<boolean>(false);
 
-  // 1) 현재 상태 구독
-  const { data: isBookmarked = initial } = useQuery({
-    queryKey: ["bookmark", recruitmentId],
-    queryFn: async () => initial,
-    initialData: initial,
-    staleTime: Infinity,
-  });
-
-  const mutation = useMutation({
-    mutationFn: async (next: boolean) => {
-      if (next) return addBookmark(recruitmentId);
-      return removeBookmark(recruitmentId);
-    },
-    onMutate: async (next) => {
-      await queryClient.cancelQueries({
-        queryKey: ["bookmark", recruitmentId],
-      });
-      const prev = queryClient.getQueryData<boolean>([
-        "bookmark",
-        recruitmentId,
-      ]);
-      queryClient.setQueryData(["bookmark", recruitmentId], next);
-      return { prev };
-    },
-    onError: (_err, _next, ctx) => {
-      if (ctx?.prev !== undefined) {
-        queryClient.setQueryData(["bookmark", recruitmentId], ctx.prev);
+  const mutate = useCallback(
+    async (next: boolean) => {
+      if (isPending) return;
+      setIsBookmarked(next); // 낙관적 업데이트
+      setIsPending(true);
+      try {
+        if (next) {
+          await addBookmark(recruitmentId);
+        } else {
+          await removeBookmark(recruitmentId);
+        }
+      } catch (e) {
+        setIsBookmarked(!next);
+        throw e;
+      } finally {
+        setIsPending(false);
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["bookmarks:infinite"] });
-      queryClient.invalidateQueries({ queryKey: ["bookmarks:ids"] });
-      queryClient.invalidateQueries({ queryKey: ["bookmarks:infinite"] });
-    },
-  });
-  return { isBookmarked, ...mutation };
+    [recruitmentId, isPending]
+  );
+
+  const toggle = useCallback(
+    () => mutate(!isBookmarked),
+    [mutate, isBookmarked]
+  );
+
+  return { isBookmarked, mutate, isPending, toggle };
 }

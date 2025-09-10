@@ -11,7 +11,7 @@ function getAccessToken(): string | null {
   }
 }
 
-async function apiFetch(url: string, init: RequestInit) {
+export async function apiFetch(url: string, init: RequestInit) {
   const token = getAccessToken();
   const headers: HeadersInit = {
     Accept: "application/json",

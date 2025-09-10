@@ -50,9 +50,12 @@ function Inner({ active }: { active: string }) {
   const { filters } = useFilterDialog();
   const params = useMemo(() => mapFiltersToParams(filters), [filters]);
 
-  const bookmarksQuery = useInfiniteBookmarks({});
-  const recruitmentsQuery = useInfiniteRecruitments(params);
-  const query = active === "saved" ? bookmarksQuery : recruitmentsQuery;
+  const isSaved = active === "saved";
+
+  const savedQ = useInfiniteBookmarks({ size: 20 }, { enabled: isSaved });
+  const allQ = useInfiniteRecruitments(params, { enabled: !isSaved });
+
+  const query = isSaved ? savedQ : allQ;
 
   const {
     data,
@@ -74,8 +77,9 @@ function Inner({ active }: { active: string }) {
 
   const pages = data?.pages ?? [];
   const content = pages.flatMap((p) => p?.data?.content ?? []);
-  console.log(content);
-  const jobs: Job[] = content.map(filterAdapt);
+  const jobs: Job[] = content
+    .map(filterAdapt)
+    .map((j) => ({ ...j, bookmarked: isSaved ? true : j.bookmarked }));
 
   return (
     <main className="p-4 space-y-4">
