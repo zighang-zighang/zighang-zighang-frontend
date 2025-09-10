@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useTransition } from "react";
 import View from "./View";
 import Bookmark from "./BookMark";
-import { toggleBookmark } from "./toggleBookmark";
 import { Job } from "@/app/_types/jobs";
 import Image from "next/image";
 import Link from "next/link";
+import { useBookmark } from "@/app/_api/bookmark/useBookmark";
 
 export default function Card({
   id,
@@ -19,30 +18,20 @@ export default function Card({
   views,
   companyImageUrl,
   deadlineType,
-  bookmarked: initialBookmarked = false,
+  bookmarked,
 }: Job) {
-  const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
-  const [isPending, startTransition] = useTransition();
+  const { isBookmarked, mutate, isPending } = useBookmark(
+    id,
+    bookmarked ?? false
+  );
 
-  const onToggle = () => {
-    setIsBookmarked((prev) => {
-      const next = !prev;
-      startTransition(async () => {
-        try {
-          await toggleBookmark(id, next);
-        } catch {
-          setIsBookmarked(prev);
-          // 실패 시에 정확히 직전 상태로 롤백하도록 함
+  const handleClick = () => {
+    mutate(!isBookmarked, {
+      onError: (err) => {
+        if ((err as Error).message === "UNAUTHORIZED") {
+          alert("로그인이 필요합니다.");
         }
-      });
-      return next;
-    });
-    startTransition(async () => {
-      try {
-        await toggleBookmark(id, !isBookmarked);
-      } catch {
-        setIsBookmarked(initialBookmarked);
-      }
+      },
     });
   };
 
@@ -133,9 +122,7 @@ export default function Card({
         >
           <div className="flex h-full w-full flex-col">
             <Bookmark
-              onClick={() => {
-                onToggle();
-              }}
+              onClick={handleClick}
               active={isBookmarked}
               disabled={isPending}
             />

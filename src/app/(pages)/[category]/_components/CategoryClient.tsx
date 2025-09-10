@@ -16,8 +16,15 @@ import { useInfiniteRecruitments } from "@/app/_api/recruitment/useRecruitments"
 import { Job } from "@/app/_types/jobs";
 import filterAdapt from "@/app/_utils/filterAdapt";
 import ResultHeaderConnector from "./Filter/ResultHeaderConnector";
+import { useInfiniteBookmarks } from "@/app/_api/bookmark/list";
 
-export default function CategoryClient({ slug }: { slug: string }) {
+export default function CategoryClient({
+  slug,
+  active,
+}: {
+  slug: string;
+  active: string;
+}) {
   const slugToJobGroup = (s: string) =>
     jobCategories.find((c) => c.href.slice(1) === s)?.name ?? "전체";
 
@@ -27,11 +34,11 @@ export default function CategoryClient({ slug }: { slug: string }) {
   );
 
   return (
-    <div className="relative w-full overflow-visible px-0 md:mx-auto md:max-w-screen-xl md:px-10">
+    <div className="relative w-full overflow-visible px-0 laptop:mx-auto laptop:max-w-screen-xl laptop:px-10">
       <FilterDialogProvider initial={initial}>
         <FilterBar />
         <ResultHeaderConnector />
-        <Inner />
+        <Inner active={active} />
         <FilterModal />
       </FilterDialogProvider>
     </div>
@@ -39,9 +46,13 @@ export default function CategoryClient({ slug }: { slug: string }) {
 }
 
 // 공고 카드 데이터 받아오는 쪽
-function Inner() {
+function Inner({ active }: { active: string }) {
   const { filters } = useFilterDialog();
   const params = useMemo(() => mapFiltersToParams(filters), [filters]);
+
+  const bookmarksQuery = useInfiniteBookmarks({});
+  const recruitmentsQuery = useInfiniteRecruitments(params);
+  const query = active === "saved" ? bookmarksQuery : recruitmentsQuery;
 
   const {
     data,
@@ -50,7 +61,7 @@ function Inner() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteRecruitments({ ...params });
+  } = query;
 
   if (status === "pending")
     return <div className="p-4 text-center">Loading…</div>;
@@ -63,6 +74,7 @@ function Inner() {
 
   const pages = data?.pages ?? [];
   const content = pages.flatMap((p) => p?.data?.content ?? []);
+  console.log(content);
   const jobs: Job[] = content.map(filterAdapt);
 
   return (
