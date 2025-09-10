@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Link from "next/link";
 import NoteItem from "./NoteItem";
 import HoverIcon from "../Icons/HoverIcon";
@@ -17,6 +17,7 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
   const { isLoggedIn } = useAuthState();
   const [isLargeOpen, setIsLargeOpen] = useState(false);
   const notesHook = useNotes(recruitmentId);
+  const [textareaKey, setTextareaKey] = useState(0);
 
   const {
     notes,
@@ -34,6 +35,12 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
   } = notesHook;
 
   const frozenNotesRef = useRef<Note[] | null>(null);
+
+  useEffect(() => {
+    if (saveStatus === "success") {
+      setTextareaKey((k) => k + 1); // key 변경으로 강제 리렌더
+    }
+  }, [saveStatus]);
 
   const handleToggleLarge = useCallback(() => {
     setIsLargeOpen((prev) => {
@@ -95,6 +102,7 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
         {!isLargeOpen && editMode && isLoggedIn && selected ? (
           <div className="relative self-stretch h-96 p-4 bg-white rounded-bl-lg rounded-br-lg border-l border-r border-b border-zinc-200 flex flex-col gap-2.5">
             <textarea
+              key={textareaKey}
               className="w-full h-full resize-none text-xs font-medium overflow-y-auto overflow-x-hidden outline-none"
               placeholder={"첫 줄이 제목이 됩니다.\n내용을 입력하세요…"}
               value={selected ? draft : ""}

@@ -6,6 +6,7 @@ import KebabMenu from "./KebabMenu";
 import NoteItem from "./NoteItem";
 import { useNotes } from "@/app/(pages)/recruitment/[slug]/_hooks/useNotes";
 import { NoteIcon } from "../Icons/NoteIcon";
+import { useState, useEffect } from "react";
 
 type Props = {
   isOpen: boolean;
@@ -20,8 +21,7 @@ export default function NotePadLarge({
   isLoggedIn,
   notesHook,
 }: Props) {
-  if (!isOpen) return null;
-
+  const [textareaKey, setTextareaKey] = useState(0);
   const {
     notes,
     selected,
@@ -35,6 +35,14 @@ export default function NotePadLarge({
     updateContent,
     saveStatus,
   } = notesHook;
+
+  useEffect(() => {
+    if (saveStatus === "success") {
+      setTextareaKey((k) => k + 1);
+    }
+  }, [saveStatus]);
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-[50]">
@@ -86,6 +94,7 @@ export default function NotePadLarge({
             ].join(" ")}
           >
             <textarea
+              key={textareaKey}
               className={[
                 "w-full h-full resize-none text-xs font-medium",
                 "overflow-y-auto overflow-x-hidden outline-none",

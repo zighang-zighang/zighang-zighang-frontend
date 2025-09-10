@@ -159,8 +159,10 @@ export function useNotes(recruitmentId?: string) {
             lastSentRef.current = freshDraft;
             // onBlur 모드가 아니면 success→idle
             if (!isBlurSavingRef.current) {
-              setSaveStatus("success");
-              setTimeout(() => setSaveStatus("idle"), 3000);
+              setTimeout(() => {
+                setSaveStatus("success");
+                setTimeout(() => setSaveStatus("idle"), 3000);
+              }, 3000);
             }
           },
           onError: () => {
@@ -202,8 +204,10 @@ export function useNotes(recruitmentId?: string) {
         onSuccess: () => {
           lastSentRef.current = draftNorm;
           // "저장 중"은 절대 띄우지 않고, 곧바로 "성공"만
-          setSaveStatus("success");
-          setTimeout(() => setSaveStatus("idle"), 3000);
+          setTimeout(() => {
+            setSaveStatus("success");
+            setTimeout(() => setSaveStatus("idle"), 3000);
+          }, 3000);
           isBlurSavingRef.current = false;
         },
         onError: () => {
