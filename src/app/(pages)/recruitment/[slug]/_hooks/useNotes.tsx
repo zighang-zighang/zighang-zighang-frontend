@@ -175,7 +175,7 @@ export function useNotes(recruitmentId?: string) {
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [draft, selected?.id, updateMemoMutation]);
+  }, [draft, selected, updateMemoMutation]);
 
   // 포커스 아웃 시 자동저장
   const flushContent = useCallback(() => {
@@ -216,7 +216,7 @@ export function useNotes(recruitmentId?: string) {
         },
       }
     );
-  }, [draft, selected?.id, updateMemoMutation]);
+  }, [draft, selected, updateMemoMutation]);
 
   // 본문 편집
   const openDetail = useCallback((id: string) => {
