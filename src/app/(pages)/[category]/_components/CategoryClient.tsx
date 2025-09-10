@@ -36,8 +36,12 @@ export default function CategoryClient({
   return (
     <div className="relative w-full overflow-visible px-0 laptop:mx-auto laptop:max-w-screen-xl laptop:px-10">
       <FilterDialogProvider initial={initial}>
-        <FilterBar />
-        <ResultHeaderConnector />
+        {active === "all" && (
+          <>
+            <FilterBar />
+            <ResultHeaderConnector />
+          </>
+        )}
         <Inner active={active} />
         <FilterModal />
       </FilterDialogProvider>
