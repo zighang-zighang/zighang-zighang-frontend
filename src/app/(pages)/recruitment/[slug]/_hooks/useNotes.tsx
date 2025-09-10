@@ -184,8 +184,7 @@ export function useNotes(recruitmentId?: string) {
 
     // 변경 없음 → UX용 success만 찍고 종료
     if (draftNorm === server || draftNorm === normalize(lastSentRef.current)) {
-      setSaveStatus("success");
-      setTimeout(() => setSaveStatus("idle"), 3000);
+      setSaveStatus("idle");
       return;
     }
 
