@@ -156,7 +156,7 @@ export function useNotes(recruitmentId?: string) {
         { memoId: selected.id, data: { title: newTitle, content: newContent } },
         {
           onSuccess: () => {
-            lastSentRef.current = draft;
+            lastSentRef.current = freshDraft;
             // onBlur 모드가 아니면 success→idle
             if (!isBlurSavingRef.current) {
               setSaveStatus("success");
@@ -201,7 +201,7 @@ export function useNotes(recruitmentId?: string) {
       { memoId: selected.id, data: { title: newTitle, content: newContent } },
       {
         onSuccess: () => {
-          lastSentRef.current = draft;
+          lastSentRef.current = draftNorm;
           // "저장 중"은 절대 띄우지 않고, 곧바로 "성공"만
           setSaveStatus("success");
           setTimeout(() => setSaveStatus("idle"), 3000);
