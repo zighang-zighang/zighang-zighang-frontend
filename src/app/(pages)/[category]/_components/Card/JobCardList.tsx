@@ -16,7 +16,7 @@ export default function JobCardList({ jobs }: { jobs: Job[] }) {
     <div className="w-full md:px-4">
       <div
         className="box-border flex w-full flex-grow flex-col items-start gap-2.5 px-4 pb-10 pt-0
-                      lg:grid lg:grid-cols-2 lg:content-start lg:justify-between lg:gap-4 lg:px-0 lg:pb-12 lg:pt-0"
+                      laptop:grid laptop:grid-cols-2 laptop:content-start laptop:justify-between laptop:gap-4 laptop:px-0 laptop:pb-12 laptop:pt-0"
       >
         {jobs.map((job) => (
           <Card
@@ -34,7 +34,7 @@ export default function JobCardList({ jobs }: { jobs: Job[] }) {
             views={job.views}
             deadlineType={job.deadlineType}
             hot={job.hot ?? false}
-            bookmarked={job.bookmarked ?? false}
+            bookmarked={job.bookmarked}
           />
         ))}
       </div>
