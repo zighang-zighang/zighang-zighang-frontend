@@ -49,6 +49,11 @@ export function useNotes(recruitmentId?: string) {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSentRef = useRef<string>("");
 
+  const normalize = (s: string) => (s ?? "").replace(/\r\n/g, "\n");
+
+  // ★ onBlur 저장 중에는 autosave가 "saving"을 띄우지 않도록 막는 플래그
+  const isBlurSavingRef = useRef(false);
+
   // 제목 디바운스용 레퍼런스
   const titleTimersRef = useRef<
     Record<string, ReturnType<typeof setTimeout> | undefined>
@@ -118,19 +123,32 @@ export function useNotes(recruitmentId?: string) {
       return;
     }
 
-    const serverContent = selected.content ?? "";
+    const serverContent = normalize(selected.content ?? "");
+    const draftNorm = normalize(draft);
 
-    if (draft === serverContent || draft === lastSentRef.current) {
+    if (
+      draftNorm === serverContent ||
+      draftNorm === normalize(lastSentRef.current)
+    ) {
       return;
     }
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
-    setSaveStatus("saving");
+
+    // ★ onBlur 저장 중에는 "saving" 문구를 띄우지 않음
+    if (!isBlurSavingRef.current) setSaveStatus("saving");
 
     debounceRef.current = setTimeout(() => {
-      if (draft === serverContent || draft === lastSentRef.current) return;
+      // 실행 시점에 다시 비교
+      const freshServer = normalize(selected.content ?? "");
+      const freshDraft = normalize(draft);
+      if (
+        freshDraft === freshServer ||
+        freshDraft === normalize(lastSentRef.current)
+      )
+        return;
 
-      const [firstLine, ...rest] = draft.replace(/\r\n/g, "\n").split("\n");
+      const [firstLine, ...rest] = freshDraft.split("\n");
       const newTitle = (firstLine ?? "").trim();
       const newContent = [firstLine, ...rest].join("\n");
 
@@ -139,8 +157,11 @@ export function useNotes(recruitmentId?: string) {
         {
           onSuccess: () => {
             lastSentRef.current = draft;
-            setSaveStatus("success");
-            setTimeout(() => setSaveStatus("idle"), 3000);
+            // onBlur 모드가 아니면 success→idle
+            if (!isBlurSavingRef.current) {
+              setSaveStatus("success");
+              setTimeout(() => setSaveStatus("idle"), 3000);
+            }
           },
           onError: () => {
             setSaveStatus("error");
@@ -152,6 +173,46 @@ export function useNotes(recruitmentId?: string) {
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
+  }, [draft, selected?.id, updateMemoMutation]);
+
+  // 포커스 아웃 시 자동저장
+  const flushContent = useCallback(() => {
+    if (!selected) return;
+
+    const server = normalize(selected.content ?? "");
+    const draftNorm = normalize(draft);
+
+    // 변경 없음 → UX용 success만 찍고 종료
+    if (draftNorm === server || draftNorm === normalize(lastSentRef.current)) {
+      setSaveStatus("success");
+      setTimeout(() => setSaveStatus("idle"), 3000);
+      return;
+    }
+
+    // 디바운스 취소 + blur saving 모드 진입
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    isBlurSavingRef.current = true;
+
+    const [firstLine, ...rest] = draftNorm.split("\n");
+    const newTitle = (firstLine ?? "").trim();
+    const newContent = [firstLine, ...rest].join("\n");
+
+    updateMemoMutation.mutate(
+      { memoId: selected.id, data: { title: newTitle, content: newContent } },
+      {
+        onSuccess: () => {
+          lastSentRef.current = draft;
+          // "저장 중"은 절대 띄우지 않고, 곧바로 "성공"만
+          setSaveStatus("success");
+          setTimeout(() => setSaveStatus("idle"), 3000);
+          isBlurSavingRef.current = false;
+        },
+        onError: () => {
+          setSaveStatus("error");
+          isBlurSavingRef.current = false;
+        },
+      }
+    );
   }, [draft, selected?.id, updateMemoMutation]);
 
   // 본문 편집
@@ -227,6 +288,7 @@ export function useNotes(recruitmentId?: string) {
     isLoading,
     error,
     addNote,
+    flushContent,
     deleteNote,
     openDetail,
     updateContent,

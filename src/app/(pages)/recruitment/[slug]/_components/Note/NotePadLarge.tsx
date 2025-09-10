@@ -31,6 +31,7 @@ export default function NotePadLarge({
     deleteNote,
     openDetail,
     draft,
+    flushContent,
     updateContent,
     saveStatus,
   } = notesHook;
@@ -93,6 +94,7 @@ export default function NotePadLarge({
               value={selected ? draft : ""}
               onChange={(e) => updateContent(e.target.value)}
               disabled={!isLoggedIn || !selected}
+              onBlur={flushContent}
             />
 
             <div className="border-t border-gray-300 pt-2.5 pb-3">

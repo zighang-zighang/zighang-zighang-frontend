@@ -27,6 +27,7 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
     deleteNote,
     openDetail,
     updateContent,
+    flushContent,
     saveStatus,
     draft,
     isLoading,
@@ -99,6 +100,7 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
               value={selected ? draft : ""}
               onChange={(e) => updateContent(e.target.value)}
               disabled={!isLoggedIn || !selected}
+              onBlur={flushContent}
             />
             <div className="border-t border-gray-300 pt-2.5 pb-3 flex">
               <p
