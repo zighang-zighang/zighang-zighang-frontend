@@ -17,6 +17,7 @@ import { Job } from "@/app/_types/jobs";
 import filterAdapt from "@/app/_utils/filterAdapt";
 import ResultHeaderConnector from "./Filter/ResultHeaderConnector";
 import { useInfiniteBookmarks } from "@/app/_api/bookmark/list";
+import { useAuthState } from "@/app/_api/auth/useAuthState";
 
 export default function CategoryClient({
   slug,
@@ -53,6 +54,7 @@ export default function CategoryClient({
 function Inner({ active }: { active: string }) {
   const { filters } = useFilterDialog();
   const params = useMemo(() => mapFiltersToParams(filters), [filters]);
+  const { isLoggedIn } = useAuthState();
 
   const isSaved = active === "saved";
 
@@ -81,12 +83,13 @@ function Inner({ active }: { active: string }) {
 
   const pages = data?.pages ?? [];
   const content = pages.flatMap((p) => p?.data?.content ?? []);
-  const jobs: Job[] = content.map(filterAdapt);
-  console.log(content);
+  const jobs: Job[] = content
+    .map(filterAdapt)
+    .map((j) => ({ ...j, bookmarked: isSaved ? true : j.bookmarked }));
 
   return (
     <main className="p-4 space-y-4">
-      <JobCardList jobs={jobs} />
+      <JobCardList jobs={jobs} isLoggedIn={isLoggedIn} isSaved={isSaved} />
       <AutoLoader
         canLoad={!!hasNextPage}
         loading={!!isFetchingNextPage}

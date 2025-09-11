@@ -5,7 +5,9 @@ import Bookmark from "./BookMark";
 import { Job } from "@/app/_types/jobs";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useBookmark } from "@/app/_api/bookmark/useBookmark";
+import { useAuthState } from "@/app/_api/auth/useAuthState";
 
 export default function Card({
   id,
@@ -20,9 +22,17 @@ export default function Card({
   deadlineType,
   bookmarked,
 }: Job) {
+  const router = useRouter();
+  const { isLoggedIn } = useAuthState();
   const { isBookmarked, mutate, isPending } = useBookmark(id, !!bookmarked);
 
   const handleClick = async () => {
+    // 로그인 상태 확인
+    if (!isLoggedIn) {
+      router.push("/join");
+      return;
+    }
+
     const next = !isBookmarked;
     try {
       await mutate(next);
