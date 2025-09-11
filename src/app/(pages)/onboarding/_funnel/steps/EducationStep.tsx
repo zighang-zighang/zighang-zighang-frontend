@@ -49,8 +49,8 @@ export function EducationStep({
     <StepContainer>
       <StepHeader
         title="최종학력이 어떻게 되세요?"
-        stepNumber={4}
-        totalSteps={5}
+        stepNumber={3}
+        totalSteps={4}
         onBack={onBack}
       />
 

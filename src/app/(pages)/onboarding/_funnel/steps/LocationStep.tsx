@@ -48,8 +48,8 @@ export function LocationStep({
     <StepContainer>
       <StepHeader
         title="원하는 근무 지역이 어떻게 되세요?"
-        stepNumber={5}
-        totalSteps={5}
+        stepNumber={4}
+        totalSteps={4}
         onBack={onBack}
       />
       <div className="flex items-center justify-center mt-6">
