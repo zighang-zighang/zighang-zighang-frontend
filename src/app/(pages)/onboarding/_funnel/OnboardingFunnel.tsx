@@ -1,7 +1,7 @@
 import { useFunnel } from "@use-funnel/browser";
 import { useRouter } from "next/navigation";
 import { useSubmitOnboarding } from "@/app/_api/user/useOnboarding";
-import { mapJobGroup, mapJobCategory, mapEducationLevel, mapGraduationStatus } from "../_utils/mapping";
+import { mapJobGroup, mapJobCategory, mapEducationLevel, mapGraduationStatus, reverseMapJobGroup, reverseMapEducationLevel, reverseMapGraduationStatus } from "../_utils/mapping";
 import { saveOnboardingData } from "../_utils/storage";
 import { getOnboardingInfo } from "../_utils/onboardingCheck";
 import {
@@ -41,8 +41,8 @@ function toApiPayload(
   지역: string | null | undefined
 ): ApiOnboardingPayload {
   return {
-    interestedJobs: context.직군.map(mapJobGroup),
-    interestedJobCategories: (context.직무 || []).map(mapJobCategory),
+    interestedJobs: context.직군.map(job => mapJobGroup(job)),
+    interestedJobCategories: (context.직무 || []).map(job => mapJobCategory(job)),
     careerYear: context.경력 || 0,
     educationLevel: mapEducationLevel(context.학력 || ""),
     graduationStatus: mapGraduationStatus(context.졸업상태 || "졸업"),
@@ -81,60 +81,10 @@ export default function OnboardingFunnel() {
               const onboardingInfo = getOnboardingInfo();
               if (onboardingInfo) {
                 // 매핑된 값들을 원래 UI 값으로 역변환
-                const originalJobGroups = onboardingInfo.data.interestedJobs.map(job => {
-                  // API 값에서 UI 값으로 역변환
-                  const reverseMap: Record<string, string> = {
-                    "IT_개발": "IT ⋅ 개발",
-                    "AI_데이터": "AI · 데이터",
-                    "게임": "게임",
-                    "디자인": "디자인",
-                    "기획_전략": "기획 · 전략",
-                    "마케팅_광고": "마케팅 · 광고",
-                    "상품기획_MD": "상품기획 · MD",
-                    "영업": "영업",
-                    "무역_물류": "무역 · 물류",
-                    "운송_배송": "운송 · 배송",
-                    "법률_법무": "법률 · 법무",
-                    "HR_총무": "HR · 총무",
-                    "회계_재무_세무": "회계 · 재무 · 세무",
-                    "증권_운용": "증권 · 운용",
-                    "은행_카드_보험": "은행 · 카드 · 보험",
-                    "엔지니어링_RND": "엔지니어링 · R&D",
-                    "건설_건축": "건설 · 건축",
-                    "생산_기능직": "생산 · 기능직",
-                    "의료_보건": "의료 · 보건",
-                    "공공_복지": "공공 · 복지",
-                    "교육": "교육",
-                    "미디어_엔터": "미디어 · 엔터",
-                    "고객상담_TM": "고객상담 · TM",
-                    "서비스": "서비스",
-                    "식음료": "식음료",
-                  };
-                  return reverseMap[job] || job;
-                });
+                const originalJobGroups = onboardingInfo.data.interestedJobs.map(reverseMapJobGroup);
 
-                const originalEducation = (() => {
-                  const reverseMap: Record<string, string> = {
-                    "초등학교": "초등학교",
-                    "중학교": "중학교",
-                    "고등학교": "고등학교",
-                    "대학교_2_3년": "대학교(2,3년)",
-                    "대학교_4년": "대학교(4년)",
-                    "대학원_석사": "대학원(석사)",
-                    "대학원_박사": "대학원(박사)",
-                  };
-                  return reverseMap[onboardingInfo.data.educationLevel] || onboardingInfo.data.educationLevel;
-                })();
-
-                const originalGraduationStatus = (() => {
-                  const reverseMap: Record<string, string> = {
-                    "재학중": "재학 중",
-                    "휴학중": "휴학 중",
-                    "졸업유예": "졸업유예",
-                    "졸업": "졸업",
-                  };
-                  return reverseMap[onboardingInfo.data.graduationStatus] || onboardingInfo.data.graduationStatus;
-                })();
+                const originalEducation = reverseMapEducationLevel(onboardingInfo.data.educationLevel);
+                const originalGraduationStatus = reverseMapGraduationStatus(onboardingInfo.data.graduationStatus);
 
                 history.push("직군입력", (prev) => ({
                   ...prev,
