@@ -1,7 +1,7 @@
 import { useFunnel } from "@use-funnel/browser";
 import { useRouter } from "next/navigation";
 import { useSubmitOnboarding } from "@/app/_api/user/useOnboarding";
-import { mapJobGroup, mapEducationLevel, mapGraduationStatus } from "../_utils/mapping";
+import { mapJobGroup, mapJobCategory, mapEducationLevel, mapGraduationStatus } from "../_utils/mapping";
 import {
   JobCategoryStep,
   JobStep,
@@ -40,7 +40,7 @@ function toApiPayload(
 ): ApiOnboardingPayload {
   return {
     interestedJobs: context.직군.map(mapJobGroup),
-    interestedJobCategories: context.직무 || [],
+    interestedJobCategories: (context.직무 || []).map(mapJobCategory),
     careerYear: context.경력 || 0,
     educationLevel: mapEducationLevel(context.학력 || ""),
     graduationStatus: mapGraduationStatus(context.졸업상태 || "졸업"),

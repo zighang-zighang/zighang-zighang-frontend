@@ -33,9 +33,9 @@ export function mapJobGroup(직군: string): string {
 // 학력 매핑 함수
 export function mapEducationLevel(학력: string): string {
   const educationMap: Record<string, string> = {
-    "초등학교": "초등학교",
-    "중학교": "중학교", 
-    "고등학교": "고등학교",
+    초등학교: "초등학교",
+    중학교: "중학교",
+    고등학교: "고등학교",
     "대학교(2,3년)": "대학교_2_3년",
     "대학교(4년)": "대학교_4년",
     "대학원(석사)": "대학원_석사",
@@ -44,13 +44,21 @@ export function mapEducationLevel(학력: string): string {
   return educationMap[학력] || 학력;
 }
 
+// 직무 매핑 함수
+export function mapJobCategory(직무: string): string {
+  const jobCategoryMap: Record<string, string> = {
+    매장운영_관리_식음료: "매장운영_관리",
+  };
+  return jobCategoryMap[직무] || 직무;
+}
+
 // 졸업상태 매핑 함수
 export function mapGraduationStatus(졸업상태: string): string {
   const graduationMap: Record<string, string> = {
     "재학 중": "재학중",
-    "휴학 중": "휴학중", 
-    "졸업유예": "졸업유예",
-    "졸업": "졸업",
+    "휴학 중": "휴학중",
+    졸업유예: "졸업유예",
+    졸업: "졸업",
   };
   return graduationMap[졸업상태] || 졸업상태;
 }
