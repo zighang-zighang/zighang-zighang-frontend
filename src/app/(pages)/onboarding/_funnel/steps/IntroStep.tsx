@@ -4,7 +4,6 @@ import Image from "next/image";
 import React from "react";
 import { StepContainer } from "../../_components/Container/StepContainer";
 import { ActionButton } from "../../_components/Button/ActionButton";
-import { checkOnboardingCompleted, getOnboardingInfo } from "../../_utils/onboardingCheck";
 
 export function IntroStep({
   onNext,
