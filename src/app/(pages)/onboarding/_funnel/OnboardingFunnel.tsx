@@ -101,16 +101,13 @@ export default function OnboardingFunnel() {
           }}
         />
       )}
-      경력입력={({ context, history }) => {
-        console.log("경력입력 context.직무:", context.직무);
-        return (
-          <ExperienceStep
-            jobs={context.직무}
-            onBack={() => history.back()}
-            onNext={(경력) => history.push("학력입력", { ...context, 경력 })}
-          />
-        );
-      }}
+      경력입력={({ context, history }) => (
+        <ExperienceStep
+          jobs={context.직무}
+          onBack={() => history.back()}
+          onNext={(경력) => history.push("학력입력", (prev) => ({ ...prev, 경력 }))}
+        />
+      )}
       학력입력={({ context, history }) => (
         <EducationStep
           onBack={() => history.back()}
