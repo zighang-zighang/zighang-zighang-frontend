@@ -81,11 +81,13 @@ export function ExperienceStep({ onNext, onBack, jobs = [] }: Props) {
   const handleWheelChange = (value: number) => setSelectedYears(value);
 
   const canProceed = true; // 기본값 선택(1년)으로 바로 진행 가능
-  const handleNext = () => onNext(selectedYears);
+  const handleNext = () => {
+    console.log("handleNext 호출됨, selectedYears:", selectedYears);
+    onNext(selectedYears);
+  };
 
-  const handleButtonClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleButtonClick = () => {
+    console.log("버튼 클릭됨!");
     handleNext();
   };
 
@@ -220,14 +222,16 @@ export function ExperienceStep({ onNext, onBack, jobs = [] }: Props) {
         </div>
 
         {/* 하단 액션 */}
-        <StepActions className="h-full flex items-end pb-[30px]">
-          <ActionButton
-            onClick={()=>handleButtonClick}
-            state={canProceed ? "abled" : "disabled"}
-          >
-            다음
-          </ActionButton>
-        </StepActions>
+        <div className="h-full flex items-end pb-[30px] pointer-events-none">
+          <div className="pointer-events-auto">
+            <ActionButton
+              onClick={handleButtonClick}
+              state={canProceed ? "abled" : "disabled"}
+            >
+              다음
+            </ActionButton>
+          </div>
+        </div>
       </div>
     </StepContainer>
   );
