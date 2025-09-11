@@ -81,9 +81,8 @@ function Inner({ active }: { active: string }) {
 
   const pages = data?.pages ?? [];
   const content = pages.flatMap((p) => p?.data?.content ?? []);
-  const jobs: Job[] = content
-    .map(filterAdapt)
-    .map((j) => ({ ...j, bookmarked: isSaved ? true : j.bookmarked }));
+  const jobs: Job[] = content.map(filterAdapt);
+  console.log(content);
 
   return (
     <main className="p-4 space-y-4">
