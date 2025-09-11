@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -12,24 +12,7 @@ function CallbackInner() {
   const router = useRouter();
   const params = useSearchParams();
 
-  useEffect(() => {
-    if (!params) return;
-    const accessToken = params.get("accessToken");
-    const refreshToken = params.get("refreshToken");
-
-    try {
-      if (accessToken) localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-      if (refreshToken) localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-    } catch {}
-
-    if (accessToken) {
-      checkUserOnboardingStatus();
-    } else {
-      router.replace("/");
-    }
-  }, [params, router]);
-
-  const checkUserOnboardingStatus = async () => {
+  const checkUserOnboardingStatus = useCallback(async () => {
     try {
       const token = localStorage.getItem(ACCESS_TOKEN_KEY);
       if (!token) {
@@ -67,7 +50,24 @@ function CallbackInner() {
       // 에러 시 기본적으로 온보딩으로 보냄
       router.replace("/onboarding");
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    if (!params) return;
+    const accessToken = params.get("accessToken");
+    const refreshToken = params.get("refreshToken");
+
+    try {
+      if (accessToken) localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+      if (refreshToken) localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+    } catch {}
+
+    if (accessToken) {
+      checkUserOnboardingStatus();
+    } else {
+      router.replace("/");
+    }
+  }, [params, router, checkUserOnboardingStatus]);
 
   return null;
 }

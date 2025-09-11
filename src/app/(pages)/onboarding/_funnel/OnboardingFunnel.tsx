@@ -1,5 +1,4 @@
 import { useFunnel } from "@use-funnel/browser";
-import { useRouter } from "next/navigation";
 
 import {
   JobCategoryStep,
@@ -45,8 +44,6 @@ function toApiPayload(
 }
 
 export default function OnboardingFunnel() {
-  const router = useRouter();
-  
   const funnel = useFunnel<{
     인트로: Record<string, never>;
     직군입력: 직군입력;
