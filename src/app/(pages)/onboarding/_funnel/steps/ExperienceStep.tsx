@@ -5,12 +5,7 @@ import { ExperienceWheel } from "./ExperienceWheel";
 import { RecruitCountBadge } from "./RecruitCountBadge";
 import { InfoCircle } from "../../_components/Icons/InfoCircle";
 import { InfoTooltip } from "../../_components/Tooltip/InfoTooltip";
-import {
-  StepContainer,
-  StepHeader,
-  StepActions,
-  ActionButton,
-} from "../../_components";
+import { StepContainer, StepHeader, ActionButton } from "../../_components";
 const MIN_EXPERIENCE_YEARS = 0; // 0=신입
 const DEFAULT_EXPERIENCE_YEARS = 1; // 초기 표시 값
 const MAX_EXPERIENCE_YEARS = 10; // 10년+
@@ -98,7 +93,7 @@ export function ExperienceStep({ onNext, onBack, jobs = [] }: Props) {
     )
       return;
     // 버튼 영역에서는 터치 이벤트 무시
-    if ((e.target as HTMLElement).closest('button')) return;
+    if ((e.target as HTMLElement).closest("button")) return;
     touchStartYRef.current = e.touches[0].clientY;
     accumDeltaRef.current = 0;
     lastTickRef.current = performance.now();
@@ -110,7 +105,7 @@ export function ExperienceStep({ onNext, onBack, jobs = [] }: Props) {
     )
       return;
     // 버튼 영역에서는 터치 이벤트 무시
-    if ((e.target as HTMLElement).closest('button')) return;
+    if ((e.target as HTMLElement).closest("button")) return;
     if (touchStartYRef.current == null) return;
     const currentY = e.touches[0].clientY;
     const dy = currentY - touchStartYRef.current;
@@ -126,7 +121,7 @@ export function ExperienceStep({ onNext, onBack, jobs = [] }: Props) {
   const onPointerDownPage: React.PointerEventHandler<HTMLDivElement> = (e) => {
     if (e.pointerType === "touch") return; // 터치는 기존 핸들러 사용
     // 버튼 영역에서는 포인터 이벤트 무시
-    if ((e.target as HTMLElement).closest('button')) return;
+    if ((e.target as HTMLElement).closest("button")) return;
     // 마우스 드래그: 휠 영역 포함 전체에서 동작
     try {
       e.currentTarget.setPointerCapture?.(e.pointerId);
