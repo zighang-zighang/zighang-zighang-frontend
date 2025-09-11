@@ -13,9 +13,6 @@ export function IntroStep({
 }) {
   const [applyRecent, setApplyRecent] = React.useState(false);
   
-  // 온보딩 완료 여부 체크
-  const isOnboardingCompleted = checkOnboardingCompleted();
-  const onboardingInfo = getOnboardingInfo();
   return (
     <StepContainer>
       <div className="relative w-full h-full rounded-[16px]">
