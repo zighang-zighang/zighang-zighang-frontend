@@ -28,10 +28,9 @@ export function useBookmark(recruitmentId: string | number, initial: boolean) {
     [recruitmentId, isPending]
   );
 
-  const toggle = useCallback(
-    () => mutate(!isBookmarked),
-    [mutate, isBookmarked]
-  );
+  const toggle = useCallback(() => {
+    void mutate(!isBookmarked).catch(() => {});
+  }, [mutate, isBookmarked]);
 
   return { isBookmarked, mutate, isPending, toggle };
 }

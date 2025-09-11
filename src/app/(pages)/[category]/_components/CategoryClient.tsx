@@ -58,7 +58,10 @@ function Inner({ active }: { active: string }) {
 
   const isSaved = active === "saved";
 
-  const savedQ = useInfiniteBookmarks({ size: 20 }, { enabled: isSaved });
+  const savedQ = useInfiniteBookmarks(
+    { size: 20 },
+    { enabled: isSaved && isLoggedIn }
+  );
   const allQ = useInfiniteRecruitments(params, { enabled: !isSaved });
 
   const query = isSaved ? savedQ : allQ;
