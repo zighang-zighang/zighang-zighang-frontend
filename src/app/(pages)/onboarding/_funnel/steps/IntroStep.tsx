@@ -4,6 +4,7 @@ import Image from "next/image";
 import React from "react";
 import { StepContainer } from "../../_components/Container/StepContainer";
 import { ActionButton } from "../../_components/Button/ActionButton";
+import { checkOnboardingCompleted, getOnboardingInfo } from "../../_utils/onboardingCheck";
 
 export function IntroStep({
   onNext,
@@ -11,6 +12,10 @@ export function IntroStep({
   onNext: (applyRecentFilter: boolean) => void;
 }) {
   const [applyRecent, setApplyRecent] = React.useState(false);
+  
+  // 온보딩 완료 여부 체크
+  const isOnboardingCompleted = checkOnboardingCompleted();
+  const onboardingInfo = getOnboardingInfo();
   return (
     <StepContainer>
       <div className="relative w-full h-full rounded-[16px]">
