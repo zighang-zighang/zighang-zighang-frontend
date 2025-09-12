@@ -14,23 +14,6 @@ import { use } from "react";
 import filterAdapt from "@/app/_utils/filterAdapt";
 import { toDisplayJobDot } from "@/app/_utils/jobFormat";
 
-const mockRecruitment = {
-  uid: "13f8be02-f11b-4294-b6b6-d46e5a71e16b",
-  title: "Solution Architect, Public sector",
-  company: {
-    name: "AmazonWebServicesKorea",
-  },
-  imageUrl: "https://d2juy7qzamcf56.cloudfront.net/company/default.svg",
-  hits: 41,
-  content:
-    '<main><img src="https://d2juy7qzamcf56.cloudfront.net/2025-08-14/a08240a0-e53f-4acc-b2b7-f928b92d3a2f.png" /></main>',
-  recruitmentJobs: {
-    "IT·개발": ["DevOps·SRE"],
-  },
-  types: [3],
-  careers: [1],
-};
-
 const mockSimilarRecruitments = [
   {
     uid: "88320ad8-0f64-49df-89bc-62b7b28e0295",
