@@ -5,8 +5,10 @@ import Link from "next/link";
 import NotePad from "./Note/NotePad";
 import { useBookmark } from "@/app/_api/bookmark/useBookmark";
 import { useRecruitmentDetail } from "@/app/_api/recruitment/detail/useRecruitmentDetail";
+import { logApplication } from "@/app/_api/recruitment/detail/applicationLog";
 import Icon from "@/app/(pages)/[category]/_components/Icons/Icon";
 import { Job } from "@/app/_types/jobs";
+import { useState } from "react";
 
 interface SidebarActionsProps {
   slug: string;
@@ -21,6 +23,25 @@ export default function SidebarActions({ slug, job }: SidebarActionsProps) {
     toggle,
     isPending,
   } = useBookmark(slug, isBookmarked);
+
+  const [isLogging, setIsLogging] = useState(false);
+
+  const handleApplyClick = async () => {
+    if (isLogging) return;
+
+    try {
+      setIsLogging(true);
+      await logApplication(slug);
+      // 로깅 성공 후 새 탭에서 지원 페이지 열기
+      window.open(job.href, "_blank", "noopener,noreferrer");
+    } catch (error) {
+      console.error("지원 로깅 실패:", error);
+      // 로깅 실패해도 지원 페이지는 열기
+      window.open(job.href, "_blank", "noopener,noreferrer");
+    } finally {
+      setIsLogging(false);
+    }
+  };
   return (
     <>
       {/* 데스크톱 사이드바 */}
@@ -46,14 +67,13 @@ export default function SidebarActions({ slug, job }: SidebarActionsProps) {
                 공유하기
               </div>
             </button>
-            <Link
-              href={job.href}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={handleApplyClick}
+              disabled={isLogging}
               className="whitespace-nowrap rounded-lg text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 bg-primary text-white hover:bg-primary/90 transition-colors hover:cursor-pointer px-4 py-2 flex h-12 flex-1 items-center justify-center"
             >
               <span className="text-lg">지원하기</span>
-            </Link>
+            </button>
           </div>
           <Link
             href="https://sprint.codeit.kr/track/frontend?utm_source=zighang_paid&utm_medium=display&utm_campaign=partnership&utm_content=frontend"
@@ -105,14 +125,13 @@ export default function SidebarActions({ slug, job }: SidebarActionsProps) {
               공유하기
             </div>
           </button>
-          <Link
-            href={job.href}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={handleApplyClick}
+            disabled={isLogging}
             className="whitespace-nowrap rounded-lg text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 bg-primary text-white hover:bg-primary/90 transition-colors hover:cursor-pointer px-4 py-2 flex h-12 flex-1 items-center justify-center"
           >
             <span className="text-base">지원하기</span>
-          </Link>
+          </button>
         </div>
       </div>
     </>
