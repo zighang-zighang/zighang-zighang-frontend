@@ -1,24 +1,41 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import NotePad from "./Note/NotePad";
+import { useBookmark } from "@/app/_api/bookmark/useBookmark";
+import { useRecruitmentDetail } from "@/app/_api/recruitment/detail/useRecruitmentDetail";
+import Icon from "@/app/(pages)/[category]/_components/Icons/Icon";
+
 export default function SidebarActions({ slug }: { slug: string }) {
+  const { data: recruitmentData } = useRecruitmentDetail(slug);
+  const isBookmarked = recruitmentData?.data?.isBookmarked ?? false;
+  const {
+    isBookmarked: bookmarkState,
+    toggle,
+    isPending,
+  } = useBookmark(slug, isBookmarked);
   return (
     <>
       {/* 데스크톱 사이드바 */}
       <div className="relative z-40 flex-col flex">
         <div className="sticky top-16 flex min-w-[360px] flex-col gap-2 py-9">
           <div className="flex gap-2">
-            <button className="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 border border-[#D5D7DA] bg-white hover:bg-zinc-100 active:bg-zinc-200 transition-colors h-12 min-w-12 p-2 !border !border-[#EDEDED] !bg-[#FAFAFA]">
-              <Image
-                alt="북마크 border 아이콘"
-                loading="lazy"
-                width={28}
-                height={28}
-                className="h-7 w-7"
-                src="https://zighang.com/icon/bookmark_border.svg"
+            <button
+              onClick={toggle}
+              disabled={isPending}
+              className={`inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 bg-white hover:bg-zinc-100 active:bg-zinc-200 transition-colors h-12 min-w-12 p-2 border border-[#EDEDED] ${
+                bookmarkState ? "bg-[#F7F1FB]" : "bg-[#FAFAFA]"
+              }`}
+            >
+              <Icon
+                variant="bookmark"
+                className={`transition-transform w-7 h-7 ${
+                  bookmarkState ? "text-purple-800" : "text-gray-200"
+                }`}
               />
             </button>
-            <button className="whitespace-nowrap text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 border border-[#D5D7DA] hover:bg-zinc-100 active:bg-zinc-200 transition-colors flex h-12 flex-1 items-center justify-center gap-2.5 rounded-lg !border-0 bg-[#F7F1FB] px-4 py-3">
+            <button className="whitespace-nowrap text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 hover:bg-zinc-100 active:bg-zinc-200 transition-colors flex h-12 flex-1 items-center justify-center gap-2.5 rounded-lg bg-[#F7F1FB] px-4 py-3">
               <div className="bg-gradient-to-b from-[#6F00B6] to-[#6F00B6] bg-clip-text text-lg font-semibold text-transparent">
                 공유하기
               </div>
@@ -58,17 +75,21 @@ export default function SidebarActions({ slug }: { slug: string }) {
       {/* 모바일 하단 액션 바 */}
       <div className="fixed bottom-0 left-0 z-[50] w-full border-t border-t-line bg-white shadow-lg hidden">
         <div className="flex items-center justify-between gap-2 px-4 py-3">
-          <button className="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 border border-[#D5D7DA] bg-white hover:bg-zinc-100 active:bg-zinc-200 transition-colors h-12 min-w-12 p-2 !border !border-[#EDEDED] !bg-[#FAFAFA]">
-            <Image
-              alt="북마크 border 아이콘"
-              loading="lazy"
-              width={28}
-              height={28}
-              className="h-7 w-7"
-              src="https://zighang.com/icon/bookmark_border.svg"
+          <button
+            onClick={toggle}
+            disabled={isPending}
+            className={`inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 bg-white hover:bg-zinc-100 active:bg-zinc-200 transition-colors h-12 min-w-12 p-2 border border-[#EDEDED] ${
+              bookmarkState ? "bg-[#F7F1FB]" : "bg-[#FAFAFA]"
+            }`}
+          >
+            <Icon
+              variant="bookmark"
+              className={`transition-transform w-7 h-7 ${
+                bookmarkState ? "text-purple-800" : "text-gray-200"
+              }`}
             />
           </button>
-          <button className="whitespace-nowrap text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 border border-[#D5D7DA] hover:bg-zinc-100 active:bg-zinc-200 transition-colors flex h-12 flex-1 items-center justify-center gap-2.5 rounded-lg !border-0 bg-[#F7F1FB] px-4 py-3">
+          <button className="whitespace-nowrap text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 hover:bg-zinc-100 active:bg-zinc-200 transition-colors flex h-12 flex-1 items-center justify-center gap-2.5 rounded-lg bg-[#F7F1FB] px-4 py-3">
             <div className="bg-gradient-to-b from-[#6F00B6] to-[#6F00B6] bg-clip-text text-base font-semibold text-transparent">
               공유하기
             </div>
