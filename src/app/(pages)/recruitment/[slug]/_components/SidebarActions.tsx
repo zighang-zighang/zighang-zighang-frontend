@@ -6,8 +6,14 @@ import NotePad from "./Note/NotePad";
 import { useBookmark } from "@/app/_api/bookmark/useBookmark";
 import { useRecruitmentDetail } from "@/app/_api/recruitment/detail/useRecruitmentDetail";
 import Icon from "@/app/(pages)/[category]/_components/Icons/Icon";
+import { Job } from "@/app/_types/jobs";
 
-export default function SidebarActions({ slug }: { slug: string }) {
+interface SidebarActionsProps {
+  slug: string;
+  job: Job;
+}
+
+export default function SidebarActions({ slug, job }: SidebarActionsProps) {
   const { data: recruitmentData } = useRecruitmentDetail(slug);
   const isBookmarked = recruitmentData?.data?.isBookmarked ?? false;
   const {
@@ -40,9 +46,14 @@ export default function SidebarActions({ slug }: { slug: string }) {
                 공유하기
               </div>
             </button>
-            <button className="whitespace-nowrap rounded-lg text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 bg-primary text-white hover:bg-primary/90 transition-colors hover:cursor-pointer px-4 py-2 flex h-12 flex-1 items-center justify-center">
+            <Link
+              href={job.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="whitespace-nowrap rounded-lg text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 bg-primary text-white hover:bg-primary/90 transition-colors hover:cursor-pointer px-4 py-2 flex h-12 flex-1 items-center justify-center"
+            >
               <span className="text-lg">지원하기</span>
-            </button>
+            </Link>
           </div>
           <Link
             href="https://sprint.codeit.kr/track/frontend?utm_source=zighang_paid&utm_medium=display&utm_campaign=partnership&utm_content=frontend"
@@ -94,9 +105,14 @@ export default function SidebarActions({ slug }: { slug: string }) {
               공유하기
             </div>
           </button>
-          <button className="whitespace-nowrap rounded-lg text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 bg-primary text-white hover:bg-primary/90 transition-colors hover:cursor-pointer px-4 py-2 flex h-12 flex-1 items-center justify-center">
+          <Link
+            href={job.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="whitespace-nowrap rounded-lg text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 bg-primary text-white hover:bg-primary/90 transition-colors hover:cursor-pointer px-4 py-2 flex h-12 flex-1 items-center justify-center"
+          >
             <span className="text-base">지원하기</span>
-          </button>
+          </Link>
         </div>
       </div>
     </>

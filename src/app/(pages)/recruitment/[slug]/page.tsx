@@ -167,7 +167,7 @@ function RecruitmentPageContent({ slug }: { slug: string }) {
             recCount={mockRecCount}
           />
         </div>
-        <SidebarActions slug={slug} />
+        <SidebarActions slug={slug} job={displayJob} />
       </div>
       <Footer />
     </main>
