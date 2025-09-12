@@ -9,14 +9,16 @@ export default function RecruitmentContent({ job }: RecruitmentContentProps) {
   return (
     <div className="w-full">
       {job.imageUrl ? (
-        <div className="relative aspect-[2/6]">
+        <div className="w-full px-4">
           <Image
             alt="채용 공고 이미지"
             src={job.imageUrl}
-            fill
-            className="object-cover rounded-lg"
+            width={0}
+            height={0}
+            className="w-full h-auto rounded-lg"
             loading="lazy"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 75vw, 960px"
+            style={{ color: "transparent" }}
           />
         </div>
       ) : (
