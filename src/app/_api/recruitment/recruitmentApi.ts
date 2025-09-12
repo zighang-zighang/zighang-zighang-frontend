@@ -28,7 +28,7 @@ export interface RecruitmentItem {
   companyLogo?: string;
 }
 
-export interface RecruitmentListResponse {
+export interface RecruitmentPageData {
   content: RecruitmentItem[];
   totalElements: number;
   totalPages: number;
@@ -38,6 +38,15 @@ export interface RecruitmentListResponse {
   last: boolean;
   numberOfElements: number;
 }
+
+export interface ApiResponse<T> {
+  success: boolean;
+  code: string | null;
+  message: string | null;
+  data: T;
+}
+
+export type RecruitmentListResponse = ApiResponse<RecruitmentPageData>;
 
 // 공고 목록 조회
 export async function fetchRecruitments(filters: RecruitmentFilters = {}): Promise<RecruitmentListResponse> {
