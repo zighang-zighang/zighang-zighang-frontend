@@ -28,16 +28,13 @@ export default function SidebarActions({ slug, job }: SidebarActionsProps) {
 
   const handleApplyClick = async () => {
     if (isLogging) return;
-
+    setIsLogging(true);
+    // 사용자 제스처 내에서 즉시 새 탭 오픈 (팝업 차단 방지)
+    window.open(job.href, "_blank", "noopener,noreferrer");
     try {
-      setIsLogging(true);
       await logApplication(slug);
-      // 로깅 성공 후 새 탭에서 지원 페이지 열기
-      window.open(job.href, "_blank", "noopener,noreferrer");
     } catch (error) {
       console.error("지원 로깅 실패:", error);
-      // 로깅 실패해도 지원 페이지는 열기
-      window.open(job.href, "_blank", "noopener,noreferrer");
     } finally {
       setIsLogging(false);
     }

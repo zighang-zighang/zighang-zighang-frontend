@@ -10,7 +10,7 @@ import Separator from "./_components/Separator";
 import SimilarRecruitments from "./_components/SimilarRecruitments";
 import SidebarActions from "./_components/SidebarActions";
 import { useRecruitmentDetail } from "@/app/_api/recruitment/detail/useRecruitmentDetail";
-import { use } from "react";
+import { useParams } from "next/navigation";
 import filterAdapt from "@/app/_utils/filterAdapt";
 import { toDisplayJobDot } from "@/app/_utils/jobFormat";
 
@@ -157,11 +157,7 @@ function RecruitmentPageContent({ slug }: { slug: string }) {
   );
 }
 
-export default function RecruitmentPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = use(params);
+export default function RecruitmentPage() {
+  const { slug } = useParams<{ slug: string }>();
   return <RecruitmentPageContent slug={slug} />;
 }
