@@ -77,23 +77,11 @@ export default function Header() {
                 style={{ display: "hidden" }}
               >
                 <Link
-                  href="https://tally.so/r/nPYly5"
+                  href="/personal"
                   className="pointer-events-auto relative"
                   target="_blank"
                 >
-                  <div className="text-[#353535] ds-web-navi">공고 제보</div>
-                </Link>
-              </div>
-              <div
-                className="relative hidden hbp:block"
-                style={{ display: "hidden" }}
-              >
-                <Link
-                  href="https://linktr.ee/zighang_chat"
-                  className="pointer-events-auto relative"
-                  target="_blank"
-                >
-                  <div className="text-[#353535] ds-web-navi">오픈 채팅</div>
+                  <div className="text-[#353535] ds-web-navi">맞춤 공고</div>
                 </Link>
               </div>
             </div>
@@ -108,7 +96,11 @@ export default function Header() {
             </div>
 
             {isLoggedIn ? (
-              <Link href="/mypage" aria-label="내 프로필" className="hidden md:block">
+              <Link
+                href="/mypage"
+                aria-label="내 프로필"
+                className="hidden md:block"
+              >
                 <Profile />
               </Link>
             ) : (
@@ -120,7 +112,11 @@ export default function Header() {
             )}
 
             {isLoggedIn ? (
-              <Link href="/mypage" aria-label="내 프로필" className="block md:hidden">
+              <Link
+                href="/mypage"
+                aria-label="내 프로필"
+                className="block md:hidden"
+              >
                 <Profile />
               </Link>
             ) : (
@@ -161,7 +157,7 @@ export default function Header() {
         }`}
         onClick={closeSidebar}
       />
-      
+
       {/* 사이드바 */}
       <div
         className={`fixed rounded-l-2xl bg-white h-full w-[70%] right-0 z-[1001] transition-transform duration-300 ease-in-out ${
