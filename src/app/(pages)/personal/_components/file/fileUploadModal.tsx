@@ -3,8 +3,10 @@
 import { Dialog } from "@headlessui/react";
 import { useState, useRef } from "react";
 import FileUploadCard from "@/app/(pages)/onboarding/_components/FileUpload/FileUploadCard";
+import { FileUploadItem } from "@/app/(pages)/onboarding/_components/FileUpload/FileUploadItem";
 import CheckIcon from "@/app/(pages)/onboarding/_components/FileUpload/icons/checkIcon";
 import { UploadIcon } from "../../_Icons/UploadIcon";
+import { UploadedFile } from "@/app/(pages)/onboarding/_components/FileUpload/types/type";
 
 type FileUploadModalProps = {
   open: boolean;
@@ -15,12 +17,67 @@ export default function FileUploadModal({
   open,
   onClose,
 }: FileUploadModalProps) {
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [fileProgress, setFileProgress] = useState<
+    Record<
+      string,
+      { progress: number; status: "loading" | "success" | "error" }
+    >
+  >({});
+
+  const processFileSequentially = async (files: File[]) => {
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const fileId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+      const uploaded: UploadedFile = {
+        id: fileId,
+        name: file.name,
+        size: file.size,
+        uploadedAt: new Date().toISOString(),
+      };
+
+      // 파일 추가
+      setUploadedFiles((prev) => [...prev, uploaded]);
+
+      // 진행률 초기화
+      setFileProgress((prev) => ({
+        ...prev,
+        [fileId]: { progress: 0, status: "loading" },
+      }));
+
+      // 시뮬레이션 시작
+      await simulateFileUpload(fileId);
+    }
+  };
+
+  const simulateFileUpload = (fileId: string): Promise<void> => {
+    return new Promise((resolve) => {
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 40;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+          setFileProgress((prev) => ({
+            ...prev,
+            [fileId]: { progress: 100, status: "success" },
+          }));
+          resolve();
+        } else {
+          setFileProgress((prev) => ({
+            ...prev,
+            [fileId]: { progress, status: "loading" },
+          }));
+        }
+      }, 150);
+    });
+  };
 
   const handleFiles = (files: File[]) => {
-    setUploadedFiles((prev) => [...prev, ...files]);
+    processFileSequentially(files);
   };
 
   const handleError = (message: string) => {
@@ -76,10 +133,10 @@ export default function FileUploadModal({
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel
           aria-labelledby="file-upload-title"
-          className="mx-auto w-full max-w-60 md:max-w-[600px] md:w-[600px] rounded-xl bg-white py-5 shadow-lg"
+          className="mx-auto w-full min-w-60 md:max-w-[600px] md:w-[600px] rounded-xl bg-white py-5 shadow-lg"
         >
           <div className="flex flex-col md:flex-row items-center">
-            <div className="hidden px-10 md:block">
+            <div className="hidden w-50 md:block">
               <FileUploadCard
                 onFiles={handleFiles}
                 onError={handleError}
@@ -90,7 +147,7 @@ export default function FileUploadModal({
               />
             </div>
 
-            <div className="md:border-l md:border-neutral-200 px-4 flex-1">
+            <div className="md:border-l w-full md:border-neutral-200 px-4 flex-1">
               <div className="flex justify-between items-center">
                 <p className="font-semibold text-sm">업로드된 파일</p>
                 <button
@@ -108,7 +165,7 @@ export default function FileUploadModal({
                   ✕
                 </button>
               </div>
-              <div className="h-48 md:h-54 mt-3 border border-neutral-200 rounded-lg overflow-y-auto">
+              <div className="h-48 md:h-54 mt-3 border border-neutral-200 rounded-lg overflow-y-auto w-full md:w-[380px]">
                 {uploadedFiles.length === 0 ? (
                   <div className="flex justify-center items-center h-full">
                     <p className="text-stone-300 text-sm font-medium text-center">
@@ -118,31 +175,28 @@ export default function FileUploadModal({
                   </div>
                 ) : (
                   <div className="p-3 space-y-2">
-                    {uploadedFiles.map((file, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between p-2 bg-gray-50 rounded-lg"
-                      >
-                        <div className="flex items-center gap-2">
-                          <UploadIcon className="w-4 h-4 text-violet-500" />
-                          <span className="text-sm font-medium text-gray-700 truncate max-w-xs">
-                            {file.name}
-                          </span>
-                          <span className="text-xs text-gray-500">
-                            ({(file.size / 1024 / 1024).toFixed(1)}MB)
-                          </span>
-                        </div>
-                        <button
-                          onClick={() =>
-                            setUploadedFiles((prev) =>
-                              prev.filter((_, i) => i !== index)
-                            )
-                          }
-                          className="text-red-500 hover:text-red-700 text-sm"
-                        >
-                          삭제
-                        </button>
-                      </div>
+                    {uploadedFiles.map((file) => (
+                      <FileUploadItem
+                        key={file.id}
+                        file={file}
+                        status={fileProgress[file.id]?.status || "loading"}
+                        progress={fileProgress[file.id]?.progress || 0}
+                        note={
+                          file.size
+                            ? `${(file.size / 1024 / 1024).toFixed(1)}MB`
+                            : undefined
+                        }
+                        onRemove={(id) => {
+                          setUploadedFiles((prev) =>
+                            prev.filter((f) => f.id !== id)
+                          );
+                          setFileProgress((prev) => {
+                            const newProgress = { ...prev };
+                            delete newProgress[id];
+                            return newProgress;
+                          });
+                        }}
+                      />
                     ))}
                   </div>
                 )}
