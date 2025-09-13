@@ -15,11 +15,13 @@ import { SIDO_GEO } from "../../_types/onBoradingMap";
 export function LocationStep({
   onBack,
   onSubmit,
+  initialRegion,
 }: {
   onBack: () => void;
   onSubmit: (지역: string | null) => void;
+  initialRegion?: string;
 }) {
-  const [region, setRegion] = useState<RegionValue | null>(null);
+  const [region, setRegion] = useState<RegionValue | null>(initialRegion as RegionValue || null);
   const isValid = useMemo(() => !!region, [region]);
 
   const handleSelect = useCallback(
