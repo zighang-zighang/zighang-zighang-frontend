@@ -63,7 +63,7 @@ export default function FileUploadCard({
 
   const getButtonStyles = () => {
     const baseStyles = [
-      "h-8 px-4.5 py-1.5 rounded-full text-sm font-semibold text-white shadow-sm",
+      "h-8 px-4.5 py-1.5 rounded-full text-sm font-semibold text-white shadow-sm cursor-pointer",
       "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet-200",
       disabled ? "opacity-60 cursor-not-allowed" : "",
     ];
@@ -248,7 +248,9 @@ export default function FileUploadCard({
           title="클릭해서 닫기"
         >
           <div className="px-4 py-2 rounded-md bg-white/85 backdrop-blur-sm border border-rose-200 shadow">
-            <p className="text-sm font-semibold text-rose-700">{error}</p>
+            <p className="text-sm font-semibold text-rose-700 text-center">
+              {error}
+            </p>
           </div>
         </div>
       )}
