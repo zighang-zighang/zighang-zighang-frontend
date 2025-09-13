@@ -42,6 +42,7 @@ type Ctx = {
   open: boolean;
   section: Section;
   filters: FilterState;
+  mode: "category" | "today";
   openDialog: (s?: Section) => void;
   closeDialog: () => void;
   setJobGroup: (id: string) => void;
@@ -209,6 +210,7 @@ export function FilterDialogProvider({
       open,
       section,
       filters,
+      mode,
       openDialog,
       closeDialog,
       setJobGroup,
@@ -224,6 +226,7 @@ export function FilterDialogProvider({
       open,
       section,
       filters,
+      mode,
       openDialog,
       closeDialog,
       setJobGroup,
