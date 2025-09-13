@@ -15,6 +15,7 @@ type Props = {
   width?: string | number;
   height?: string | number;
   className?: string;
+  error?: string | null;
 };
 
 export default function FileUploadCard({
@@ -29,11 +30,15 @@ export default function FileUploadCard({
   width,
   height,
   className,
+  error: externalError,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setDragging] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [internalError, setInternalError] = useState<string | null>(null);
   const liveId = useId();
+
+  // 외부 에러와 내부 에러를 합쳐서 사용
+  const error = externalError || internalError;
 
   // modal 상태에 따른 스타일 조절
   const getContainerStyles = () => {
@@ -45,7 +50,8 @@ export default function FileUploadCard({
         ? "border-violet-400 ring-4 ring-violet-100"
         : "border-zinc-200 hover:shadow",
       hasFile ? "h-[200px]" : "h-[228px]",
-      error ? "blur-sm select-none" : "",
+      // modal 상태일 때는 블러 처리하지 않음
+      error && !modal ? "blur-sm select-none" : "",
     ];
 
     if (modal) {
@@ -79,14 +85,14 @@ export default function FileUploadCard({
 
   const showError = useCallback(
     (msg: string) => {
-      setError(msg);
+      setInternalError(msg);
       onError?.(msg);
     },
     [onError]
   );
 
   const clearError = useCallback(() => {
-    setError(null);
+    setInternalError(null);
   }, []);
 
   const validateAndEmit = useCallback(
@@ -231,7 +237,7 @@ export default function FileUploadCard({
           />
         </div>
       </div>
-      {error && (
+      {error && !modal && (
         <div
           role="alert"
           aria-live="assertive"

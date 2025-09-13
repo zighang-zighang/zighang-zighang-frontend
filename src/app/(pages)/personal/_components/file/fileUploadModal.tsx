@@ -11,11 +11,13 @@ import { UploadedFile } from "@/app/(pages)/onboarding/_components/FileUpload/ty
 type FileUploadModalProps = {
   open: boolean;
   onClose: () => void;
+  onComplete?: () => void;
 };
 
 export default function FileUploadModal({
   open,
   onClose,
+  onComplete,
 }: FileUploadModalProps) {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -80,11 +82,18 @@ export default function FileUploadModal({
     processFileSequentially(files);
   };
 
+  const handleComplete = () => {
+    if (onComplete) {
+      onComplete();
+    } else {
+      onClose();
+    }
+  };
+
   const handleError = (message: string) => {
     setError(message);
-    console.error("File upload error:", message);
     // 3초 후 에러 메시지 자동 제거
-    setTimeout(() => setError(null), 3000);
+    setTimeout(() => setError(null), 1500);
   };
 
   const handleMobileFileUpload = () => {
@@ -133,9 +142,11 @@ export default function FileUploadModal({
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel
           aria-labelledby="file-upload-title"
-          className="mx-auto w-full min-w-60 md:max-w-[600px] md:w-[600px] rounded-xl bg-white py-5 shadow-lg"
+          className={`h-95 mx-auto w-full min-w-60 md:max-w-[600px] md:w-[600px] rounded-xl bg-white py-3 shadow-lg relative ${
+            error ? "blur-xs" : ""
+          }`}
         >
-          <div className="flex flex-col md:flex-row items-center">
+          <div className="flex flex-col md:flex-row items-center h-full">
             <div className="hidden w-50 md:block">
               <FileUploadCard
                 onFiles={handleFiles}
@@ -147,7 +158,7 @@ export default function FileUploadModal({
               />
             </div>
 
-            <div className="md:border-l w-full md:border-neutral-200 px-4 flex-1">
+            <div className="md:border-l w-full md:border-neutral-200 px-4 flex-1 flex flex-col">
               <div className="flex justify-between items-center">
                 <p className="font-semibold text-sm">업로드된 파일</p>
                 <button
@@ -165,7 +176,7 @@ export default function FileUploadModal({
                   ✕
                 </button>
               </div>
-              <div className="h-48 md:h-54 mt-3 border border-neutral-200 rounded-lg overflow-y-auto w-full md:w-[380px]">
+              <div className="md:h-54 mt-2.5 md:mt-1 border border-neutral-200 rounded-lg overflow-y-auto w-full md:w-[380px] h-full">
                 {uploadedFiles.length === 0 ? (
                   <div className="flex justify-center items-center h-full">
                     <p className="text-stone-300 text-sm font-medium text-center">
@@ -202,7 +213,7 @@ export default function FileUploadModal({
                 )}
               </div>
 
-              <div className="flex items-center">
+              <div className="flex items-center mt-2">
                 <div className="mt-3 mb-4 flex flex-col gap-1">
                   <div className="flex items-start gap-2">
                     <CheckIcon />
@@ -219,6 +230,7 @@ export default function FileUploadModal({
                   </div>
                 </div>
                 <button
+                  onClick={handleComplete}
                   className={`hidden md:block ml-auto text-white text-sm font-semibold h-9 px-7 py-2 rounded-lg ${
                     uploadedFiles.length > 0
                       ? "bg-violet-600 hover:bg-violet-700"
@@ -229,7 +241,7 @@ export default function FileUploadModal({
                   완료
                 </button>
               </div>
-              <div className="flex gap-2 mt-4">
+              <div className="flex gap-2 mb-2">
                 <button
                   onClick={onClose}
                   className="flex-1 md:hidden text-sm font-semibold h-9 px-7 py-2 bg-white rounded-lg border border-neutral-200 hover:bg-neutral-100 "
@@ -237,6 +249,7 @@ export default function FileUploadModal({
                   나가기
                 </button>
                 <button
+                  onClick={handleComplete}
                   className={`flex-1 md:hidden  text-white text-sm font-semibold h-9 px-7 py-2 rounded-lg ${
                     uploadedFiles.length > 0
                       ? "bg-violet-600 hover:bg-violet-700"
@@ -250,6 +263,20 @@ export default function FileUploadModal({
             </div>
           </div>
         </Dialog.Panel>
+
+        {/* 에러 메시지 오버레이 */}
+        {error && (
+          <div
+            className="absolute inset-0 flex items-center justify-center z-10 cursor-pointer"
+            onClick={(e) => {
+              setError(null);
+            }}
+          >
+            <div className="bg-red-500 text-white px-6 py-4 rounded-lg shadow-lg max-w-sm mx-4 text-center">
+              <p className="text-sm">{error}</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* 숨겨진 파일 input (모바일용) */}

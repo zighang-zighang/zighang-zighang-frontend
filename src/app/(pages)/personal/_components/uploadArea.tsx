@@ -4,6 +4,7 @@ import { UploadIcon } from "../_Icons/UploadIcon";
 import { useState } from "react";
 import FileList from "./file/fileList";
 import FileUploadModal from "./file/fileUploadModal";
+import FileExploreModal from "./file/fileExploreModal";
 
 type FileRow = {
   id: string;
@@ -40,12 +41,34 @@ export default function UploadArea({
 }: UploadAreaProps) {
   const [showTooltip, setShowTooltip] = useState(true);
   const [openModal, setOpenModal] = useState(false);
+  const [showExploreModal, setShowExploreModal] = useState(false);
+  const [progress, setProgress] = useState(0);
   const handleUpload = () => {
     setOpenModal(true);
   };
 
   const handleDelete = () => {
     console.log(1);
+  };
+
+  const handleUploadComplete = () => {
+    setOpenModal(false);
+    setShowExploreModal(true);
+    setProgress(0);
+
+    // 진행률 시뮬레이션 (공고 찾기 - 부드럽게)
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          setTimeout(() => {
+            setShowExploreModal(false);
+          }, 2000);
+          return 100;
+        }
+        return prev + 2; // 2%씩 증가
+      });
+    }, 100);
   };
   return (
     <div className="space-y-3 mt-16 md:mt-23 mb-24 md:mb-38">
@@ -61,7 +84,7 @@ export default function UploadArea({
           <button
             type="button"
             onClick={handleUpload}
-            className="hidden md:inline-flex gap-2 px-3 h-9 bg-violet-500 rounded-lg justify-center items-center z-10"
+            className="hidden md:inline-flex gap-2 px-3 h-9 bg-violet-500 rounded-lg justify-center items-center z-10 cursor-pointer"
           >
             <UploadIcon className="text-white" />
             <p className="text-white text-sm font-semibold">파일 업로드</p>
@@ -101,12 +124,21 @@ export default function UploadArea({
       <button
         type="button"
         onClick={handleUpload}
-        className="md:hidden w-full h-10 bg-violet-500 rounded-lg inline-flex justify-center items-center gap-2"
+        className="md:hidden w-full h-10 bg-violet-500 rounded-lg inline-flex justify-center items-center gap-2 cursor-pointer"
       >
         <UploadIcon className="text-white" />
-        <p className="text-white text-sm font-semibold">파일 업로드</p>
+        <p className="text-white text-sm font-semibold ">파일 업로드</p>
       </button>
-      <FileUploadModal open={openModal} onClose={() => setOpenModal(false)} />
+      <FileUploadModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        onComplete={handleUploadComplete}
+      />
+      <FileExploreModal
+        open={showExploreModal}
+        onClose={() => setShowExploreModal(false)}
+        progress={progress}
+      />
     </div>
   );
 }
