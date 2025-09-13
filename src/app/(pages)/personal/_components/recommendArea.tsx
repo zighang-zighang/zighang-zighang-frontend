@@ -30,33 +30,20 @@ const mockRecruitments = [
 export default function RecommendArea() {
   return (
     <div className="mt-5">
-      <div className="flex justify-between items-center">
-        <div className="justify-center">
-          <span className="text-purple-800 text-lg md:text-xl font-semibold">
+      <div className="flex justify-between items-center mb-4">
+        <div className="justify-center text-black text-lg md:text-xl font-semibold">
+          <span className="text-purple-800 text-lg md:text-xl font-semibold mr-1">
             초개인화
           </span>
-          <span className="text-black text-lg md:text-xl font-semibold">
-            {" "}
-            추천 공고{" "}
-          </span>
-          <span className="text-purple-800 text-lg md:text-xl font-semibold">
+          추천 공고
+          <span className="text-purple-800 text-lg md:text-xl font-semibold ml-1">
             N
           </span>
-          <span className="text-black text-lg md:text-xl font-semibold">
-            {" "}
-            건
-          </span>
+          건
         </div>
-
-        <button className="hidden md:inline-flex px-2 h-9 bg-violet-500 rounded-lg justify-center items-center gap-1">
-          <RefreshIcon className="text-white" />
-          <p className="md:w-20 justify-start text-white text-sm font-semibold">
-            다시 추천받기
-          </p>
-        </button>
       </div>
 
-      <div className="relative w-full max-w-[787px] h-[400px] md:h-44">
+      <div className="relative w-full max-w-[787px] h-[400px] md:h-43">
         <div className="absolute inset-0 z-0 flex flex-col md:flex-row items-center justify-center gap-4 px-6">
           {mockRecruitments.map((item, idx) => (
             <RecruitmentCard key={idx} {...item} />
@@ -87,13 +74,6 @@ export default function RecommendArea() {
           </div>
         </div>
       </div>
-
-      <button className="mt-3 md:hidden w-full h-10 bg-violet-500 rounded-lg inline-flex justify-center items-center gap-1">
-        <RefreshIcon className="text-white" />
-        <p className="justify-start text-white text-sm font-semibold">
-          다시 추천받기
-        </p>
-      </button>
     </div>
   );
 }
