@@ -1,4 +1,4 @@
-import UploadHero from "../_Icons/UploadHero";
+// import UploadHero from "../_Icons/UploadHero";
 
 export default function PersonalBanner() {
   return (

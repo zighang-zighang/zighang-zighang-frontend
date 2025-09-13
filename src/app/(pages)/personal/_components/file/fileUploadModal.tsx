@@ -268,7 +268,7 @@ export default function FileUploadModal({
         {error && (
           <div
             className="absolute inset-0 flex items-center justify-center z-10 cursor-pointer"
-            onClick={(e) => {
+            onClick={() => {
               setError(null);
             }}
           >

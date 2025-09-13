@@ -1,5 +1,4 @@
 import RecruitmentCard from "../../onboarding/_components/RecommendCard/RecruitmentCard";
-import { RefreshIcon } from "../_Icons/RefreshIcon";
 
 // 임시 목업 데이터 삭제 예정
 

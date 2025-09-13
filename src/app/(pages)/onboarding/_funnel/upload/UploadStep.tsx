@@ -4,10 +4,7 @@ import { useEffect, useState } from "react";
 import { StepContainer } from "../../_components";
 import FileUploadCard from "../../_components/FileUpload/FileUploadCard";
 import FileUploadList from "../../_components/FileUpload/FileUploadList";
-import {
-  UploadStatus,
-  UploadedFile,
-} from "../../_components/FileUpload/types/type";
+import { UploadedFile } from "../../_components/FileUpload/types/type";
 import { useProgressSimulation } from "@/app/_hooks/useProgressSimulation";
 
 type ApiOnboardingPayload = {
