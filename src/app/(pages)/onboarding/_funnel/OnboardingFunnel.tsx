@@ -144,7 +144,6 @@ export default function OnboardingFunnel() {
         return (
           <UploadStep
             apiPayload={apiPayload}
-            isLoading={submitOnboardingMutation.isPending}
             onNext={async (file, payload) => {
               try {
                 const responseData = await submitOnboardingMutation.mutateAsync({ payload, file });
