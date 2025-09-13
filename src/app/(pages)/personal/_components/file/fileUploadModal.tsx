@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog } from "@headlessui/react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import FileUploadCard from "@/app/(pages)/onboarding/_components/FileUpload/FileUploadCard";
 import CheckIcon from "@/app/(pages)/onboarding/_components/FileUpload/icons/checkIcon";
 import { UploadIcon } from "../../_Icons/UploadIcon";
@@ -16,13 +16,57 @@ export default function FileUploadModal({
   onClose,
 }: FileUploadModalProps) {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFiles = (files: File[]) => {
     setUploadedFiles((prev) => [...prev, ...files]);
   };
 
   const handleError = (message: string) => {
+    setError(message);
     console.error("File upload error:", message);
+    // 3초 후 에러 메시지 자동 제거
+    setTimeout(() => setError(null), 3000);
+  };
+
+  const handleMobileFileUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const validateFiles = (files: File[]) => {
+    const maxSizeMB = 15;
+    const allowedTypes = [".pdf", ".doc", ".docx", ".hwp", ".hwpx"];
+
+    for (const file of files) {
+      // 파일 크기 검증
+      if (file.size > maxSizeMB * 1024 * 1024) {
+        handleError(`파일은 최대 ${maxSizeMB}MB까지 업로드할 수 있어요.`);
+        return false;
+      }
+
+      // 파일 형식 검증
+      const fileExtension = "." + file.name.split(".").pop()?.toLowerCase();
+      if (!allowedTypes.includes(fileExtension)) {
+        handleError(
+          "허용되지 않는 파일 형식입니다. PDF, DOC, DOCX, HWP, HWPX 파일만 업로드 가능합니다."
+        );
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length > 0) {
+      if (validateFiles(files)) {
+        handleFiles(files);
+      }
+    }
+    // input 초기화
+    e.target.value = "";
   };
 
   return (
@@ -49,7 +93,10 @@ export default function FileUploadModal({
             <div className="md:border-l md:border-neutral-200 px-4 flex-1">
               <div className="flex justify-between items-center">
                 <p className="font-semibold text-sm">업로드된 파일</p>
-                <button className="w-20 h-7 flex items-center justify-center gap-1 bg-violet-50 rounded-md md:hidden text-violet-500 text-[9.66px] font-semibold">
+                <button
+                  onClick={handleMobileFileUpload}
+                  className="w-20 h-7 flex items-center justify-center gap-1 bg-violet-50 rounded-md md:hidden text-violet-500 text-[9.66px] font-semibold hover:bg-violet-100 transition-colors"
+                >
                   <UploadIcon className="text-violet-500"></UploadIcon>
                   파일업로드
                 </button>
@@ -150,6 +197,16 @@ export default function FileUploadModal({
           </div>
         </Dialog.Panel>
       </div>
+
+      {/* 숨겨진 파일 input (모바일용) */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        accept=".pdf,.doc,.docx,.hwp,.hwpx"
+        onChange={handleFileChange}
+        className="hidden"
+      />
     </Dialog>
   );
 }
