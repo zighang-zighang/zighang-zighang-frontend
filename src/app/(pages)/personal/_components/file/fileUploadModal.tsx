@@ -32,14 +32,21 @@ export default function FileUploadModal({
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel
           aria-labelledby="file-upload-title"
-          className="mx-auto w-full max-w-4xl rounded-xl bg-white p-6 shadow-lg"
+          className="mx-auto w-full max-w-60 md:max-w-[600px] md:w-[600px] rounded-xl bg-white py-5 shadow-lg"
         >
-          <div className="flex flex-col md:flex-row gap-6">
-            <div className="hidden md:block">
-              <FileUploadCard />
+          <div className="flex flex-col md:flex-row items-center">
+            <div className="hidden px-10 md:block">
+              <FileUploadCard
+                onFiles={handleFiles}
+                onError={handleError}
+                multiple={true}
+                accept=".pdf,.doc,.docx,.hwp,.hwpx"
+                maxSizeMB={15}
+                modal={true}
+              />
             </div>
 
-            <div>
+            <div className="md:border-l md:border-neutral-200 px-4 flex-1">
               <div className="flex justify-between items-center">
                 <p className="font-semibold text-sm">업로드된 파일</p>
                 <button className="w-20 h-7 flex items-center justify-center gap-1 bg-violet-50 rounded-md md:hidden text-violet-500 text-[9.66px] font-semibold">
@@ -54,33 +61,88 @@ export default function FileUploadModal({
                   ✕
                 </button>
               </div>
-              <div className="h-48 md:h-54 mt-3 flex justify-center items-center border border-neutral-200 rounded-lg">
-                <p className="mt-1 text-stone-300 text-sm font-medium text-center">
-                  아직 비어있네요. <br />
-                  파일을 업로드하세요!
-                </p>
+              <div className="h-48 md:h-54 mt-3 border border-neutral-200 rounded-lg overflow-y-auto">
+                {uploadedFiles.length === 0 ? (
+                  <div className="flex justify-center items-center h-full">
+                    <p className="text-stone-300 text-sm font-medium text-center">
+                      아직 비어있네요. <br />
+                      파일을 업로드하세요!
+                    </p>
+                  </div>
+                ) : (
+                  <div className="p-3 space-y-2">
+                    {uploadedFiles.map((file, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-2 bg-gray-50 rounded-lg"
+                      >
+                        <div className="flex items-center gap-2">
+                          <UploadIcon className="w-4 h-4 text-violet-500" />
+                          <span className="text-sm font-medium text-gray-700 truncate max-w-xs">
+                            {file.name}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            ({(file.size / 1024 / 1024).toFixed(1)}MB)
+                          </span>
+                        </div>
+                        <button
+                          onClick={() =>
+                            setUploadedFiles((prev) =>
+                              prev.filter((_, i) => i !== index)
+                            )
+                          }
+                          className="text-red-500 hover:text-red-700 text-sm"
+                        >
+                          삭제
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
-              <div className="mt-3 mb-4 flex flex-col gap-1">
-                <div className="flex items-start gap-2">
-                  <CheckIcon />
-                  <p className="text-[10px] font-medium text-zinc-400 md:text-xs md:text-stone-300">
-                    파일 형식은 PDF, DOC, HWP, HWPX로 올려주세요
-                  </p>
-                </div>
+              <div className="flex items-center">
+                <div className="mt-3 mb-4 flex flex-col gap-1">
+                  <div className="flex items-start gap-2">
+                    <CheckIcon />
+                    <p className="text-[10px] font-medium text-zinc-400 md:text-xs md:text-stone-300">
+                      파일 형식은 PDF, DOC, HWP, HWPX로 올려주세요
+                    </p>
+                  </div>
 
-                <div className="flex items-start gap-2">
-                  <CheckIcon />
-                  <p className="text-[10px] font-medium text-zinc-400 md:text-xs md:text-stone-300">
-                    파일 최대 용량은 15mb까지입니다
-                  </p>
+                  <div className="flex items-start gap-2">
+                    <CheckIcon />
+                    <p className="text-[10px] font-medium text-zinc-400 md:text-xs md:text-stone-300">
+                      파일 최대 용량은 15mb까지입니다
+                    </p>
+                  </div>
                 </div>
+                <button
+                  className={`hidden md:block ml-auto text-white text-sm font-semibold h-9 px-7 py-2 rounded-lg ${
+                    uploadedFiles.length > 0
+                      ? "bg-violet-600 hover:bg-violet-700"
+                      : "bg-neutral-400 cursor-not-allowed"
+                  }`}
+                  disabled={uploadedFiles.length === 0}
+                >
+                  완료
+                </button>
               </div>
-              <div className="flex gap-1">
-                <button className="flex-1 md:hidden text-sm font-semibold h-9 px-7 py-2 bg-white rounded-lg border border-neutral-200 hover:bg-neutral-100">
+              <div className="flex gap-2 mt-4">
+                <button
+                  onClick={onClose}
+                  className="flex-1 md:hidden text-sm font-semibold h-9 px-7 py-2 bg-white rounded-lg border border-neutral-200 hover:bg-neutral-100 "
+                >
                   나가기
                 </button>
-                <button className="flex-1 md:flex-0 text-white text-sm font-semibold h-9 px-7 py-2 bg-neutral-400 rounded-lg border-neutral-500">
+                <button
+                  className={`flex-1 md:hidden  text-white text-sm font-semibold h-9 px-7 py-2 rounded-lg ${
+                    uploadedFiles.length > 0
+                      ? "bg-violet-600 hover:bg-violet-700"
+                      : "bg-neutral-400 cursor-not-allowed"
+                  }`}
+                  disabled={uploadedFiles.length === 0}
+                >
                   완료
                 </button>
               </div>

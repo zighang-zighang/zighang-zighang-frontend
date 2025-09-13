@@ -11,6 +11,10 @@ type Props = {
   maxSizeMB?: number;
   disabled?: boolean;
   hasFile?: boolean;
+  modal?: boolean;
+  width?: string | number;
+  height?: string | number;
+  className?: string;
 };
 
 export default function FileUploadCard({
@@ -21,11 +25,57 @@ export default function FileUploadCard({
   maxSizeMB = 15,
   disabled = false,
   hasFile,
+  modal = false,
+  width,
+  height,
+  className,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const liveId = useId();
+
+  // modal 상태에 따른 스타일 조절
+  const getContainerStyles = () => {
+    const baseStyles = [
+      "bg-white flex justify-center shadow-sm transition outline-none relative",
+      disabled
+        ? "opacity-60 cursor-not-allowed"
+        : isDragging
+        ? "border-violet-400 ring-4 ring-violet-100"
+        : "border-zinc-200 hover:shadow",
+      hasFile ? "h-[200px]" : "h-[228px]",
+      error ? "blur-sm select-none" : "",
+    ];
+
+    if (modal) {
+      baseStyles.push("!shadow-none");
+    } else {
+      baseStyles.push("w-[526px] rounded-2xl border");
+    }
+
+    if (className) {
+      baseStyles.push(className);
+    }
+
+    return baseStyles.join(" ");
+  };
+
+  const getButtonStyles = () => {
+    const baseStyles = [
+      "h-8 px-4.5 py-1.5 rounded-full text-sm font-semibold text-white shadow-sm",
+      "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet-200",
+      disabled ? "opacity-60 cursor-not-allowed" : "",
+    ];
+
+    if (modal) {
+      baseStyles.push("bg-black text-white");
+    } else {
+      baseStyles.push("bg-violet-600 hover:bg-violet-700");
+    }
+
+    return baseStyles.join(" ");
+  };
 
   const showError = useCallback(
     (msg: string) => {
@@ -106,17 +156,19 @@ export default function FileUploadCard({
       <div
         role="group"
         aria-labelledby={`${liveId}-title`}
-        className={[
-          "w-[526px] rounded-2xl border bg-white flex justify-center",
-          "shadow-sm transition outline-none relative",
-          disabled
-            ? "opacity-60 cursor-not-allowed"
-            : isDragging
-            ? "border-violet-400 ring-4 ring-violet-100"
-            : "border-zinc-200 hover:shadow",
-          hasFile ? "h-[200px]" : "h-[228px]",
-          error ? "blur-sm select-none" : "",
-        ].join(" ")}
+        className={getContainerStyles()}
+        style={{
+          width: width
+            ? typeof width === "number"
+              ? `${width}px`
+              : width
+            : undefined,
+          height: height
+            ? typeof height === "number"
+              ? `${height}px`
+              : height
+            : undefined,
+        }}
         onDragEnter={(e) => {
           if (disabled) return;
           e.preventDefault();
@@ -163,12 +215,7 @@ export default function FileUploadCard({
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={disabled}
-            className={[
-              " h-8 px-4.5 py-1.5 rounded-full text-sm ",
-              "font-semibold bg-violet-600 text-white shadow-sm",
-              "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet-200",
-              disabled ? "opacity-60 cursor-not-allowed" : "",
-            ].join(" ")}
+            className={getButtonStyles()}
           >
             파일 업로드
           </button>
