@@ -40,9 +40,9 @@ export default function FileUploadModal({
             </div>
 
             <div>
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center">
                 <p className="font-semibold text-sm">업로드된 파일</p>
-                <button className="w-20 h-6 flex items-center justify-center gap-1 bg-violet-50 rounded-md md:hidden text-violet-500 text-[9.66px] font-semibold">
+                <button className="w-20 h-7 flex items-center justify-center gap-1 bg-violet-50 rounded-md md:hidden text-violet-500 text-[9.66px] font-semibold">
                   <UploadIcon className="text-violet-500"></UploadIcon>
                   파일업로드
                 </button>
@@ -77,10 +77,10 @@ export default function FileUploadModal({
                 </div>
               </div>
               <div className="flex gap-1">
-                <button className="flex-1 text-sm font-semibold h-9 px-7 py-2 bg-white rounded-lg border border-neutral-200 hover:bg-neutral-100">
+                <button className="flex-1 md:hidden text-sm font-semibold h-9 px-7 py-2 bg-white rounded-lg border border-neutral-200 hover:bg-neutral-100">
                   나가기
                 </button>
-                <button className="flex-1 text-white text-sm font-semibold h-9 px-7 py-2 bg-neutral-400 rounded-lg border-neutral-500">
+                <button className="flex-1 md:flex-0 text-white text-sm font-semibold h-9 px-7 py-2 bg-neutral-400 rounded-lg border-neutral-500">
                   완료
                 </button>
               </div>
