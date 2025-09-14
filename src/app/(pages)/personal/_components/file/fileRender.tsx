@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 interface FileRenderProps {
   file: {
     id: string;

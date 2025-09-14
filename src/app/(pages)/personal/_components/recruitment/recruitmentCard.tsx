@@ -1,8 +1,6 @@
 import Image from "next/image";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useBookmark } from "@/app/_api/bookmark/useBookmark";
-import { useAuthState } from "@/app/_api/auth/useAuthState";
 
 interface RecruitmentCardProps {
   id: string | number;

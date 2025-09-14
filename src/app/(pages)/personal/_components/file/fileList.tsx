@@ -1,7 +1,7 @@
 "use client";
 
 import { EmptyFileIcon } from "../../_Icons/EmptyFileIcon";
-import FileRender from "./fileRender";
+import FileRender from "./FileRender";
 
 type FileRow = {
   id: string;
