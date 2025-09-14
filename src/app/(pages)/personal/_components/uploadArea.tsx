@@ -84,7 +84,7 @@ export default function UploadArea({
           <button
             type="button"
             onClick={handleUpload}
-            className="hidden md:inline-flex gap-2 px-3 h-9 bg-violet-500 rounded-lg justify-center items-center z-10 cursor-pointer"
+            className="hidden md:inline-flex gap-2 px-3 h-9 bg-violet-500 rounded-lg justify-center items-center z-10 cursor-pointer hover:bg-purple-900"
           >
             <UploadIcon className="text-white" />
             <p className="text-white text-sm font-semibold">파일 업로드</p>
@@ -124,7 +124,7 @@ export default function UploadArea({
       <button
         type="button"
         onClick={handleUpload}
-        className="md:hidden w-full h-10 bg-violet-500 rounded-lg inline-flex justify-center items-center gap-2 cursor-pointer"
+        className="md:hidden w-full h-10 bg-violet-500 rounded-lg inline-flex justify-center items-center gap-2 cursor-pointer hover:bg-purple-900"
       >
         <UploadIcon className="text-white" />
         <p className="text-white text-sm font-semibold ">파일 업로드</p>

@@ -163,7 +163,7 @@ export default function FileUploadModal({
                 <p className="font-semibold text-sm">업로드된 파일</p>
                 <button
                   onClick={handleMobileFileUpload}
-                  className="w-20 h-7 flex items-center justify-center gap-1 bg-violet-50 rounded-md md:hidden text-violet-500 text-[9.66px] font-semibold hover:bg-violet-100 transition-colors"
+                  className="w-20 h-7 flex items-center justify-center gap-1 bg-violet-50 rounded-md md:hidden text-violet-500 text-[9.66px] font-semibold hover:bg-purple-200 transition-colors cursor-pointer"
                 >
                   <UploadIcon className="text-violet-500"></UploadIcon>
                   파일업로드
@@ -244,7 +244,7 @@ export default function FileUploadModal({
               <div className="flex gap-2 mb-2">
                 <button
                   onClick={onClose}
-                  className="flex-1 md:hidden text-sm font-semibold h-9 px-7 py-2 bg-white rounded-lg border border-neutral-200 hover:bg-neutral-100 "
+                  className="flex-1 md:hidden text-sm font-semibold h-9 px-7 py-2 bg-white rounded-lg border border-neutral-200 hover:bg-neutral-100 cursor-pointer "
                 >
                   나가기
                 </button>

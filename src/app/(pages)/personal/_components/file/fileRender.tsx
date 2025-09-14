@@ -51,7 +51,7 @@ export default function FileRender({ file, index, onDelete }: FileRenderProps) {
       <div className="col-span-3 md:col-span-1 text-right">
         <button
           onClick={() => onDelete(file.id)}
-          className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+          className="cursor-pointer p-1 text-gray-400 hover:text-red-500 transition-colors"
           title="파일 삭제"
         >
           <svg
