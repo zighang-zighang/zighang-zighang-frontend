@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import RecruitmentCard from "../recruitmentCard";
+import type { Meta, StoryObj } from "@storybook/nextjs";
+import PersonalizedRecruitmentCard from "../PersonalizedRecruitmentCard";
 
-const meta: Meta<typeof RecruitmentCard> = {
-  title: "Personal/RecruitmentCard",
-  component: RecruitmentCard,
+const meta: Meta<typeof PersonalizedRecruitmentCard> = {
+  title: "Personal/PersonalizedRecruitmentCard",
+  component: PersonalizedRecruitmentCard,
   parameters: {
     layout: "centered",
   },

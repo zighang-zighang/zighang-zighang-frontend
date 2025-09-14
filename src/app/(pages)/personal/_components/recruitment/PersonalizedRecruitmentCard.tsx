@@ -1,24 +1,21 @@
+"use client";
+
 import Image from "next/image";
 import { useState } from "react";
 import { useBookmark } from "@/app/_api/bookmark/useBookmark";
 
 interface RecruitmentCardProps {
-  id: string | number;
-  experience: string;
-  logo: string;
-  company: string;
-  title: string;
-  location: string;
-  bookmarked?: boolean;
+  item: {
+    id: string | number;
+    logo: string;
+    company: string;
+    title: string;
+    bookmarked?: boolean;
+  };
 }
 
-export default function RecruitmentCard({
-  id,
-  logo,
-  company,
-  title,
-  bookmarked,
-}: RecruitmentCardProps) {
+export default function RecruitmentCard({ item }: RecruitmentCardProps) {
+  const { id, logo, company, title, bookmarked } = item;
   const { isBookmarked, mutate, isPending } = useBookmark(id, !!bookmarked);
   const [activeTab, setActiveTab] = useState<"job" | "reason">("job");
 
@@ -27,11 +24,7 @@ export default function RecruitmentCard({
     try {
       await mutate(next);
     } catch (err) {
-      if ((err as Error).message === "UNAUTHORIZED") {
-        alert("로그인이 필요합니다.");
-      } else {
-        alert("북마크 처리에 실패했습니다.");
-      }
+      alert("북마크 처리에 실패했습니다.");
     }
   };
 
