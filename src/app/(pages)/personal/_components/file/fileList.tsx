@@ -1,24 +1,87 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { EmptyFileIcon } from "../../_Icons/EmptyFileIcon";
 import FileRender from "./fileRender";
+import { fetchResumes, deleteResume } from "@/app/_api/resume/resumeApi";
 
 type FileRow = {
   id: string;
-  name: string;
-  type: string;
+  fileName: string;
+  fileUrl: string;
   size: number;
-  url?: string;
-  uploadDate?: string;
+  uploadDate: string;
 };
 
 type FileListProps = {
-  files?: FileRow[]; // ❗ 옵셔널로 변경
-  onDelete: (id: string) => void;
+  onFilesChange?: (hasFiles: boolean) => void;
+  refreshTrigger?: number; // 업로드 완료 시 새로고침을 위한 트리거
 };
 
-export default function FileList({ files = [], onDelete }: FileListProps) {
+export default function FileList({
+  onFilesChange,
+  refreshTrigger,
+}: FileListProps) {
+  const [files, setFiles] = useState<FileRow[]>([]);
+  const [loading, setLoading] = useState(true);
   const isEmpty = files.length === 0;
+
+  // 파일 목록 가져오기
+  useEffect(() => {
+    const loadFiles = async () => {
+      try {
+        setLoading(true);
+        const response = await fetchResumes();
+        setFiles(response.resumes);
+        console.log("API Response:", response);
+        if (onFilesChange) {
+          onFilesChange(response.resumes.length > 0);
+        }
+      } catch (error) {
+        console.error("파일 목록을 가져오는데 실패했습니다:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadFiles();
+  }, [onFilesChange]);
+
+  // refreshTrigger가 변경될 때 파일 목록 새로고침
+  useEffect(() => {
+    if (refreshTrigger) {
+      const loadFiles = async () => {
+        try {
+          setLoading(true);
+          const response = await fetchResumes();
+          setFiles(response.resumes);
+          if (onFilesChange) {
+            onFilesChange(response.resumes.length > 0);
+          }
+        } catch (error) {
+          console.error("파일 목록 새로고침에 실패했습니다:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      loadFiles();
+    }
+  }, [refreshTrigger, onFilesChange]);
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteResume(id);
+      // 삭제 후 목록에서 제거
+      const updatedFiles = files.filter((file) => file.id !== id);
+      setFiles(updatedFiles);
+      if (onFilesChange) {
+        onFilesChange(updatedFiles.length > 0);
+      }
+    } catch (error) {
+      console.error("파일 삭제에 실패했습니다:", error);
+    }
+  };
 
   return (
     <div className="w-full">
@@ -43,9 +106,16 @@ export default function FileList({ files = [], onDelete }: FileListProps) {
             {files.map((file, idx) => (
               <FileRender
                 key={file.id}
-                file={file}
+                file={{
+                  id: file.id,
+                  name: file.fileName,
+                  type: file.fileName.split(".").pop() || "",
+                  size: file.size,
+                  url: file.fileUrl,
+                  uploadDate: file.uploadDate,
+                }}
                 index={idx}
-                onDelete={onDelete}
+                onDelete={handleDelete}
               />
             ))}
           </ul>

@@ -6,6 +6,7 @@ export interface ResumeUploadResponse {
   code: string | null;
   message: string | null;
   data: {
+    id: string;
     fileName: string;
     fileUrl: string;
     size: number;
@@ -51,7 +52,7 @@ export async function fetchResumes(): Promise<ResumeListResponse> {
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
   const json = await res.json();
-  return { resumes: json?.data?.resumes ?? [] };
+  return { resumes: json?.data ?? [] };
 }
 
 export async function uploadResume(file: File): Promise<ResumeUploadResponse> {

@@ -115,8 +115,11 @@ export default function PersonalizedRecruitmentList({
       <PersonalizedRecruitmentBanner></PersonalizedRecruitmentBanner>
       {/* 그리드 레이아웃 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 ">
-        {currentItems.map((item) => (
-          <PersonalizedRecruitmentCard key={item.id} item={item} />
+        {currentItems.map((item, index) => (
+          <PersonalizedRecruitmentCard
+            key={`${item.id}-${item.company}-${item.title}-${index}`}
+            item={item}
+          />
         ))}
       </div>
 
