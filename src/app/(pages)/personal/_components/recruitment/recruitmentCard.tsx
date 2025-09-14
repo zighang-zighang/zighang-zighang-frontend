@@ -1,22 +1,44 @@
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useBookmark } from "@/app/_api/bookmark/useBookmark";
+import { useAuthState } from "@/app/_api/auth/useAuthState";
 
 interface RecruitmentCardProps {
+  id: string | number;
   experience: string;
   logo: string;
   company: string;
   title: string;
   location: string;
+  bookmarked?: boolean;
 }
 
 export default function RecruitmentCard({
+  id,
   logo,
   company,
   title,
+  bookmarked,
 }: RecruitmentCardProps) {
+  const { isBookmarked, mutate, isPending } = useBookmark(id, !!bookmarked);
   const [activeTab, setActiveTab] = useState<"job" | "reason">("job");
+
+  const handleBookmarkClick = async () => {
+    const next = !isBookmarked;
+    try {
+      await mutate(next);
+    } catch (err) {
+      if ((err as Error).message === "UNAUTHORIZED") {
+        alert("로그인이 필요합니다.");
+      } else {
+        alert("북마크 처리에 실패했습니다.");
+      }
+    }
+  };
+
   return (
-    <div className="border border-gray-200 rounded-lg px-3.5 py-3 w-60 h-34 [box-shadow:0_4px_10px_rgba(0,0,0,0.1)]">
+    <div className="border border-gray-200 rounded-lg px-3.5 py-3 w-60 h-34 hover:[box-shadow:0_8px_25px_rgba(0,0,0,0.1)] transition-shadow duration-200 cursor-pointer">
       <div className="flex gap-1 items-cente mb-3.5">
         <button
           onClick={() => setActiveTab("job")}
@@ -60,14 +82,22 @@ export default function RecruitmentCard({
           )}
           추천이유
         </button>
-        <button className="cursor-pointer ml-auto">
+        <button
+          onClick={handleBookmarkClick}
+          disabled={isPending}
+          className="cursor-pointer ml-auto disabled:opacity-50"
+        >
           <Image
-            alt="북마크 border 아이콘"
+            alt={isBookmarked ? "북마크 아이콘" : "북마크 border 아이콘"}
             loading="lazy"
             width={7}
             height={7}
             className="h-7 w-7"
-            src="https://zighang.com/icon/bookmark_border.svg"
+            src={
+              isBookmarked
+                ? "https://zighang.com/icon/bookmark.svg"
+                : "https://zighang.com/icon/bookmark_border.svg"
+            }
           />
         </button>
       </div>
