@@ -4,10 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Profile from "./Icons/Profile";
+import ProfileDropdown from "./ProfileDropdown";
 
 export default function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -15,6 +17,20 @@ export default function Header() {
 
   const closeSidebar = () => {
     setIsSidebarOpen(false);
+  };
+
+  const toggleProfileDropdown = () => {
+    setIsProfileDropdownOpen(!isProfileDropdownOpen);
+  };
+
+  const closeProfileDropdown = () => {
+    setIsProfileDropdownOpen(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("zh_access_token");
+    setIsLoggedIn(false);
+    setIsProfileDropdownOpen(false);
   };
 
   useEffect(() => {
@@ -108,13 +124,20 @@ export default function Header() {
             </div>
 
             {isLoggedIn ? (
-              <Link
-                href="/mypage"
-                aria-label="내 프로필"
-                className="hidden md:block"
-              >
-                <Profile />
-              </Link>
+              <div className="relative hidden md:block">
+                <button
+                  onClick={toggleProfileDropdown}
+                  aria-label="내 프로필"
+                  className="relative"
+                >
+                  <Profile />
+                </button>
+                <ProfileDropdown
+                  isOpen={isProfileDropdownOpen}
+                  onClose={closeProfileDropdown}
+                  onLogout={handleLogout}
+                />
+              </div>
             ) : (
               <Link href="/join" rel="nofollow" className="hidden md:block">
                 <div className="flex min-h-8 items-center justify-center px-2 text-[#6F00B6] md:min-h-10 md:rounded-lg md:border md:border-line md:px-4 md:py-[0px] ds-Button2-16sb">
@@ -124,13 +147,20 @@ export default function Header() {
             )}
 
             {isLoggedIn ? (
-              <Link
-                href="/mypage"
-                aria-label="내 프로필"
-                className="block md:hidden"
-              >
-                <Profile />
-              </Link>
+              <div className="relative block md:hidden">
+                <button
+                  onClick={toggleProfileDropdown}
+                  aria-label="내 프로필"
+                  className="relative"
+                >
+                  <Profile />
+                </button>
+                <ProfileDropdown
+                  isOpen={isProfileDropdownOpen}
+                  onClose={closeProfileDropdown}
+                  onLogout={handleLogout}
+                />
+              </div>
             ) : (
               <Link href="/join" rel="nofollow" className="block md:hidden">
                 <div className="text-[#6F00B6] font-semibold">로그인</div>
