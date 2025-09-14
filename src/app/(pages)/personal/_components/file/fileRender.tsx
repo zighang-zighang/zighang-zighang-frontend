@@ -9,9 +9,15 @@ interface FileRenderProps {
   };
   index: number;
   onDelete: (id: string) => void;
+  isDeleting?: boolean;
 }
 
-export default function FileRender({ file, index, onDelete }: FileRenderProps) {
+export default function FileRender({
+  file,
+  index,
+  onDelete,
+  isDeleting = false,
+}: FileRenderProps) {
   return (
     <div className="grid grid-cols-12 items-center p-3 md:px-7 md:py-2.5 bg-white border-b border-gray-200 hover:bg-gray-50 transition-colors">
       {/* 번호 */}
@@ -49,13 +55,17 @@ export default function FileRender({ file, index, onDelete }: FileRenderProps) {
 
       {/* 삭제 버튼 */}
       <div className="col-span-3 md:col-span-1 text-right ">
-        <button
-          onClick={() => onDelete(file.id)}
-          className="cursor-pointer p-1 text-gray-400 hover:text-red-500 transition-colors"
-          title="파일 삭제"
-        >
-          <DeleteIcon />
-        </button>
+        {isDeleting ? (
+          <div className="p-1 text-gray-500 text-xs">삭제 중...</div>
+        ) : (
+          <button
+            onClick={() => onDelete(file.id)}
+            className="cursor-pointer p-1 text-gray-400 hover:text-red-500 transition-colors"
+            title="파일 삭제"
+          >
+            <DeleteIcon />
+          </button>
+        )}
       </div>
     </div>
   );

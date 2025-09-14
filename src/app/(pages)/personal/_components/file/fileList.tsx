@@ -24,6 +24,7 @@ export default function FileList({
 }: FileListProps) {
   const [files, setFiles] = useState<FileRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deletingFileId, setDeletingFileId] = useState<string | null>(null);
   const isEmpty = files.length === 0;
 
   // 파일 목록 가져오기
@@ -71,6 +72,7 @@ export default function FileList({
 
   const handleDelete = async (id: string) => {
     try {
+      setDeletingFileId(id);
       await deleteResume(id);
       // 삭제 후 목록에서 제거
       const updatedFiles = files.filter((file) => file.id !== id);
@@ -78,8 +80,12 @@ export default function FileList({
       if (onFilesChange) {
         onFilesChange(updatedFiles.length > 0);
       }
+      alert("삭제 완료!");
     } catch (error) {
       console.error("파일 삭제에 실패했습니다:", error);
+      alert("파일 삭제에 실패했습니다.");
+    } finally {
+      setDeletingFileId(null);
     }
   };
 
@@ -116,6 +122,7 @@ export default function FileList({
                 }}
                 index={idx}
                 onDelete={handleDelete}
+                isDeleting={deletingFileId === file.id}
               />
             ))}
           </ul>
