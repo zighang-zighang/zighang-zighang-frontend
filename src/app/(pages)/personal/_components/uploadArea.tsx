@@ -8,9 +8,13 @@ import FileExploreModal from "./file/fileExploreModal";
 
 type UploadAreaProps = {
   onFilesChange?: (hasFiles: boolean) => void;
+  onAnalysisModalChange?: (isOpen: boolean) => void;
 };
 
-export default function UploadArea({ onFilesChange }: UploadAreaProps) {
+export default function UploadArea({
+  onFilesChange,
+  onAnalysisModalChange,
+}: UploadAreaProps) {
   const [showTooltip, setShowTooltip] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [showExploreModal, setShowExploreModal] = useState(false);
@@ -23,6 +27,7 @@ export default function UploadArea({ onFilesChange }: UploadAreaProps) {
     setOpenModal(false);
     setShowExploreModal(true);
     setProgress(0);
+    onAnalysisModalChange?.(true);
 
     // 진행률 시뮬레이션 (공고 찾기 - 부드럽게)
     const interval = setInterval(() => {
@@ -31,6 +36,7 @@ export default function UploadArea({ onFilesChange }: UploadAreaProps) {
           clearInterval(interval);
           setTimeout(() => {
             setShowExploreModal(false);
+            onAnalysisModalChange?.(false);
           }, 2000);
           return 100;
         }
@@ -88,7 +94,7 @@ export default function UploadArea({ onFilesChange }: UploadAreaProps) {
         </div>
       </div>
 
-      <FileList onFilesChange={onFilesChange} />
+      {!showExploreModal && <FileList onFilesChange={onFilesChange} />}
       <button
         type="button"
         onClick={handleUpload}

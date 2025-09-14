@@ -32,11 +32,13 @@ const mockRecruitments = [
 
 interface RecommendAreaProps {
   hasFiles?: boolean;
+  isAnalysisModalOpen?: boolean;
   onFileUpload?: () => void;
 }
 
 export default function RecommendArea({
   hasFiles = false,
+  isAnalysisModalOpen = false,
   onFileUpload,
 }: RecommendAreaProps) {
   const [recruitmentCount, setRecruitmentCount] = useState(0);
@@ -65,9 +67,17 @@ export default function RecommendArea({
         </div>
       </div>
 
-      {hasFiles ? (
-        // 파일이 있을 때: PersonalizedRecruitmentList 표시
+      {hasFiles && !isAnalysisModalOpen ? (
+        // 파일이 있고 분석 모달이 열려있지 않을 때: PersonalizedRecruitmentList 표시
         <PersonalizedRecruitmentList items={mockRecruitments} />
+      ) : hasFiles && isAnalysisModalOpen ? (
+        // 파일이 있고 분석 모달이 열려있을 때: 로딩 상태 표시
+        <div className="flex items-center justify-center h-64 bg-gray-50 rounded-lg">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-500 mx-auto mb-2"></div>
+            <p className="text-gray-600 text-sm">공고를 분석하고 있습니다...</p>
+          </div>
+        </div>
       ) : (
         // 파일이 없을 때: 기존 업로드 유도 UI 표시
         <div className="relative w-full max-w-[787px] h-72 md:h-43">
