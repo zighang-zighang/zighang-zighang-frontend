@@ -2,8 +2,7 @@
 
 import { Profile } from "@/components/Icons/Profile";
 import KeywordButton from "./keywordButton";
-import { useState, useEffect } from "react";
-import { fetchKeywords } from "@/app/_api/resume/keyword/keywordApi";
+import { useKeywords } from "@/app/_api/resume/hooks/useKeywords";
 
 interface PersonalizedRecruitmentBannerProps {
   userName?: string;
@@ -14,25 +13,7 @@ export default function PersonalizedRecruitmentBanner({
   userName = "민수",
   onKeywordClick,
 }: PersonalizedRecruitmentBannerProps) {
-  const [keywords, setKeywords] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadKeywords = async () => {
-      try {
-        setLoading(true);
-        const fetchedKeywords = await fetchKeywords();
-        setKeywords(fetchedKeywords);
-      } catch (error) {
-        console.error("키워드를 가져오는데 실패했습니다:", error);
-        setKeywords([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadKeywords();
-  }, []);
+  const { data: keywords = [], isLoading: loading, error } = useKeywords();
 
   return (
     <div className="p-4 flex flex-col items-center justify-center min-w-64 min-h-36 md:w-full md:min-h-18 md:flex-row md:gap-7 bg-violet-50 rounded-lg mb-3.5">

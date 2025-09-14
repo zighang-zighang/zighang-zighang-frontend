@@ -7,7 +7,7 @@ import { FileUploadItem } from "@/app/(pages)/onboarding/_components/FileUpload/
 import CheckIcon from "@/app/(pages)/onboarding/_components/FileUpload/icons/checkIcon";
 import { UploadIcon } from "../../_Icons/UploadIcon";
 import { UploadedFile } from "@/app/(pages)/onboarding/_components/FileUpload/types/type";
-import { uploadResume } from "@/app/_api/resume/resumeApi";
+import { useUploadResume } from "@/app/_api/resume/hooks/useResumes";
 
 type FileUploadModalProps = {
   open: boolean;
@@ -31,6 +31,7 @@ export default function FileUploadModal({
     >
   >({});
   const [originalFiles, setOriginalFiles] = useState<File[]>([]);
+  const uploadResumeMutation = useUploadResume();
 
   // 모달이 열릴 때마다 상태 초기화
   useEffect(() => {
@@ -116,7 +117,7 @@ export default function FileUploadModal({
 
         try {
           // 실제 API 호출
-          const response = await uploadResume(file);
+          const response = await uploadResumeMutation.mutateAsync(file);
 
           if (response.success) {
             // 업로드 성공 - 상태는 그대로 유지 (이미 success로 표시됨)

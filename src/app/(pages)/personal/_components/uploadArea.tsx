@@ -15,8 +15,6 @@ export default function UploadArea({ onFilesChange }: UploadAreaProps) {
   const [openModal, setOpenModal] = useState(false);
   const [showExploreModal, setShowExploreModal] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
-
   const handleUpload = () => {
     setOpenModal(true);
   };
@@ -25,8 +23,6 @@ export default function UploadArea({ onFilesChange }: UploadAreaProps) {
     setOpenModal(false);
     setShowExploreModal(true);
     setProgress(0);
-    // 파일 목록 새로고침 트리거
-    setRefreshTrigger((prev) => prev + 1);
 
     // 진행률 시뮬레이션 (공고 찾기 - 부드럽게)
     const interval = setInterval(() => {
@@ -92,7 +88,7 @@ export default function UploadArea({ onFilesChange }: UploadAreaProps) {
         </div>
       </div>
 
-      <FileList onFilesChange={onFilesChange} refreshTrigger={refreshTrigger} />
+      <FileList onFilesChange={onFilesChange} />
       <button
         type="button"
         onClick={handleUpload}
