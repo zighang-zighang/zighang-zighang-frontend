@@ -1,3 +1,7 @@
+"use client";
+
+import { useDownloadResume } from "@/app/_api/resume/hooks/useResumes";
+
 interface FileRenderProps {
   file: {
     id: string;
@@ -18,6 +22,7 @@ export default function FileRender({
   onDelete,
   isDeleting = false,
 }: FileRenderProps) {
+  const downloadResumeMutation = useDownloadResume();
   return (
     <div className="grid grid-cols-12 items-center p-3 md:px-7 md:py-2.5 bg-white border-b border-gray-200 hover:bg-gray-50 transition-colors">
       {/* 번호 */}
@@ -31,18 +36,12 @@ export default function FileRender({
       <div className="col-span-7">
         <button
           onClick={() => {
-            if (file.url) {
-              const link = document.createElement("a");
-              link.href = file.url;
-              link.download = file.name;
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }
+            downloadResumeMutation.mutate(file.id);
           }}
-          className="text-sm font-medium text-gray-900 hover:text-blue-600 hover:border-b hover:border-blue-600 transition-colors cursor-pointer text-left inline-block"
+          disabled={downloadResumeMutation.isPending}
+          className="text-sm font-medium text-gray-900 hover:text-blue-600 hover:border-b hover:border-blue-600 transition-colors cursor-pointer text-left inline-block disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {file.name}
+          {downloadResumeMutation.isPending ? "다운로드 중..." : file.name}
         </button>
       </div>
 

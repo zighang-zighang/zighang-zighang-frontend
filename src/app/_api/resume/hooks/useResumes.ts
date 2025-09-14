@@ -1,7 +1,12 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchResumes, uploadResume, deleteResume } from "../resumeApi";
+import {
+  fetchResumes,
+  uploadResume,
+  deleteResume,
+  downloadResume,
+} from "../resumeApi";
 
 // Query Keys
 export const resumeKeys = {
@@ -48,6 +53,31 @@ export function useDeleteResume() {
     },
     onError: (error) => {
       console.error("이력서 삭제 실패:", error);
+    },
+  });
+}
+
+// 이력서 다운로드
+export function useDownloadResume() {
+  return useMutation({
+    mutationFn: async (resumeId: string) => {
+      const blob = await downloadResume(resumeId);
+      return blob;
+    },
+    onSuccess: (blob, resumeId) => {
+      // 다운로드 성공 시 파일 다운로드 실행
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `resume-${resumeId}.pdf`; // 파일명 설정
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    },
+    onError: (error) => {
+      console.error("이력서 다운로드 실패:", error);
+      alert("파일 다운로드에 실패했습니다.");
     },
   });
 }

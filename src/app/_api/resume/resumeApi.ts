@@ -90,3 +90,18 @@ export async function deleteResume(resumeId: string): Promise<void> {
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
 }
+
+export async function downloadResume(resumeId: string): Promise<Blob> {
+  const token = getAccessToken();
+  const res = await fetch(`${API_BASE}/${resumeId}/download`, {
+    method: "GET",
+    headers: {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    cache: "no-store",
+  });
+
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+  return res.blob();
+}
