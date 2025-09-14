@@ -1,12 +1,15 @@
 "use client";
 
 import { EmptyFileIcon } from "../../_Icons/EmptyFileIcon";
-import FileItem from "./fileItem";
+import FileRender from "./fileRender";
 
 type FileRow = {
   id: string;
   name: string;
-  uploadedAt: string;
+  type: string;
+  size: number;
+  url?: string;
+  uploadDate?: string;
 };
 
 type FileListProps = {
@@ -35,7 +38,7 @@ export default function FileList({ files = [], onDelete }: FileListProps) {
         ) : (
           <ul className="divide-y">
             {files.map((file, idx) => (
-              <FileItem
+              <FileRender
                 key={file.id}
                 file={file}
                 index={idx}
