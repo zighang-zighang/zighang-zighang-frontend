@@ -8,14 +8,6 @@ import {
   useDeleteResume,
 } from "@/app/_api/resume/hooks/useResumes";
 
-type FileRow = {
-  id: string;
-  fileName: string;
-  fileUrl: string;
-  size: number;
-  uploadDate: string;
-};
-
 type FileListProps = {
   onFilesChange?: (hasFiles: boolean) => void;
 };
@@ -24,7 +16,7 @@ export default function FileList({ onFilesChange }: FileListProps) {
   const [deletingFileId, setDeletingFileId] = useState<string | null>(null);
 
   // React Query hooks 사용
-  const { data: resumeData, isLoading: loading, error } = useResumes();
+  const { data: resumeData } = useResumes();
   const deleteResumeMutation = useDeleteResume();
 
   const files = resumeData?.resumes || [];

@@ -13,7 +13,7 @@ export default function PersonalizedRecruitmentBanner({
   userName = "민수",
   onKeywordClick,
 }: PersonalizedRecruitmentBannerProps) {
-  const { data: keywords = [], isLoading: loading, error } = useKeywords();
+  const { data: keywords = [], isLoading: loading } = useKeywords();
 
   return (
     <div className="p-4 flex flex-col items-center justify-center min-w-64 min-h-36 md:w-full md:min-h-18 md:flex-row md:gap-7 bg-violet-50 rounded-lg mb-3.5">

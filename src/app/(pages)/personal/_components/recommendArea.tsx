@@ -39,7 +39,6 @@ interface RecommendAreaProps {
 export default function RecommendArea({
   hasFiles = false,
   isAnalysisModalOpen = false,
-  onFileUpload,
 }: RecommendAreaProps) {
   const [recruitmentCount, setRecruitmentCount] = useState(0);
 
