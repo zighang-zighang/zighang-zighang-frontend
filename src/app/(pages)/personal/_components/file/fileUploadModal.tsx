@@ -22,6 +22,7 @@ export default function FileUploadModal({
 }: FileUploadModalProps) {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [fileProgress, setFileProgress] = useState<
     Record<
@@ -92,6 +93,8 @@ export default function FileUploadModal({
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
       // 모든 파일을 순차적으로 실제 업로드
       for (let i = 0; i < originalFiles.length; i++) {
@@ -133,6 +136,8 @@ export default function FileUploadModal({
           ? error.message
           : "파일 업로드 중 오류가 발생했습니다."
       );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -278,13 +283,13 @@ export default function FileUploadModal({
                 <button
                   onClick={handleComplete}
                   className={`hidden md:block ml-auto text-white text-sm font-semibold h-9 px-7 py-2 rounded-lg ${
-                    uploadedFiles.length > 0
+                    uploadedFiles.length > 0 && !isSubmitting
                       ? "bg-violet-600 hover:bg-violet-700"
                       : "bg-neutral-400 cursor-not-allowed"
                   }`}
-                  disabled={uploadedFiles.length === 0}
+                  disabled={uploadedFiles.length === 0 || isSubmitting}
                 >
-                  완료
+                  {isSubmitting ? "제출 중..." : "완료"}
                 </button>
               </div>
               <div className="flex gap-2 mb-2">
@@ -297,13 +302,13 @@ export default function FileUploadModal({
                 <button
                   onClick={handleComplete}
                   className={`flex-1 md:hidden  text-white text-sm font-semibold h-9 px-7 py-2 rounded-lg ${
-                    uploadedFiles.length > 0
+                    uploadedFiles.length > 0 && !isSubmitting
                       ? "bg-violet-600 hover:bg-violet-700"
                       : "bg-neutral-400 cursor-not-allowed"
                   }`}
-                  disabled={uploadedFiles.length === 0}
+                  disabled={uploadedFiles.length === 0 || isSubmitting}
                 >
-                  완료
+                  {isSubmitting ? "제출 중..." : "완료"}
                 </button>
               </div>
             </div>
