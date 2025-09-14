@@ -33,7 +33,10 @@ export default function FileList({ files = [], onDelete }: FileListProps) {
         {isEmpty ? (
           <div className="flex flex-col justify-center items-center text-zinc-400 h-62 md:h-64 border-b border-neutral-200">
             <EmptyFileIcon className="w-50 h-30 text-red-500" />
-            아직 비어 있네요. 파일을 올려 시작해보세요.
+            <p className="text-center">
+              아직 비어 있네요. <br />
+              파일을 올려 시작해보세요.
+            </p>
           </div>
         ) : (
           <ul className="divide-y">

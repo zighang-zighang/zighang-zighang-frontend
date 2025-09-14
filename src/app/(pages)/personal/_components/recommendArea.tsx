@@ -30,43 +30,25 @@ const mockRecruitments = [
   },
 ];
 
-export default function RecommendArea() {
-  const [hasFiles, setHasFiles] = useState(false);
+interface RecommendAreaProps {
+  hasFiles?: boolean;
+  onFileUpload?: () => void;
+}
+
+export default function RecommendArea({
+  hasFiles = false,
+  onFileUpload,
+}: RecommendAreaProps) {
   const [recruitmentCount, setRecruitmentCount] = useState(0);
 
-  // 파일 상태 확인 (실제로는 API나 상태 관리에서 가져와야 함)
   useEffect(() => {
-    // 임시로 localStorage에서 파일 상태 확인
-    const checkFileStatus = () => {
-      const files = localStorage.getItem("uploadedFiles");
-      const hasUploadedFiles = !!(files && JSON.parse(files).length > 0);
-      setHasFiles(hasUploadedFiles);
-
-      if (hasUploadedFiles) {
-        // 파일이 있으면 추천 공고 개수 설정 (실제로는 API에서 가져와야 함)
-        setRecruitmentCount(mockRecruitments.length);
-      } else {
-        setRecruitmentCount(0);
-      }
-    };
-
-    checkFileStatus();
-
-    // 파일 상태 변경 감지 (storage 이벤트는 다른 탭에서만 발생하므로 polling 추가)
-    const handleStorageChange = () => {
-      checkFileStatus();
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    // 주기적으로 파일 상태 확인 (실제 구현에서는 상태 관리 라이브러리 사용 권장)
-    const interval = setInterval(checkFileStatus, 1000);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      clearInterval(interval);
-    };
-  }, []);
+    if (hasFiles) {
+      // 파일이 있으면 추천 공고 개수 설정 (실제로는 API에서 가져와야 함)
+      setRecruitmentCount(mockRecruitments.length);
+    } else {
+      setRecruitmentCount(0);
+    }
+  }, [hasFiles]);
 
   return (
     <div className="mt-5">

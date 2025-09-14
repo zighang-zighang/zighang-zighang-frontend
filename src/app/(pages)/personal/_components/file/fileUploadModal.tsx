@@ -83,9 +83,6 @@ export default function FileUploadModal({
   };
 
   const handleComplete = () => {
-    // localStorage에 업로드된 파일 저장
-    localStorage.setItem("uploadedFiles", JSON.stringify(uploadedFiles));
-
     if (onComplete) {
       onComplete();
     } else {
