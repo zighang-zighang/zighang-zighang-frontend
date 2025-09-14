@@ -48,29 +48,56 @@ export default function FileRender({ file, index, onDelete }: FileRenderProps) {
       </div>
 
       {/* 삭제 버튼 */}
-      <div className="col-span-3 md:col-span-1 text-right">
+      <div className="col-span-3 md:col-span-1 text-right ">
         <button
           onClick={() => onDelete(file.id)}
           className="cursor-pointer p-1 text-gray-400 hover:text-red-500 transition-colors"
           title="파일 삭제"
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M3 6H5H21M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <DeleteIcon />
         </button>
       </div>
     </div>
+  );
+}
+
+function DeleteIcon() {
+  return (
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 22 22"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M4.125 6.875H5.65278H17.875"
+        stroke="#919193"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M16.5 6.875V17.7375C16.5 18.1386 16.3344 18.5234 16.0397 18.807C15.745 19.0906 15.3453 19.25 14.9286 19.25H7.07143C6.65466 19.25 6.25496 19.0906 5.96026 18.807C5.66556 18.5234 5.5 18.1386 5.5 17.7375V6.875M7.85714 6.875V4.2625C7.85714 3.86136 8.0227 3.47665 8.3174 3.193C8.6121 2.90935 9.0118 2.75 9.42857 2.75H12.5714C12.9882 2.75 13.3879 2.90935 13.6826 3.193C13.9773 3.47665 14.1429 3.86136 14.1429 4.2625V6.875"
+        stroke="#919193"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9.625 11V15.125"
+        stroke="#919193"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12.375 11V15.125"
+        stroke="#919193"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }

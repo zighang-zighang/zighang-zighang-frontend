@@ -1,4 +1,4 @@
-import Profile from "@/components/Icons/Profile";
+import { Profile } from "@/components/Icons/Profile";
 import KeywordButton from "./keywordButton";
 
 interface Keyword {
