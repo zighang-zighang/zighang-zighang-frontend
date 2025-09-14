@@ -124,7 +124,7 @@ export default function Header() {
             </div>
 
             {isLoggedIn ? (
-              <div className="relative hidden md:block">
+              <div className="relative hidden md:block z-50">
                 <button
                   onClick={toggleProfileDropdown}
                   aria-label="내 프로필"
@@ -147,7 +147,7 @@ export default function Header() {
             )}
 
             {isLoggedIn ? (
-              <div className="relative block md:hidden">
+              <div className="relative block md:hidden z-50">
                 <button
                   onClick={toggleProfileDropdown}
                   aria-label="내 프로필"

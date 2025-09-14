@@ -28,11 +28,12 @@ export default function ProfileDropdown({
     };
 
     if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
+      // mousedown 대신 click 이벤트 사용
+      document.addEventListener("click", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, [isOpen, onClose]);
 
@@ -41,19 +42,25 @@ export default function ProfileDropdown({
   return (
     <div
       ref={dropdownRef}
-      className="absolute right-0 top-full mt-2 w-[126px] bg-white rounded-[8px] border border-gray-200 z-50"
+      className="absolute right-0 top-full mt-2 w-[126px] bg-white rounded-[8px] border border-gray-200 shadow-lg z-[9999]"
     >
       <Link
         href="/mypage"
         className="block p-4 text-Heading6-12sb hover:bg-gray-100 rounded-t-[8px]"
-        onClick={onClose}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
       >
         프로필
       </Link>
       <Link
         href="/memos"
         className="block p-4 text-Heading6-12sb hover:bg-gray-100"
-        onClick={onClose}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
       >
         메모장
       </Link>
