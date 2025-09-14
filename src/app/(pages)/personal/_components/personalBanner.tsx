@@ -1,17 +1,24 @@
-// import UploadHero from "../_Icons/UploadHero";
+import Image from "next/image";
 
 export default function PersonalBanner() {
   return (
     <div className="max-w-[786px] md:w-[786px] h-64 flex justify-between bg-gradient-to-br from-violet-500 via-violet-500/70 to-violet-500 rounded-lg">
-      <div className="h-14 relative">
-        <p className="w-40 left-0 top-[5px] absolute  text-purple-300 text-sm md:text-lg font-semibold leading-normal [text-shadow:_0px_4px_9px_rgb(111_0_182_/_0.51)]">
-          내 자소서로 찾는 0.001% 미만의 최적 공고! <br />
-          자소서 3초 업로드하고 숨은 공고를 확인하세요
-        </p>
-        <p className="w-1 h-1 left-[129.55px] top-0 absolute bg-white rounded-full"></p>
-        <p className="w-1 h-1 left-[140.66px] top-0 absolute bg-white rounded-full"></p>
-      </div>
-      {/* <UploadHero /> */}
+      {/* 모바일 배너 */}
+      <Image
+        src="/banner/mobile_banner.png"
+        alt="MobileBanner"
+        width={786}
+        height={250}
+        className="block md:hidden"
+      />
+      {/* PC 배너 */}
+      <Image
+        src="/banner/pc_banner.png"
+        alt="PcBanner"
+        width={786}
+        height={250}
+        className="hidden md:block"
+      />
     </div>
   );
 }
