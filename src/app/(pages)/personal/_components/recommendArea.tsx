@@ -15,18 +15,18 @@ const mockRecruitments = [
     bookmarked: false,
   },
   {
+    id: "1",
+    logo: "/logos/naver.png",
+    title: "Product Manager",
+    company: "Naver",
+    bookmarked: true,
+  },
+  {
     id: "2",
     logo: "/logos/samsung.png",
     title: "Backend Developer",
     company: "Samsung Electronics",
     bookmarked: true,
-  },
-  {
-    id: "3",
-    logo: "/logos/coupang.png",
-    title: "Product Manager",
-    company: "Coupang",
-    bookmarked: false,
   },
 ];
 
