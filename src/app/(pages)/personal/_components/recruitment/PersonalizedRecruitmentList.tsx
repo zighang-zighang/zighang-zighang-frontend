@@ -112,7 +112,13 @@ export default function PersonalizedRecruitmentList({
     <div
       className={`w-full ${className} items-center justify-center flex flex-col`}
     >
-      <PersonalizedRecruitmentBanner></PersonalizedRecruitmentBanner>
+      <PersonalizedRecruitmentBanner
+        userName="민수"
+        onKeywordClick={(keyword) => {
+          console.log("선택된 키워드:", keyword);
+          // 키워드 클릭 시 처리 로직 추가 가능
+        }}
+      />
       {/* 그리드 레이아웃 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 ">
         {currentItems.map((item, index) => (
