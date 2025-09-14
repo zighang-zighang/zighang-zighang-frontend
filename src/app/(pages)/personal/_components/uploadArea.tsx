@@ -108,7 +108,9 @@ export default function UploadArea({ onFilesChange }: UploadAreaProps) {
       />
       <FileExploreModal
         open={showExploreModal}
-        onClose={() => setShowExploreModal(false)}
+        onClose={() => {
+          setShowExploreModal(false);
+        }}
         progress={progress}
       />
     </div>

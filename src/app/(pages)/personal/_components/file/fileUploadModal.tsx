@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog } from "@headlessui/react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import FileUploadCard from "@/app/(pages)/onboarding/_components/FileUpload/FileUploadCard";
 import { FileUploadItem } from "@/app/(pages)/onboarding/_components/FileUpload/FileUploadItem";
 import CheckIcon from "@/app/(pages)/onboarding/_components/FileUpload/icons/checkIcon";
@@ -31,6 +31,17 @@ export default function FileUploadModal({
     >
   >({});
   const [originalFiles, setOriginalFiles] = useState<File[]>([]);
+
+  // 모달이 열릴 때마다 상태 초기화
+  useEffect(() => {
+    if (open) {
+      setUploadedFiles([]);
+      setError(null);
+      setIsSubmitting(false);
+      setFileProgress({});
+      setOriginalFiles([]);
+    }
+  }, [open]);
 
   const processFileSequentially = async (files: File[]) => {
     setOriginalFiles(files);
