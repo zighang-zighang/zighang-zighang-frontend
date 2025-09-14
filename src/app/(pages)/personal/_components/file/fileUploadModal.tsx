@@ -7,6 +7,7 @@ import { FileUploadItem } from "@/app/(pages)/onboarding/_components/FileUpload/
 import CheckIcon from "@/app/(pages)/onboarding/_components/FileUpload/icons/checkIcon";
 import { UploadIcon } from "../../_Icons/UploadIcon";
 import { UploadedFile } from "@/app/(pages)/onboarding/_components/FileUpload/types/type";
+import { uploadResume } from "@/app/_api/resume/resumeApi";
 
 type FileUploadModalProps = {
   open: boolean;
@@ -28,8 +29,11 @@ export default function FileUploadModal({
       { progress: number; status: "loading" | "success" | "error" }
     >
   >({});
+  const [originalFiles, setOriginalFiles] = useState<File[]>([]);
 
   const processFileSequentially = async (files: File[]) => {
+    setOriginalFiles(files);
+
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const fileId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -50,7 +54,7 @@ export default function FileUploadModal({
         [fileId]: { progress: 0, status: "loading" },
       }));
 
-      // 시뮬레이션 시작
+      // 시뮬레이션 애니메이션 (100%까지)
       await simulateFileUpload(fileId);
     }
   };
@@ -59,7 +63,7 @@ export default function FileUploadModal({
     return new Promise((resolve) => {
       let progress = 0;
       const interval = setInterval(() => {
-        progress += 40;
+        progress += 20;
         if (progress >= 100) {
           progress = 100;
           clearInterval(interval);
@@ -74,7 +78,7 @@ export default function FileUploadModal({
             [fileId]: { progress, status: "loading" },
           }));
         }
-      }, 150);
+      }, 100);
     });
   };
 
@@ -82,11 +86,53 @@ export default function FileUploadModal({
     processFileSequentially(files);
   };
 
-  const handleComplete = () => {
-    if (onComplete) {
-      onComplete();
-    } else {
-      onClose();
+  const handleComplete = async () => {
+    if (originalFiles.length === 0) {
+      handleError("업로드할 파일이 없습니다.");
+      return;
+    }
+
+    try {
+      // 모든 파일을 순차적으로 실제 업로드
+      for (let i = 0; i < originalFiles.length; i++) {
+        const file = originalFiles[i];
+        const fileId = uploadedFiles[i]?.id;
+
+        if (!fileId) continue;
+
+        try {
+          // 실제 API 호출
+          const response = await uploadResume(file);
+
+          if (response.success) {
+            // 업로드 성공 - 상태는 그대로 유지 (이미 success로 표시됨)
+            console.log(`파일 ${file.name} 업로드 성공`);
+          } else {
+            throw new Error(response.message || "업로드에 실패했습니다.");
+          }
+        } catch (error) {
+          // 개별 파일 업로드 실패
+          setFileProgress((prev) => ({
+            ...prev,
+            [fileId]: { progress: 0, status: "error" },
+          }));
+          throw error;
+        }
+      }
+
+      // 모든 업로드 완료
+      if (onComplete) {
+        onComplete();
+      } else {
+        onClose();
+      }
+    } catch (error) {
+      console.error("파일 업로드 실패:", error);
+      handleError(
+        error instanceof Error
+          ? error.message
+          : "파일 업로드 중 오류가 발생했습니다."
+      );
     }
   };
 

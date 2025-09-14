@@ -59,7 +59,7 @@ export async function uploadResume(file: File): Promise<ResumeUploadResponse> {
   const url = API_BASE;
 
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append("resumeFile", file);
 
   const res = await fetch(url, {
     method: "POST",
