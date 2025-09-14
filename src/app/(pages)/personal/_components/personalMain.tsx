@@ -5,11 +5,17 @@ import PersonalBanner from "./personalBanner";
 import RecommendArea from "./recommendArea";
 import UploadArea from "./uploadArea";
 
-export default function PersonalMain() {
-  const [hasFiles, setHasFiles] = useState(false);
+type FileRow = {
+  id: string;
+  name: string;
+  uploadedAt: string;
+};
 
-  const handleFileUpload = () => {
-    setHasFiles(true);
+export default function PersonalMain() {
+  const [files, setFiles] = useState<FileRow[]>([]);
+
+  const handleFileUpload = (newFiles: FileRow[]) => {
+    setFiles(newFiles);
   };
 
   return (
@@ -17,8 +23,8 @@ export default function PersonalMain() {
       <h2 className="text-black text-xl md:text-2xl font-semibold ">
         맞춤공고
       </h2>
-      <PersonalBanner />
-      <RecommendArea hasFiles={hasFiles} onFileUpload={handleFileUpload} />
+      <PersonalBanner files={files} />
+      <RecommendArea hasFiles={files.length > 0} onFileUpload={() => {}} />
       <UploadArea onFilesChange={handleFileUpload} />
     </div>
   );

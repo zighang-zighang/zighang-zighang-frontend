@@ -1,6 +1,15 @@
 import Image from "next/image";
 
-export default function PersonalBanner() {
+interface PersonalBannerProps {
+  files?: Array<{ id: string; name: string; uploadedAt: string }>;
+}
+
+export default function PersonalBanner({ files = [] }: PersonalBannerProps) {
+  // 파일이 하나라도 있으면 배너를 숨김
+  if (files.length > 0) {
+    return null;
+  }
+
   return (
     <div className="max-w-[786px] md:w-[786px] h-64 flex justify-between bg-gradient-to-br from-violet-500 via-violet-500/70 to-violet-500 rounded-lg">
       {/* 모바일 배너 */}
