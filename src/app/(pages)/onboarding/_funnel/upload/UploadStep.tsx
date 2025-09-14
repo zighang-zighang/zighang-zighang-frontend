@@ -1,13 +1,10 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { StepContainer } from "../../_components";
 import FileUploadCard from "../../_components/FileUpload/FileUploadCard";
 import FileUploadList from "../../_components/FileUpload/FileUploadList";
-import {
-  UploadStatus,
-  UploadedFile,
-} from "../../_components/FileUpload/types/type";
+import { UploadedFile } from "../../_components/FileUpload/types/type";
 import { useProgressSimulation } from "@/app/_hooks/useProgressSimulation";
 
 type ApiOnboardingPayload = {
@@ -28,11 +25,7 @@ type UploadStepProps = {
   isLoading?: boolean;
 };
 
-export function UploadStep({
-  onNext,
-  apiPayload,
-  isLoading = false,
-}: UploadStepProps) {
+export function UploadStep({ onNext, apiPayload }: UploadStepProps) {
   const [file, setFile] = useState<UploadedFile | undefined>(undefined);
   const [actualFile, setActualFile] = useState<File | null>(null);
   const { progress, status, startSimulation, setError, cleanup } =
@@ -42,7 +35,6 @@ export function UploadStep({
     });
   const [isSkipLoading, setIsSkipLoading] = useState(false);
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
-  const timerRef = useRef<number | null>(null);
 
   const handleFiles = (files: File[]) => {
     const f = files[0];
