@@ -76,11 +76,7 @@ export default function Header() {
                 className="relative hidden hbp:block"
                 style={{ display: "hidden" }}
               >
-                <Link
-                  href="/personal"
-                  className="pointer-events-auto relative"
-                  target="_blank"
-                >
+                <Link href="/personal" className="pointer-events-auto relative">
                   <div className="text-[#353535] ds-web-navi">맞춤 공고</div>
                 </Link>
               </div>
