@@ -24,7 +24,7 @@ export default function RecruitmentCard({ item }: RecruitmentCardProps) {
     try {
       await mutate(next);
     } catch (err) {
-      alert("북마크 처리에 실패했습니다.");
+      alert(`북마크 처리에 실패했습니다.\n${err}`);
     }
   };
 
