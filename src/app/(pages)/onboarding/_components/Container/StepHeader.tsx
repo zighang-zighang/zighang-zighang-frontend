@@ -21,10 +21,10 @@ export function StepHeader({
     <div className="w-full flex items-center justify-between border-b border-gray-200 pl-[16px] pr-[19px] pt-[14px] pb-[15px]">
       <button onClick={onBack} className="text-Button1-18sb flex items-center">
         <ArrowLeft className="text-black mr-[2px]" />
-        이전
+        <span className="hidden md:inline">이전</span>
       </button>
 
-      <h1 className="text-Heading3-18sb flex items-center justify-center gap-[6px] text-black">
+      <h1 className="text-Heading3-18sb hidden md:flex items-center justify-center gap-[6px] text-black">
         {title}{" "}
         {subTitle != null && (
           <span className="text-Subheading4-12m text-[#767678] inline-flex items-center gap-1">
