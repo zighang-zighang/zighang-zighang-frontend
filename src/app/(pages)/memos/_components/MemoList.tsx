@@ -5,12 +5,18 @@ interface MemoListProps {
   memoGroups: MemoGroup[];
   selectedMemoId?: string | null;
   onMemoSelect: (memoId: string) => void;
+  viewMode?: "single" | "split";
+  leftSelectedMemo?: string | null;
+  rightSelectedMemo?: string | null;
 }
 
 export default function MemoList({
   memoGroups,
   selectedMemoId,
   onMemoSelect,
+  viewMode = "single",
+  leftSelectedMemo,
+  rightSelectedMemo,
 }: MemoListProps) {
   return (
     <div className="w-1/3 flex flex-col border border-[#E1E1E4] rounded-l-[8px] h-[600px]">
@@ -24,16 +30,22 @@ export default function MemoList({
         {memoGroups.map((group) => {
           const dDate = calculateDDay(group.recruitment.endDate);
           const isExpired = dDate.startsWith("D+");
+          const firstMemoId = group.memos[0]?.id;
+          
+          // 선택 상태 확인
+          const isSelected = viewMode === "single" 
+            ? selectedMemoId === firstMemoId
+            : leftSelectedMemo === firstMemoId || rightSelectedMemo === firstMemoId;
 
           return (
             <div
               key={group.recruitment.id}
               className={`h-[98px] px-4 pt-[14px] pb-[18px] border-b border-[#E1E1E4] cursor-pointer transition-colors ${
-                selectedMemoId === group.memos[0]?.id
+                isSelected
                   ? "bg-[#F7F1FB]"
                   : "hover:bg-gray-50"
               }`}
-              onClick={() => onMemoSelect(group.memos[0]?.id || "")}
+              onClick={() => onMemoSelect(firstMemoId || "")}
             >
               <div
                 className={`text-Badge3-10m px-2 py-[6px] rounded-[4px] inline-block mb-[6px] ${

@@ -90,19 +90,67 @@ const sampleMemoGroups: MemoGroup[] = [
 
 export default function MemoBoard() {
   const [selectedMemoId, setSelectedMemoId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<"single" | "split">("single");
+  const [leftSelectedMemo, setLeftSelectedMemo] = useState<string | null>(null);
+  const [rightSelectedMemo, setRightSelectedMemo] = useState<string | null>(null);
 
   const handleMemoSelect = (memoId: string) => {
-    setSelectedMemoId(memoId);
+    if (viewMode === "split") {
+      // 스플릿뷰에서는 중복 방지 및 토글 기능
+      if (leftSelectedMemo === memoId) {
+        // 왼쪽에 선택된 메모를 다시 클릭하면 취소
+        setLeftSelectedMemo(null);
+      } else if (rightSelectedMemo === memoId) {
+        // 오른쪽에 선택된 메모를 다시 클릭하면 취소
+        setRightSelectedMemo(null);
+      } else if (!leftSelectedMemo) {
+        // 왼쪽이 비어있으면 왼쪽에 배치
+        setLeftSelectedMemo(memoId);
+      } else if (!rightSelectedMemo) {
+        // 오른쪽이 비어있으면 오른쪽에 배치
+        setRightSelectedMemo(memoId);
+      } else {
+        // 둘 다 채워져 있으면 왼쪽을 새로운 메모로 교체
+        setLeftSelectedMemo(memoId);
+      }
+    } else {
+      // 단일뷰에서는 기존 방식
+      setSelectedMemoId(memoId);
+    }
+  };
+
+  const handleViewChange = (mode: "single" | "split") => {
+    setViewMode(mode);
+    if (mode === "single") {
+      // 단일뷰로 전환할 때 왼쪽 선택된 메모를 메인으로
+      if (leftSelectedMemo) {
+        setSelectedMemoId(leftSelectedMemo);
+      }
+      setLeftSelectedMemo(null);
+      setRightSelectedMemo(null);
+    }
   };
 
   return (
     <div className="w-full h-[522px] flex">
-      <MemoList
+      <MemoList 
         memoGroups={sampleMemoGroups}
         selectedMemoId={selectedMemoId}
         onMemoSelect={handleMemoSelect}
+        viewMode={viewMode}
+        leftSelectedMemo={leftSelectedMemo}
+        rightSelectedMemo={rightSelectedMemo}
       />
-      <MemoView selectedMemo={selectedMemoId} memoGroups={sampleMemoGroups} />
+      <MemoView 
+        selectedMemo={selectedMemoId} 
+        memoGroups={sampleMemoGroups}
+        viewMode={viewMode}
+        onViewChange={handleViewChange}
+        leftSelectedMemo={leftSelectedMemo}
+        rightSelectedMemo={rightSelectedMemo}
+        onLeftMemoChange={setLeftSelectedMemo}
+        onRightMemoChange={setRightSelectedMemo}
+      />
     </div>
   );
 }

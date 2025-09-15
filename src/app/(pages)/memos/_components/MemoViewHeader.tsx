@@ -1,5 +1,5 @@
-import SingleViewIcon from "./SingleVeiwIcon";
-import SplitViewIcon from "./SplitVeiwIcon";
+import SingleViewIcon from "./SingleViewIcon";
+import SplitViewIcon from "./SplitViewIcon";
 
 interface MemoViewHeaderProps {
   selectedView?: "single" | "split";
