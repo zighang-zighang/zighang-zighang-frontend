@@ -71,7 +71,7 @@ function MapBase({
 }) {
   const isDesktop = useIsDesktop();
 
-  // 모바일: 300x300, scale 2500
+  // 모바일: 300x310, scale 2500
   // PC: 400x400, scale 3000
   const mapConfig = isDesktop
     ? { width: 400, height: 400, scale: 3000 }

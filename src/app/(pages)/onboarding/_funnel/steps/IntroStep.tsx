@@ -41,7 +41,7 @@ export function IntroStep({
           </h2>
 
           <StepActions showBorder={false} className="w-full">
-            <div className="flex-col items-center justify-center w-full md:w-auto">
+            <div className="flex flex-col items-center justify-center w-full md:w-auto">
               <label className="flex items-center justify-center gap-2 text-[#363636] text-[16px] mb-2 md:mb-6">
                 <input
                   type="checkbox"
