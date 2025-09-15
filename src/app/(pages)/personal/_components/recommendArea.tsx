@@ -63,6 +63,20 @@ export default function RecommendArea({
   >([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIsMobile();
+    window.addEventListener("resize", checkIsMobile);
+
+    return () => window.removeEventListener("resize", checkIsMobile);
+  }, []);
 
   useEffect(() => {
     if (hasFiles && !isAnalysisModalOpen) {
@@ -74,17 +88,23 @@ export default function RecommendArea({
       setRecommendedData([]);
       setError(null);
     }
-  }, [hasFiles, isAnalysisModalOpen]);
+  }, [hasFiles, isAnalysisModalOpen, currentPage]);
 
   const fetchRecommendedData = async () => {
     try {
       setIsLoading(true);
       setError(null);
-      const response = await fetchRecommendedRecruitments();
+      const pageSize = isMobile ? 3 : 9;
+      const response = await fetchRecommendedRecruitments(
+        currentPage,
+        pageSize
+      );
 
       if (response.success && response.data) {
         setRecommendedData(response.data);
         setRecruitmentCount(response.data.length);
+        // API에서 totalPages를 받아와야 하지만, 현재는 임시로 계산
+        setTotalPages(Math.ceil(response.data.length / pageSize));
       } else {
         throw new Error(
           response.message || "추천 데이터를 가져오는데 실패했습니다."
@@ -101,6 +121,10 @@ export default function RecommendArea({
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -141,6 +165,9 @@ export default function RecommendArea({
           // API 데이터가 있을 때
           <PersonalizedRecruitmentList
             items={transformRecommendedData(recommendedData)}
+            currentPage={currentPage + 1}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
           />
         ) : (
           // API 데이터가 없을 때 - 목업 데이터 표시

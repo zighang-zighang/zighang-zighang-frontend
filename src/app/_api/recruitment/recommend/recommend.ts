@@ -8,9 +8,12 @@ function getAccessToken(): string | null {
   }
 }
 
-export async function fetchRecommendedRecruitments(): Promise<RecommendResponse> {
+export async function fetchRecommendedRecruitments(
+  page: number = 0,
+  size: number = 9
+): Promise<RecommendResponse> {
   const token = getAccessToken();
-  const url = `/api/users/recommend`;
+  const url = `/api/users/recommend?page=${page}&size=${size}`;
 
   const res = await fetch(url, {
     method: "GET",
