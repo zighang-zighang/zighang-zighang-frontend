@@ -130,7 +130,7 @@ export default function SuccessStep({
       <div className="flex flex-col items-center">
         <CheckBadge className="mt-20" />
         <p className="text-2xl font-semibold mt-3.5">반가워요 {name}님!</p>
-        <p className="text-Subheading3-14m md:text-Subheading2-16m text-neutral-600 w-50 md:w-auto text-center">
+        <p className="text-Subheading3-14m md:text-Subheading2-16m text-neutral-600 w-50 md:w-auto text-center mt-2">
           공고 탐색 페이지에서 응답 내용 기반 적합한 공고를 보여드릴게요!
         </p>
 
@@ -143,6 +143,11 @@ export default function SuccessStep({
     "
         >
           <RecruitmentCardList items={mock} />
+          <RecruitmentCardList
+            items={mock}
+            className="md:hidden"
+            reverse={true}
+          />
         </section>
 
         <StepActions showBorder={false} className="mt-11">
