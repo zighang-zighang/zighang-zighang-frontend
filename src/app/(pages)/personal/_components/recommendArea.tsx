@@ -5,6 +5,7 @@ import PersonalizedRecruitmentList from "./recruitment/PersonalizedRecruitmentLi
 import { useState, useEffect } from "react";
 import { fetchRecommendedRecruitments } from "@/app/_api/recruitment/recommend/recommend";
 import type { RecommendedRecruitment } from "@/app/_types/jobs";
+import PersonalizedRecruitmentBanner from "./recruitment/PersonalizedRecruitmentBanner";
 
 // 임시 목업 데이터 (파일이 없을 때 사용)
 const mockRecruitments = [
@@ -103,7 +104,7 @@ export default function RecommendArea({
   };
 
   return (
-    <div className="mt-5">
+    <div className="mt-5 ">
       <div className="flex justify-between items-center mb-4">
         <div className="justify-center text-black text-lg md:text-xl font-semibold">
           <span className="text-purple-800 text-lg md:text-xl font-semibold mr-1">
@@ -116,7 +117,7 @@ export default function RecommendArea({
           건
         </div>
       </div>
-
+      <PersonalizedRecruitmentBanner userName="민수" />
       {hasFiles && !isAnalysisModalOpen ? (
         // 파일이 있고 분석 모달이 열려있지 않을 때
         isLoading ? (
