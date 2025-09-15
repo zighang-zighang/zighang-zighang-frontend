@@ -41,6 +41,7 @@ interface RecruitmentItem {
   company: string;
   title: string;
   bookmarked?: boolean;
+  reason: string;
 }
 
 interface PersonalizedRecruitmentListProps {
@@ -69,7 +70,8 @@ export default function PersonalizedRecruitmentList({
   }, []);
 
   // 반응형 itemsPerPage 설정
-  const currentItemsPerPage = itemsPerPage !== undefined ? itemsPerPage : 9;
+  const currentItemsPerPage =
+    itemsPerPage !== undefined ? itemsPerPage : isMobile ? 3 : 9;
 
   // 총 페이지 수 계산
   const totalPages = Math.ceil(items.length / currentItemsPerPage);
@@ -77,10 +79,7 @@ export default function PersonalizedRecruitmentList({
   // 현재 페이지에 해당하는 아이템들 계산
   const startIndex = (currentPage - 1) * currentItemsPerPage;
   const endIndex = startIndex + currentItemsPerPage;
-  const allCurrentItems = items.slice(startIndex, endIndex);
-
-  // 모바일에서는 3개만 표시, PC에서는 9개 표시
-  const currentItems = isMobile ? allCurrentItems.slice(0, 3) : allCurrentItems;
+  const currentItems = items.slice(startIndex, endIndex);
 
   // 페이지 변경 핸들러
   const handlePageChange = (page: number) => {
@@ -112,13 +111,8 @@ export default function PersonalizedRecruitmentList({
     <div
       className={`w-full ${className} items-center justify-center flex flex-col`}
     >
-      <PersonalizedRecruitmentBanner
-        userName="민수"
-        onKeywordClick={(keyword) => {
-          console.log("선택된 키워드:", keyword);
-          // 키워드 클릭 시 처리 로직 추가 가능
-        }}
-      />
+      <PersonalizedRecruitmentBanner userName="민수" />
+
       {/* 그리드 레이아웃 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 ">
         {currentItems.map((item, index) => (

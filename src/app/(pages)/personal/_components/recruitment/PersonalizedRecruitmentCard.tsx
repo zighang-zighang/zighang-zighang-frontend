@@ -11,11 +11,12 @@ interface RecruitmentCardProps {
     company: string;
     title: string;
     bookmarked?: boolean;
+    reason: string;
   };
 }
 
 export default function RecruitmentCard({ item }: RecruitmentCardProps) {
-  const { id, logo, company, title, bookmarked } = item;
+  const { id, logo, company, title, bookmarked, reason } = item;
   const { isBookmarked, mutate, isPending } = useBookmark(id, !!bookmarked);
   const [activeTab, setActiveTab] = useState<"job" | "reason">("job");
 
@@ -94,25 +95,24 @@ export default function RecruitmentCard({ item }: RecruitmentCardProps) {
       </div>
       {activeTab === "job" ? (
         <div className="flex items-start  gap-2.5 mt-1.5 h-full">
-          <div className="w-16 h-16 bg-gray-100 flex items-center justify-center rounded-xs">
+          <div className="w-16 h-16 bg-gray-100 border border-gray-200 flex items-center justify-center rounded-md overflow-hidden">
             <Image
               src={logo}
               alt={`${company} 로고`}
-              className="max-w-full max-h-full "
+              className="w-full h-full object-cover"
               width={60}
               height={60}
             />
           </div>
           <div className="h-16 flex flex-col justify-between">
-            <p className="font-semibold text-base">{title}</p>
+            <p className="font-semibold text-base w-35 h-11 line-clamp-2">
+              {title}
+            </p>
             <p className="text-neutral-400 font-medium text-xs">{company}</p>
           </div>
         </div>
       ) : (
-        <p className=" text-zinc-800 text-sm font-medium">
-          평소 재택근무를 좋아한다는 키워드와 가우디오랩의 근무환경과 일치하여
-          추천하였어요.
-        </p>
+        <p className=" text-zinc-800 text-sm font-medium">{reason}</p>
       )}
     </div>
   );

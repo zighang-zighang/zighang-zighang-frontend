@@ -6,12 +6,10 @@ import { useKeywords } from "@/app/_api/resume/hooks/useKeywords";
 
 interface PersonalizedRecruitmentBannerProps {
   userName?: string;
-  onKeywordClick?: (keyword: string) => void;
 }
 
 export default function PersonalizedRecruitmentBanner({
   userName = "민수",
-  onKeywordClick,
 }: PersonalizedRecruitmentBannerProps) {
   const { data: keywords = [], isLoading: loading } = useKeywords();
 
@@ -26,11 +24,7 @@ export default function PersonalizedRecruitmentBanner({
           <p className="text-gray-500 text-sm">키워드를 불러오는 중...</p>
         ) : keywords.length > 0 ? (
           keywords.map((keyword, index) => (
-            <KeywordButton
-              key={`${keyword}-${index}`}
-              keyword={keyword}
-              onClick={() => onKeywordClick?.(keyword)}
-            />
+            <KeywordButton key={`${keyword}-${index}`} keyword={keyword} />
           ))
         ) : (
           <p className="text-gray-500 text-sm">키워드가 없습니다.</p>

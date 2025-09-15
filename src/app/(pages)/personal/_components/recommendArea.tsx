@@ -3,9 +3,10 @@
 import PersonalizedRecruitmentCard from "./recruitment/PersonalizedRecruitmentCard";
 import PersonalizedRecruitmentList from "./recruitment/PersonalizedRecruitmentList";
 import { useState, useEffect } from "react";
+import { fetchRecommendedRecruitments } from "@/app/_api/recruitment/recommend/recommend";
+import type { RecommendedRecruitment } from "@/app/_types/jobs";
 
-// 임시 목업 데이터 삭제 예정
-
+// 임시 목업 데이터 (파일이 없을 때 사용)
 const mockRecruitments = [
   {
     id: "1",
@@ -13,6 +14,7 @@ const mockRecruitments = [
     title: "Frontend Engineer",
     company: "Google",
     bookmarked: false,
+    reason: "프론트엔드 개발 경험과 React 기술 스택이 일치합니다.",
   },
   {
     id: "1",
@@ -20,6 +22,7 @@ const mockRecruitments = [
     title: "Product Manager",
     company: "Naver",
     bookmarked: true,
+    reason: "제품 기획 및 사용자 경험 개선 경험이 요구사항과 부합합니다.",
   },
   {
     id: "2",
@@ -27,8 +30,21 @@ const mockRecruitments = [
     title: "Backend Developer",
     company: "Samsung Electronics",
     bookmarked: true,
+    reason: "백엔드 개발 및 시스템 아키텍처 설계 경험이 적합합니다.",
   },
 ];
+
+// API 응답을 PersonalizedRecruitmentList가 기대하는 형태로 변환
+const transformRecommendedData = (data: RecommendedRecruitment[]) => {
+  return data.map((item) => ({
+    id: item.id,
+    logo: item.companyImageUrl || "/logos/google.png", // 기본 로고 설정
+    title: item.title,
+    company: item.companyName,
+    bookmarked: item.isBookmarked,
+    reason: item.reason,
+  }));
+};
 
 interface RecommendAreaProps {
   hasFiles?: boolean;
@@ -41,15 +57,50 @@ export default function RecommendArea({
   isAnalysisModalOpen = false,
 }: RecommendAreaProps) {
   const [recruitmentCount, setRecruitmentCount] = useState(0);
+  const [recommendedData, setRecommendedData] = useState<
+    RecommendedRecruitment[]
+  >([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (hasFiles) {
-      // 파일이 있으면 추천 공고 개수 설정 (실제로는 API에서 가져와야 함)
+    if (hasFiles && !isAnalysisModalOpen) {
+      // 파일이 있고 분석 모달이 열려있지 않을 때만 API 호출
+      fetchRecommendedData();
+    } else if (!hasFiles) {
+      // 파일이 없을 때는 목업 데이터 사용
       setRecruitmentCount(mockRecruitments.length);
-    } else {
-      setRecruitmentCount(0);
+      setRecommendedData([]);
+      setError(null);
     }
-  }, [hasFiles]);
+  }, [hasFiles, isAnalysisModalOpen]);
+
+  const fetchRecommendedData = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const response = await fetchRecommendedRecruitments();
+
+      if (response.success && response.data) {
+        setRecommendedData(response.data);
+        setRecruitmentCount(response.data.length);
+      } else {
+        throw new Error(
+          response.message || "추천 데이터를 가져오는데 실패했습니다."
+        );
+      }
+    } catch (err) {
+      console.error("추천 데이터 로딩 실패:", err);
+      setError(
+        err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다."
+      );
+      // 에러 발생 시 목업 데이터 사용
+      setRecommendedData([]);
+      setRecruitmentCount(mockRecruitments.length);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="mt-5">
@@ -67,8 +118,33 @@ export default function RecommendArea({
       </div>
 
       {hasFiles && !isAnalysisModalOpen ? (
-        // 파일이 있고 분석 모달이 열려있지 않을 때: PersonalizedRecruitmentList 표시
-        <PersonalizedRecruitmentList items={mockRecruitments} />
+        // 파일이 있고 분석 모달이 열려있지 않을 때
+        isLoading ? (
+          // 로딩 상태
+          <div className="flex items-center justify-center flex-col min-w-64 md:w-full">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-500 mx-auto mb-2 "></div>
+            <p className="text-gray-600 text-sm">
+              추천 공고를 불러오고 있습니다...
+            </p>
+          </div>
+        ) : error ? (
+          // 에러 상태 - 에러 메시지만 표시
+          <div className="flex items-center justify-center h-64 bg-gray-50 rounded-lg">
+            <div className="text-center">
+              <p className="text-gray-600 text-sm">
+                추천 공고를 불러올 수 없습니다.
+              </p>
+            </div>
+          </div>
+        ) : recommendedData.length > 0 ? (
+          // API 데이터가 있을 때
+          <PersonalizedRecruitmentList
+            items={transformRecommendedData(recommendedData)}
+          />
+        ) : (
+          // API 데이터가 없을 때 - 목업 데이터 표시
+          <PersonalizedRecruitmentList items={mockRecruitments} />
+        )
       ) : hasFiles && isAnalysisModalOpen ? (
         // 파일이 있고 분석 모달이 열려있을 때: 로딩 상태 표시
         <div className="flex items-center justify-center h-64 bg-gray-50 rounded-lg">
