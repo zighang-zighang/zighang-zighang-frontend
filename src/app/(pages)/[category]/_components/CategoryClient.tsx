@@ -29,10 +29,10 @@ export default function CategoryClient({
   const slugToJobGroup = (s: string) =>
     jobCategories.find((c) => c.href.slice(1) === s)?.name ?? "전체";
 
-  const initial = useMemo<FilterState>(
-    () => ({ ...DEFAULT, jobGroup: slugToJobGroup(slug) }),
-    [slug]
-  );
+  const initial = useMemo<FilterState>(() => {
+    const baseState = { ...DEFAULT, jobGroup: slugToJobGroup(slug) };
+    return baseState;
+  }, [slug]);
 
   return (
     <div className="relative w-full overflow-visible px-0 laptop:mx-auto laptop:max-w-screen-xl laptop:px-10">
