@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchMemos, createMemo, updateMemo, deleteMemo } from "./memoApi";
+import { fetchMemos, createMemo, updateMemo, deleteMemo, bulkDeleteMemos } from "./memoApi";
 import { MemoGroup } from "../../../app/(pages)/memos/_types/memoTypes";
 
 // 메모 목록 조회
@@ -88,6 +88,32 @@ export function useDeleteMemo(recruitmentId?: string) {
           memos: group.memos.filter((memo) => memo.id !== memoId)
         })).filter((group: MemoGroup) => group.memos.length > 0);
         
+        queryClient.setQueryData(["memoGroups"], updatedMemoGroups);
+      }
+    },
+  });
+}
+
+// 공고별 메모 일괄 삭제
+export function useBulkDeleteMemos() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (recruitmentIds: string[]) => bulkDeleteMemos(recruitmentIds),
+    onSuccess: (_, recruitmentIds) => {
+      // 삭제된 공고들의 메모 캐시 무효화
+      recruitmentIds.forEach(recruitmentId => {
+        queryClient.invalidateQueries({
+          queryKey: ["memos", { recruitmentId }],
+        });
+      });
+
+      // 전체 메모 목록 캐시 업데이트
+      const memoGroups = queryClient.getQueryData<MemoGroup[]>(["memoGroups"]);
+      if (memoGroups && Array.isArray(memoGroups)) {
+        const updatedMemoGroups = memoGroups.filter((group: MemoGroup) => 
+          !recruitmentIds.includes(group.recruitment.id)
+        );
         queryClient.setQueryData(["memoGroups"], updatedMemoGroups);
       }
     },

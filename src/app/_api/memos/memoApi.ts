@@ -106,6 +106,25 @@ export async function deleteMemo(memoId: string): Promise<void> {
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
 }
 
+// 공고별 메모 일괄 삭제
+export async function bulkDeleteMemos(recruitmentIds: string[]): Promise<void> {
+  const token = getAccessToken();
+  const res = await fetch(`${API_BASE}/bulk`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify({
+      recruitments: recruitmentIds,
+    }),
+    cache: "no-store",
+  });
+
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+}
+
 // 전체 메모 목록 조회 (공고별 그룹)
 export async function fetchAllMemos(): Promise<MemoGroup[]> {
   const token = getAccessToken();

@@ -4,7 +4,7 @@ import { useState } from "react";
 import MemoList from "./MemoList";
 import MemoView from "./MemoView";
 import { useMemoGroups } from "../../../_api/memos/useMemoGroups";
-import { useDeleteMemo } from "../../../_api/memos/useMemos";
+import { useDeleteMemo, useBulkDeleteMemos } from "../../../_api/memos/useMemos";
 
 export default function MemoBoard() {
   const [selectedMemoId, setSelectedMemoId] = useState<string | null>(null);
@@ -16,6 +16,7 @@ export default function MemoBoard() {
 
   const { data: memoGroups = [], isLoading, error } = useMemoGroups();
   const deleteMemoMutation = useDeleteMemo();
+  const bulkDeleteMemosMutation = useBulkDeleteMemos();
 
   const handleMemoSelect = (memoId: string) => {
     if (viewMode === "split") {
@@ -115,6 +116,35 @@ export default function MemoBoard() {
     });
   };
 
+  const handleBulkDeleteRecruitments = (recruitmentIds: string[]) => {
+    bulkDeleteMemosMutation.mutate(recruitmentIds, {
+      onSuccess: () => {
+        // 삭제된 공고에 속한 메모들의 선택 상태 초기화
+        const deletedMemoIds = new Set<string>();
+        recruitmentIds.forEach(recruitmentId => {
+          const memoGroup = memoGroups.find(group => group.recruitment.id === recruitmentId);
+          if (memoGroup) {
+            memoGroup.memos.forEach(memo => deletedMemoIds.add(memo.id));
+          }
+        });
+
+        // 삭제된 메모가 현재 선택된 메모라면 선택 해제
+        if (selectedMemoId && deletedMemoIds.has(selectedMemoId)) {
+          setSelectedMemoId(null);
+        }
+        if (leftSelectedMemo && deletedMemoIds.has(leftSelectedMemo)) {
+          setLeftSelectedMemo(null);
+        }
+        if (rightSelectedMemo && deletedMemoIds.has(rightSelectedMemo)) {
+          setRightSelectedMemo(null);
+        }
+      },
+      onError: (error) => {
+        console.error("공고별 메모 일괄 삭제 실패:", error);
+      },
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="w-full h-[522px] flex items-center justify-center">
@@ -147,6 +177,7 @@ export default function MemoBoard() {
         leftSelectedMemo={leftSelectedMemo}
         rightSelectedMemo={rightSelectedMemo}
         onDeleteMemo={handleDeleteMemo}
+        onBulkDeleteRecruitments={handleBulkDeleteRecruitments}
       />
       <MemoView
         selectedMemo={selectedMemoId}
