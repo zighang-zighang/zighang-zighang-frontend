@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useBookmark } from "@/app/_api/bookmark/useBookmark";
 
 interface RecruitmentCardProps {
@@ -19,6 +20,7 @@ export default function RecruitmentCard({ item }: RecruitmentCardProps) {
   const { id, logo, company, title, bookmarked, reason } = item;
   const { isBookmarked, mutate, isPending } = useBookmark(id, !!bookmarked);
   const [activeTab, setActiveTab] = useState<"job" | "reason">("job");
+  const router = useRouter();
 
   const handleBookmarkClick = async () => {
     const next = !isBookmarked;
@@ -29,11 +31,21 @@ export default function RecruitmentCard({ item }: RecruitmentCardProps) {
     }
   };
 
+  const handleCardClick = () => {
+    router.push(`/recruitment/${id}`);
+  };
+
   return (
-    <div className="border border-gray-200 rounded-lg px-3.5 py-3 w-full h-34 hover:[box-shadow:0_8px_25px_rgba(0,0,0,0.1)] transition-shadow duration-200 cursor-pointer">
+    <div
+      className="border border-gray-200 rounded-lg px-3.5 py-3 w-full h-34 hover:[box-shadow:0_8px_25px_rgba(0,0,0,0.1)] transition-shadow duration-200 cursor-pointer"
+      onClick={handleCardClick}
+    >
       <div className="flex gap-1 items-cente mb-3.5">
         <button
-          onClick={() => setActiveTab("job")}
+          onClick={(e) => {
+            e.stopPropagation();
+            setActiveTab("job");
+          }}
           className={`cursor-pointer text-xs font-medium px-2.5 py-1 rounded-[20px] border inline-flex justify-start items-center gap-0.5 ${
             activeTab === "job"
               ? "text-violet-500 bg-white border-purple-200"
@@ -54,7 +66,10 @@ export default function RecruitmentCard({ item }: RecruitmentCardProps) {
           공고
         </button>
         <button
-          onClick={() => setActiveTab("reason")}
+          onClick={(e) => {
+            e.stopPropagation();
+            setActiveTab("reason");
+          }}
           className={`cursor-pointer text-xs font-medium px-2.5 py-1 rounded-[20px] border inline-flex justify-start items-center gap-0.5 ${
             activeTab === "reason"
               ? "text-violet-500 bg-white border-purple-200"
@@ -75,7 +90,10 @@ export default function RecruitmentCard({ item }: RecruitmentCardProps) {
           추천이유
         </button>
         <button
-          onClick={handleBookmarkClick}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleBookmarkClick();
+          }}
           disabled={isPending}
           className="cursor-pointer ml-auto disabled:opacity-50"
         >
