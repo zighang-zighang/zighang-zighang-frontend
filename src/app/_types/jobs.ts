@@ -32,7 +32,7 @@ export interface RecommendedRecruitment {
   jobCategories: string[];
   companyName: string;
   companyDescription: string;
-  companyImageUrl: string;
+  companyImageUrl: string | null;
   isBookmarked: boolean;
   reason: string;
 }
