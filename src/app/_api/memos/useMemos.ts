@@ -1,51 +1,55 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchMemos, createMemo, updateMemo, deleteMemo } from "./memoApi";
-import type {
-  CreateMemoRequest,
-  UpdateMemoRequest,
-  MemoListResponse,
-  MemoResponse,
-} from "@/app/_types/memos";
 
+// 메모 목록 조회
 export function useMemos(recruitmentId?: string) {
-  return useQuery<MemoListResponse>({
+  return useQuery({
     queryKey: ["memos", { recruitmentId }],
     queryFn: () => fetchMemos(recruitmentId),
-    staleTime: 30_000,
-    gcTime: 5 * 60_000,
+    staleTime: 5 * 60 * 1000, // 5분
+    retry: 1,
   });
 }
 
+// 메모 생성
 export function useCreateMemo(recruitmentId?: string) {
-  const qc = useQueryClient();
-  return useMutation<MemoResponse | void, Error, CreateMemoRequest>({
-    mutationFn: (data) => createMemo(data, recruitmentId),
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: { title: string; content: string }) =>
+      createMemo(data, recruitmentId),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["memos", { recruitmentId }] });
+      queryClient.invalidateQueries({ queryKey: ["memos", { recruitmentId }] });
     },
   });
 }
 
+// 메모 수정
 export function useUpdateMemo(recruitmentId?: string) {
-  const qc = useQueryClient();
-  return useMutation<
-    MemoResponse | void,
-    Error,
-    { memoId: string; data: UpdateMemoRequest }
-  >({
-    mutationFn: ({ memoId, data }) => updateMemo(memoId, data),
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      memoId,
+      data,
+    }: {
+      memoId: string;
+      data: { title: string; content: string };
+    }) => updateMemo(memoId, data),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["memos", { recruitmentId }] });
+      queryClient.invalidateQueries({ queryKey: ["memos", { recruitmentId }] });
     },
   });
 }
 
+// 메모 삭제
 export function useDeleteMemo(recruitmentId?: string) {
-  const qc = useQueryClient();
-  return useMutation<void, Error, string>({
-    mutationFn: deleteMemo,
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (memoId: string) => deleteMemo(memoId),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["memos", { recruitmentId }] });
+      queryClient.invalidateQueries({ queryKey: ["memos", { recruitmentId }] });
     },
   });
 }

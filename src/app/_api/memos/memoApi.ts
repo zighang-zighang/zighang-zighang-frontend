@@ -4,6 +4,7 @@ import {
   MemoListResponse,
   MemoResponse,
 } from "@/app/_types/memos";
+import { MemoGroup } from "../../../app/(pages)/memos/_types/memoTypes";
 
 const API_BASE = "/api/memos";
 // 토근 가져오기
@@ -103,4 +104,22 @@ export async function deleteMemo(memoId: string): Promise<void> {
     cache: "no-store",
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
+}
+
+// 전체 메모 목록 조회 (공고별 그룹)
+export async function fetchAllMemos(): Promise<MemoGroup[]> {
+  const token = getAccessToken();
+  const res = await fetch(`${API_BASE}/all`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    cache: "no-store",
+  });
+
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+  const json = await res.json();
+  return json?.data?.memos ?? [];
 }
