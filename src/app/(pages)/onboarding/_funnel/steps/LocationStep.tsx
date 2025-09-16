@@ -15,25 +15,15 @@ import { SIDO_GEO } from "../../_types/onBoradingMap";
 export function LocationStep({
   onBack,
   onSubmit,
-  initialRegion,
+  initialRegion = [],
 }: {
   onBack: () => void;
   onSubmit: (지역: string[] | null) => void;
-  initialRegion?: string | string[];
+  initialRegion?: string[];
 }) {
   const [regions, setRegions] = useState<RegionValue[]>(() => {
     if (!initialRegion) return [];
-    // initialRegion이 배열인 경우 그대로 사용, 문자열인 경우 배열로 변환
-    if (Array.isArray(initialRegion)) {
-      return initialRegion;
-    }
-    // 쉼표로 구분된 문자열을 배열로 변환
-    if (initialRegion.includes(",")) {
-      return initialRegion
-        .split(",")
-        .map((region) => region.trim() as RegionValue);
-    }
-    return [initialRegion as RegionValue];
+    return initialRegion as RegionValue[];
   });
   const isValid = useMemo(() => regions.length > 0, [regions]);
 
@@ -44,14 +34,15 @@ export function LocationStep({
           // 이미 선택된 지역이면 제거
           return prev.filter((region) => region !== next);
         } else {
-          // 선택되지 않은 지역이면 추가
-          return [...prev, next];
+          // 선택되지 않은 지역이면 기존 선택 완전 초기화 후 새로 선택한 것만 추가
+          return [next];
         }
       });
     },
     []
   );
   const handleChange = useCallback((next: RegionValue) => {
+    console.log("handleChange next:", next);
     setRegions((prev) => {
       if (next === "전체") {
         return ["전체"];
@@ -59,13 +50,16 @@ export function LocationStep({
         if (prev.includes("해외")) {
           return prev.filter((region) => region !== "해외");
         } else {
-          return [...prev.filter((region) => region !== "전체"), "해외"];
+          return ["해외"];
         }
       } else {
         if (prev.includes(next)) {
           return prev.filter((region) => region !== next);
         } else {
-          return [...prev.filter((region) => region !== "전체"), next];
+          return [
+            ...prev.filter((region) => region !== "전체" && region !== "해외"),
+            next,
+          ];
         }
       }
     });
@@ -77,7 +71,8 @@ export function LocationStep({
     if (regions.includes("전체")) {
       onSubmit(null);
     } else {
-      onSubmit(regions);
+      const uniq = Array.from(new Set(regions));
+      onSubmit(uniq);
     }
   }, [regions, onSubmit]);
 
