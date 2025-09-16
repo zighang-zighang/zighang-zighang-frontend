@@ -7,16 +7,6 @@ import { useEffect, useState } from "react";
 import Profile from "./Icons/Profile";
 import ProfileDropdown from "./ProfileDropdown";
 
-// 토큰 가져오기 함수
-function getAccessToken(): string | null {
-  try {
-    if (typeof window === "undefined") return null;
-    return localStorage.getItem("zh_access_token");
-  } catch {
-    return null;
-  }
-}
-
 export default function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);

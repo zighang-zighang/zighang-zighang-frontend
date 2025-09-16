@@ -17,16 +17,12 @@ export default function SplitMemoView({
   memoGroups,
   leftSelectedMemo,
   rightSelectedMemo,
-  onLeftMemoChange,
-  onRightMemoChange,
 }: SplitMemoViewProps) {
   const router = useRouter();
-  // 왼쪽 선택된 메모가 속한 공고 그룹 찾기
   const leftSelectedGroup = memoGroups?.find((group) =>
     group.memos.some((memo) => memo.id === leftSelectedMemo)
   );
 
-  // 오른쪽 선택된 메모가 속한 공고 그룹 찾기
   const rightSelectedGroup = memoGroups?.find((group) =>
     group.memos.some((memo) => memo.id === rightSelectedMemo)
   );
@@ -47,7 +43,9 @@ export default function SplitMemoView({
           {leftSelectedGroup && (
             <button
               className="text-Button3-14sb rounded-[8px] px-[14px] py-[6px] bg-white border border-[#E1E1E4] cursor-pointer"
-              onClick={() => handleRecruitmentNavigation(leftSelectedGroup.recruitment.id)}
+              onClick={() =>
+                handleRecruitmentNavigation(leftSelectedGroup.recruitment.id)
+              }
             >
               공고 바로가기
             </button>
@@ -109,7 +107,9 @@ export default function SplitMemoView({
           {rightSelectedGroup && (
             <button
               className="text-Button3-14sb rounded-[8px] px-[14px] py-[6px] bg-white border border-[#E1E1E4] cursor-pointer"
-              onClick={() => handleRecruitmentNavigation(rightSelectedGroup.recruitment.id)}
+              onClick={() =>
+                handleRecruitmentNavigation(rightSelectedGroup.recruitment.id)
+              }
             >
               공고 바로가기
             </button>
