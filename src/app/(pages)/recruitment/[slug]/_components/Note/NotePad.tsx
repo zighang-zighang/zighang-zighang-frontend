@@ -5,7 +5,6 @@ import Link from "next/link";
 import NoteItem from "./NoteItem";
 import HoverIcon from "../Icons/HoverIcon";
 import KebabMenu from "./KebabMenu";
-import NotePadLarge from "./NotePadLarge";
 import { useNotes } from "@/app/(pages)/recruitment/[slug]/_hooks/useNotes";
 import { useAuthState } from "@/app/_api/auth/useAuthState";
 import { NoteIcon } from "../Icons/NoteIcon";
