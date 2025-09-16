@@ -70,8 +70,8 @@ export function useNotes(recruitmentId?: string) {
   const addNote = useCallback(async () => {
     try {
       await createMemoMutation.mutateAsync({
-        title: "제목",
-        content: "내용",
+        title: "제목 없음",
+        content: null,
         ...(recruitmentId ? { recruitmentId } : {}),
       });
 
