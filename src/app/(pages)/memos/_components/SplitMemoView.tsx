@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { MemoGroup } from "../_types/memoTypes";
 import MemoSection from "./MemoSection";
 import AddMemoButton from "./AddMemoButton";
@@ -19,6 +20,7 @@ export default function SplitMemoView({
   onLeftMemoChange,
   onRightMemoChange,
 }: SplitMemoViewProps) {
+  const router = useRouter();
   // 왼쪽 선택된 메모가 속한 공고 그룹 찾기
   const leftSelectedGroup = memoGroups?.find((group) =>
     group.memos.some((memo) => memo.id === leftSelectedMemo)
@@ -28,6 +30,10 @@ export default function SplitMemoView({
   const rightSelectedGroup = memoGroups?.find((group) =>
     group.memos.some((memo) => memo.id === rightSelectedMemo)
   );
+
+  const handleRecruitmentNavigation = (recruitmentId: string) => {
+    router.push(`/recruitment/${recruitmentId}`);
+  };
 
   return (
     <div className="h-full flex">
@@ -40,8 +46,8 @@ export default function SplitMemoView({
           </h2>
           {leftSelectedGroup && (
             <button
-              className="text-Button3-14sb rounded-[8px] px-[14px] py-[6px] bg-white border border-[#E1E1E4]"
-              onClick={() => onLeftMemoChange?.(null)}
+              className="text-Button3-14sb rounded-[8px] px-[14px] py-[6px] bg-white border border-[#E1E1E4] cursor-pointer"
+              onClick={() => handleRecruitmentNavigation(leftSelectedGroup.recruitment.id)}
             >
               공고 바로가기
             </button>
@@ -102,8 +108,8 @@ export default function SplitMemoView({
           </h2>
           {rightSelectedGroup && (
             <button
-              className="text-Button3-14sb rounded-[8px] px-[14px] py-[6px] bg-white border border-[#E1E1E4]"
-              onClick={() => onRightMemoChange?.(null)}
+              className="text-Button3-14sb rounded-[8px] px-[14px] py-[6px] bg-white border border-[#E1E1E4] cursor-pointer"
+              onClick={() => handleRecruitmentNavigation(rightSelectedGroup.recruitment.id)}
             >
               공고 바로가기
             </button>
