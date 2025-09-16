@@ -10,8 +10,6 @@ interface SplitMemoViewProps {
   memoGroups?: MemoGroup[];
   leftSelectedMemo?: string | null;
   rightSelectedMemo?: string | null;
-  onLeftMemoChange?: (memoId: string | null) => void;
-  onRightMemoChange?: (memoId: string | null) => void;
   onDeleteMemo?: (memoId: string) => void;
 }
 
@@ -19,8 +17,6 @@ export default function SplitMemoView({
   memoGroups,
   leftSelectedMemo,
   rightSelectedMemo,
-  onLeftMemoChange,
-  onRightMemoChange,
   onDeleteMemo,
 }: SplitMemoViewProps) {
   const router = useRouter();
