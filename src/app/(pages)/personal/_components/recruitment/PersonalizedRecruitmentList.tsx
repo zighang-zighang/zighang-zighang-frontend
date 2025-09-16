@@ -66,7 +66,7 @@ export default function PersonalizedRecruitmentList({
 
   useEffect(() => {
     const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 1416);
+      setIsMobile(window.innerWidth < 768);
     };
 
     checkIsMobile();
@@ -84,18 +84,19 @@ export default function PersonalizedRecruitmentList({
     : internalCurrentPage;
   const totalPages = isExternalPagination
     ? externalTotalPages || 1
-    : Math.ceil(items.length / (itemsPerPage || (isMobile ? 3 : 9)));
+    : isMobile
+    ? Math.ceil(items.length / (itemsPerPage || 3))
+    : 1;
 
-  // 외부 페이지네이션인 경우 모든 아이템을 표시, 내부 페이지네이션인 경우 슬라이싱
-  const currentItems = isExternalPagination
-    ? items
-    : (() => {
-        const currentItemsPerPage =
-          itemsPerPage !== undefined ? itemsPerPage : isMobile ? 3 : 9;
+  // 데스크탑에서는 모든 아이템을 표시, 모바일에서만 페이지네이션 적용
+  const currentItems = isMobile
+    ? (() => {
+        const currentItemsPerPage = itemsPerPage || 3;
         const startIndex = (currentPage - 1) * currentItemsPerPage;
         const endIndex = startIndex + currentItemsPerPage;
         return items.slice(startIndex, endIndex);
-      })();
+      })()
+    : items;
 
   // 페이지 변경 핸들러
   const handlePageChange = (page: number) => {
@@ -133,7 +134,7 @@ export default function PersonalizedRecruitmentList({
     >
       <PersonalizedRecruitmentBanner />
       {/* 그리드 레이아웃 */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 ">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 max-w-[786px] ">
         {currentItems.map((item, index) => (
           <PersonalizedRecruitmentCard
             key={`${item.id}-${item.company}-${item.title}-${index}`}
@@ -142,8 +143,8 @@ export default function PersonalizedRecruitmentList({
         ))}
       </div>
 
-      {/* 페이지네이션 */}
-      {totalPages > 1 && (
+      {/* 페이지네이션 - 모바일에서만 표시 */}
+      {isMobile && totalPages > 1 && (
         <div className="flex justify-center items-center gap-2">
           {/* 이전 페이지 버튼 */}
           <button
