@@ -2,7 +2,6 @@ import { useState } from "react";
 import { MemoGroup } from "../_types/memoTypes";
 import { calculateDDay } from "../_utils/dateUtils";
 import DeleteMemo from "../../recruitment/[slug]/_components/Note/DeleteMemo";
-import { useBulkDeleteMemos } from "../../../_api/memos/useMemos";
 
 interface MemoListProps {
   memoGroups: MemoGroup[];
@@ -11,7 +10,6 @@ interface MemoListProps {
   viewMode?: "single" | "split";
   leftSelectedMemo?: string | null;
   rightSelectedMemo?: string | null;
-  onDeleteMemo?: (memoId: string) => void;
   onBulkDeleteRecruitments?: (recruitmentIds: string[]) => void;
 }
 
@@ -22,7 +20,6 @@ export default function MemoList({
   viewMode = "single",
   leftSelectedMemo,
   rightSelectedMemo,
-  onDeleteMemo,
   onBulkDeleteRecruitments,
 }: MemoListProps) {
   const [isEditMode, setIsEditMode] = useState(false);
