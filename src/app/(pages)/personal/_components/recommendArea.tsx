@@ -5,7 +5,6 @@ import PersonalizedRecruitmentList from "./recruitment/PersonalizedRecruitmentLi
 import { useState, useEffect } from "react";
 import { useAllRecommendedRecruitments } from "@/app/_api/recruitment/recommend/useRecommend";
 import type { RecommendedRecruitment } from "@/app/_types/jobs";
-import PersonalizedRecruitmentBanner from "./recruitment/PersonalizedRecruitmentBanner";
 
 // 임시 목업 데이터 (파일이 없을 때 사용)
 const mockRecruitments = [
