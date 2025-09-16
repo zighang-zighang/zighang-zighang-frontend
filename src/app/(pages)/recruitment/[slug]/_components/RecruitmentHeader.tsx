@@ -1,11 +1,45 @@
+"use client";
+
 import Image from "next/image";
 import { Job } from "@/app/_types/jobs";
+import { useBookmark } from "@/app/_api/bookmark/useBookmark";
+import { useRecruitmentDetail } from "@/app/_api/recruitment/detail/useRecruitmentDetail";
+import { logApplication } from "@/app/_api/recruitment/detail/applicationLog";
+import Icon from "@/app/(pages)/[category]/_components/Icons/Icon";
+import { useState } from "react";
 
 interface RecruitmentHeaderProps {
   job: Job;
+  slug: string;
 }
 
-export default function RecruitmentHeader({ job }: RecruitmentHeaderProps) {
+export default function RecruitmentHeader({
+  job,
+  slug,
+}: RecruitmentHeaderProps) {
+  const { data: recruitmentData } = useRecruitmentDetail(slug);
+  const isBookmarked = recruitmentData?.data?.isBookmarked ?? false;
+  const {
+    isBookmarked: bookmarkState,
+    toggle,
+    isPending,
+  } = useBookmark(slug, isBookmarked);
+
+  const [isLogging, setIsLogging] = useState(false);
+
+  const handleApplyClick = async () => {
+    if (isLogging) return;
+    setIsLogging(true);
+    // 사용자 제스처 내에서 즉시 새 탭 오픈 (팝업 차단 방지)
+    window.open(job.href, "_blank", "noopener,noreferrer");
+    try {
+      await logApplication(slug);
+    } catch (error) {
+      console.error("지원 로깅 실패:", error);
+    } finally {
+      setIsLogging(false);
+    }
+  };
   return (
     <div className="flex w-full items-start gap-5">
       <section className="relative flex aspect-[1/1] flex-shrink-0 items-center justify-center rounded-xl md:rounded-2xl w-16 md:w-[100px] overflow-hidden bg-gray-100">
@@ -28,9 +62,35 @@ export default function RecruitmentHeader({ job }: RecruitmentHeaderProps) {
         )}
       </section>
       <div className="flex w-full flex-col gap-2">
-        <h1 className="break-all text-xl font-semibold text-black md:gap-5 md:text-[26px]">
-          {job.title}
-        </h1>
+        <div className="flex justify-between">
+          <h1 className="break-all text-xl font-semibold text-black md:gap-5 md:text-[26px]">
+            {job.title}
+          </h1>
+          <div className="gap-2 hidden md:flex">
+            <button
+              onClick={toggle}
+              disabled={isPending}
+              className={`inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 bg-white hover:bg-zinc-100 active:bg-zinc-200 transition-colors h-12 min-w-12 p-2 border border-[#EDEDED] ${
+                bookmarkState ? "bg-[#F7F1FB]" : "bg-[#FAFAFA]"
+              }`}
+            >
+              <Icon
+                variant="bookmark"
+                className={`transition-transform w-7 h-7 ${
+                  bookmarkState ? "text-purple-800" : "text-gray-200"
+                }`}
+              />
+            </button>
+
+            <button
+              onClick={handleApplyClick}
+              disabled={isLogging}
+              className="whitespace-nowrap rounded-lg text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 bg-primary text-white hover:bg-primary/90 transition-colors hover:cursor-pointer px-18 py-2 flex h-12 flex-1 items-center justify-center"
+            >
+              <span className="text-lg">지원하기</span>
+            </button>
+          </div>
+        </div>
         <span className="w-fit text-sm font-medium text-[#5E5E5E] md:text-lg">
           {job.company}
         </span>

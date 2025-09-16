@@ -60,7 +60,7 @@ export default function NotePad({ recruitmentId }: { recruitmentId: string }) {
 
   return (
     <>
-      <div className="h-96 inline-flex flex-col justify-start items-start">
+      <div className="hidden md:inline-flex h-[444px] w-58  flex-col justify-start items-start">
         {!isLargeOpen && editMode && isLoggedIn && selected ? (
           <div className="self-stretch h-11 pl-2.5 pr-3.5 py-2.5 bg-white rounded-tl-lg rounded-tr-lg outline outline-1 outline-offset-[-1px] outline-zinc-200 inline-flex justify-between items-center">
             <div className="flex items-center gap-2.5">
