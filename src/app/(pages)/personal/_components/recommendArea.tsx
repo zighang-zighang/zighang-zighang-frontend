@@ -3,8 +3,9 @@
 import PersonalizedRecruitmentCard from "./recruitment/PersonalizedRecruitmentCard";
 import PersonalizedRecruitmentList from "./recruitment/PersonalizedRecruitmentList";
 import { useState, useEffect } from "react";
-import { fetchRecommendedRecruitments } from "@/app/_api/recruitment/recommend/recommend";
+import { useAllRecommendedRecruitments } from "@/app/_api/recruitment/recommend/useRecommend";
 import type { RecommendedRecruitment } from "@/app/_types/jobs";
+import PersonalizedRecruitmentBanner from "./recruitment/PersonalizedRecruitmentBanner";
 
 // 임시 목업 데이터 (파일이 없을 때 사용)
 const mockRecruitments = [
@@ -56,15 +57,19 @@ export default function RecommendArea({
   hasFiles = false,
   isAnalysisModalOpen = false,
 }: RecommendAreaProps) {
-  const [recruitmentCount, setRecruitmentCount] = useState(0);
-  const [recommendedData, setRecommendedData] = useState<
-    RecommendedRecruitment[]
-  >([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+
+  // React Query로 추천 공고 데이터 가져오기
+  const {
+    data: recommendResponse,
+    isLoading,
+    error,
+    isSuccess,
+  } = useAllRecommendedRecruitments({
+    enabled: hasFiles && !isAnalysisModalOpen,
+  });
+
+  const allRecommendedData = recommendResponse?.data || [];
 
   useEffect(() => {
     const checkIsMobile = () => {
@@ -77,54 +82,7 @@ export default function RecommendArea({
     return () => window.removeEventListener("resize", checkIsMobile);
   }, []);
 
-  useEffect(() => {
-    if (hasFiles && !isAnalysisModalOpen) {
-      // 파일이 있고 분석 모달이 열려있지 않을 때만 API 호출
-      fetchRecommendedData();
-    } else if (!hasFiles) {
-      // 파일이 없을 때는 목업 데이터 사용
-      setRecruitmentCount(mockRecruitments.length);
-      setRecommendedData([]);
-      setError(null);
-    }
-  }, [hasFiles, isAnalysisModalOpen, currentPage]);
-
-  const fetchRecommendedData = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const pageSize = isMobile ? 3 : 9;
-      const response = await fetchRecommendedRecruitments(
-        currentPage,
-        pageSize
-      );
-
-      if (response.success && response.data) {
-        setRecommendedData(response.data);
-        setRecruitmentCount(response.data.length);
-        // API에서 totalPages를 받아와야 하지만, 현재는 임시로 계산
-        setTotalPages(Math.ceil(response.data.length / pageSize));
-      } else {
-        throw new Error(
-          response.message || "추천 데이터를 가져오는데 실패했습니다."
-        );
-      }
-    } catch (err) {
-      console.error("추천 데이터 로딩 실패:", err);
-      setError(
-        err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다."
-      );
-      // 에러 발생 시 목업 데이터 사용
-      setRecommendedData([]);
-      setRecruitmentCount(mockRecruitments.length);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+  // 페이지네이션은 이제 PersonalizedRecruitmentList에서 내부적으로 처리
 
   return (
     <div className="mt-5 ">
@@ -135,7 +93,7 @@ export default function RecommendArea({
           </span>
           추천 공고
           <span className="text-purple-800 text-lg md:text-xl font-semibold ml-1">
-            {hasFiles ? recruitmentCount : "N"}
+            {hasFiles ? allRecommendedData.length : "N"}
           </span>
           건
         </div>
@@ -145,8 +103,8 @@ export default function RecommendArea({
         // 파일이 있고 분석 모달이 열려있지 않을 때
         isLoading ? (
           // 로딩 상태
-          <div className="flex items-center justify-center flex-col min-w-64 md:w-full">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-500 mx-auto mb-2 "></div>
+          <div className="p-3 flex items-center justify-center flex-col w-full md:w-[763px]">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-500 mx-auto mb-2"></div>
             <p className="text-gray-600 text-sm">
               추천 공고를 불러오고 있습니다...
             </p>
@@ -160,17 +118,18 @@ export default function RecommendArea({
               </p>
             </div>
           </div>
-        ) : recommendedData.length > 0 ? (
-          // API 데이터가 있을 때
+        ) : isSuccess && allRecommendedData.length > 0 ? (
+          // API 데이터가 있을 때 - 내부 페이지네이션 사용
           <PersonalizedRecruitmentList
-            items={transformRecommendedData(recommendedData)}
-            currentPage={currentPage + 1}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
+            items={transformRecommendedData(allRecommendedData)}
+            itemsPerPage={isMobile ? 3 : 9}
           />
         ) : (
           // API 데이터가 없을 때 - 목업 데이터 표시
-          <PersonalizedRecruitmentList items={mockRecruitments} />
+          <PersonalizedRecruitmentList
+            items={mockRecruitments}
+            itemsPerPage={isMobile ? 3 : 9}
+          />
         )
       ) : hasFiles && isAnalysisModalOpen ? (
         // 파일이 있고 분석 모달이 열려있을 때: 로딩 상태 표시
