@@ -46,6 +46,10 @@ export default function Header() {
     setIsProfileDropdownOpen(false);
   };
 
+  const handlePersonalClick = () => {
+    router.push("/personal");
+  };
+
   useEffect(() => {
     try {
       const token = localStorage.getItem("zh_access_token");
