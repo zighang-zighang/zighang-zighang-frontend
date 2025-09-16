@@ -2,6 +2,7 @@ import { jobCategories } from "@/app/_constants/jobCategories";
 import { usePopularRecruitments } from "@/app/_api/popular/usePopular";
 import { useAuthState } from "@/app/_api/auth/useAuthState";
 import { useRouter } from "next/navigation";
+import { MobileRankingAnimation } from "./MobileRankingAnimation";
 
 interface RankingProps {
   slug: string;
@@ -54,10 +55,58 @@ export function Ranking({ slug }: RankingProps) {
   const jobParam = getJobParam(slug);
   const { data, isLoading, error } = usePopularRecruitments(jobParam);
 
+  // 모바일용 애니메이션 컴포넌트 렌더링
+  return (
+    <>
+      {/* 모바일용 애니메이션 컴포넌트 */}
+      <MobileRankingAnimation
+        slug={slug}
+        data={data?.data}
+        isLoading={isLoading}
+        error={error}
+      />
+
+      {/* 데스크톱용 기존 컴포넌트 */}
+      <DesktopRanking
+        slug={slug}
+        data={data?.data}
+        isLoading={isLoading}
+        error={error}
+        getCategoryTitle={getCategoryTitle}
+        isLoggedIn={isLoggedIn}
+        router={router}
+      />
+    </>
+  );
+}
+
+// 데스크톱용 랭킹 컴포넌트
+function DesktopRanking({
+  slug,
+  data,
+  isLoading,
+  error,
+  getCategoryTitle,
+  isLoggedIn,
+  router,
+}: {
+  slug: string;
+  data?: Array<{
+    id: string;
+    title: string;
+    companyName: string;
+    views: number;
+  }>;
+  isLoading: boolean;
+  error: Error | null;
+  getCategoryTitle: (slug: string) => string;
+  isLoggedIn: boolean;
+  router: ReturnType<typeof useRouter>;
+}) {
   // 로딩 상태
   if (isLoading) {
     return (
-      <div className="flex w-full border px-7 py-4 border-neutral-200 rounded-lg items-center gap-5">
+      <div className="hidden md:flex w-full border px-7 py-4 border-neutral-200 rounded-lg items-center gap-5">
         <div className="w-45">
           <h3 className="text-purple-800 text-sm font-semibold">
             {getCategoryTitle(slug)} 실시간 공고
@@ -76,7 +125,7 @@ export function Ranking({ slug }: RankingProps) {
   // 에러 상태
   if (error) {
     return (
-      <div className="flex w-full border px-7 py-4 border-neutral-200 rounded-lg items-center gap-5">
+      <div className="hidden md:flex w-full border px-7 py-4 border-neutral-200 rounded-lg items-center gap-5">
         <div className="w-45">
           <h3 className="text-purple-800 text-sm font-semibold">
             {getCategoryTitle(slug)} 실시간 공고
@@ -93,9 +142,9 @@ export function Ranking({ slug }: RankingProps) {
   }
 
   // 데이터가 없을 때
-  if (!data?.data || data.data.length === 0) {
+  if (!data || data.length === 0) {
     return (
-      <div className="flex w-full border px-7 py-4 border-neutral-200 rounded-lg items-center gap-5">
+      <div className="hidden md:flex w-full border px-7 py-4 border-neutral-200 rounded-lg items-center gap-5">
         <div className="w-45">
           <h3 className="text-purple-800 text-sm font-semibold">
             {getCategoryTitle(slug)} 실시간 공고
@@ -112,10 +161,10 @@ export function Ranking({ slug }: RankingProps) {
   }
 
   // 상위 3개만 표시
-  const topItems = data.data.slice(0, 3);
+  const topItems = data.slice(0, 3);
 
   return (
-    <div className="flex w-full border px-7 py-4 border-neutral-200 rounded-lg items-center gap-5">
+    <div className="hidden md:flex w-full border px-7 py-4 border-neutral-200 rounded-lg items-center gap-5">
       <div className="w-45">
         <div className="flex items-center gap-2">
           <h3 className="text-purple-800 text-sm font-semibold">

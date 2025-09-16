@@ -37,14 +37,16 @@ export default function CategoryClient({
 
   return (
     <div className="relative w-full overflow-visible px-0 md:mx-auto md:max-w-screen-xl md:px-10">
-      <div className="mx-10 my-2">
+      <div className="mx-5 my-5">
         <Ranking slug={slug} />
       </div>
       <FilterDialogProvider initial={initial}>
         {active === "all" && (
           <>
-            <FilterBar />
-            <ResultHeaderConnector />
+            <div className="mx-5">
+              <FilterBar />
+              <ResultHeaderConnector />
+            </div>
           </>
         )}
         <Inner active={active} />
