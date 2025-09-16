@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { MemoGroup } from "../_types/memoTypes";
 import MemoSection from "./MemoSection";
 import AddMemoButton from "./AddMemoButton";

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { MemoGroup } from "../_types/memoTypes";
 import { calculateDDay } from "../_utils/dateUtils";
+import DeleteMemo from "../../recruitment/[slug]/_components/Note/DeleteMemo";
 
 interface MemoListProps {
   memoGroups: MemoGroup[];
@@ -25,6 +26,7 @@ export default function MemoList({
   const [selectedMemosForDelete, setSelectedMemosForDelete] = useState<
     Set<string>
   >(new Set());
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleEditClick = () => {
     setIsEditMode(true);
@@ -37,13 +39,37 @@ export default function MemoList({
   };
 
   const handleDeleteClick = () => {
+    if (selectedMemosForDelete.size > 0) {
+      setIsDeleteModalOpen(true);
+    }
+  };
+
+  const handleConfirmDelete = () => {
     if (selectedMemosForDelete.size > 0 && onDeleteMemo) {
       selectedMemosForDelete.forEach((memoId) => {
         onDeleteMemo(memoId);
       });
     }
+    setIsDeleteModalOpen(false);
     setIsEditMode(false);
     setSelectedMemosForDelete(new Set());
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+  const getSelectedMemoTitle = () => {
+    if (selectedMemosForDelete.size === 0) return "선택된 메모";
+    
+    // 첫 번째 선택된 메모의 제목만 표시
+    const selectedMemoIds = Array.from(selectedMemosForDelete);
+    const firstSelectedMemoId = selectedMemoIds[0];
+    const firstSelectedGroup = memoGroups.find(group => 
+      group.memos.some(memo => memo.id === firstSelectedMemoId)
+    );
+    
+    return firstSelectedGroup?.recruitment.title || "선택된 메모";
   };
 
   const handleMemoSelectForDelete = (memoId: string) => {
@@ -63,13 +89,13 @@ export default function MemoList({
           <div className="flex gap-2">
             <button
               onClick={handleDeleteClick}
-              className="text-Button3-14sb text-[#303030] border border-[#E1E1E4] rounded-[8px] px-[14px] py-1 bg-white"
+              className="text-Button3-14sb text-[#303030] border border-[#E1E1E4] rounded-[8px] px-[14px] py-1 bg-white cursor-pointer"
             >
               삭제
             </button>
             <button
               onClick={handleCompleteClick}
-              className="text-Button3-14sb text-white rounded-[8px] px-[14px] py-1 bg-[#303030]"
+              className="text-Button3-14sb text-white rounded-[8px] px-[14px] py-1 bg-[#303030] cursor-pointer"
             >
               완료
             </button>
@@ -77,7 +103,7 @@ export default function MemoList({
         ) : (
           <button
             onClick={handleEditClick}
-            className="text-Button3-14sb text-[#303030] border border-[#E1E1E4] rounded-[8px] px-[14px] py-1"
+            className="text-Button3-14sb text-[#303030] border border-[#E1E1E4] rounded-[8px] px-[14px] py-1 cursor-pointer"
           >
             편집
           </button>
@@ -164,6 +190,14 @@ export default function MemoList({
           );
         })}
       </div>
+      
+      {isDeleteModalOpen && (
+        <DeleteMemo
+          title={getSelectedMemoTitle()}
+          isOpen={handleCancelDelete}
+          onDelete={handleConfirmDelete}
+        />
+      )}
     </div>
   );
 }
