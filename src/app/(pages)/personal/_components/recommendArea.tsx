@@ -2,7 +2,6 @@
 
 import PersonalizedRecruitmentCard from "./recruitment/PersonalizedRecruitmentCard";
 import PersonalizedRecruitmentList from "./recruitment/PersonalizedRecruitmentList";
-import { useState, useEffect } from "react";
 import { useAllRecommendedRecruitments } from "@/app/_api/recruitment/recommend/useRecommend";
 import type { RecommendedRecruitment } from "@/app/_types/jobs";
 import UserName from "./UserName";
@@ -59,8 +58,6 @@ export default function RecommendArea({
   hasFiles = false,
   isAnalysisModalOpen = false,
 }: RecommendAreaProps) {
-  const [isMobile, setIsMobile] = useState(false);
-
   // React Query로 추천 공고 데이터 가져오기
   const {
     data: recommendResponse,
@@ -72,17 +69,6 @@ export default function RecommendArea({
   });
 
   const allRecommendedData = recommendResponse?.data || [];
-
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkIsMobile();
-    window.addEventListener("resize", checkIsMobile);
-
-    return () => window.removeEventListener("resize", checkIsMobile);
-  }, []);
 
   // 페이지네이션은 이제 PersonalizedRecruitmentList에서 내부적으로 처리
 

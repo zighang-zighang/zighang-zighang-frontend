@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import PersonalizedRecruitmentCard from "./PersonalizedRecruitmentCard";
 import PersonalizedRecruitmentBanner from "./PersonalizedRecruitmentBanner";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -28,11 +27,7 @@ interface PersonalizedRecruitmentListProps {
 
 export default function PersonalizedRecruitmentList({
   items,
-  itemsPerPage,
   className = "",
-  currentPage: externalCurrentPage,
-  totalPages: externalTotalPages,
-  onPageChange,
 }: PersonalizedRecruitmentListProps) {
   // 데스크탑에서는 모든 아이템을 표시, 모바일에서는 모든 아이템을 Swiper로 표시
   const currentItems = items;
