@@ -66,7 +66,7 @@ export default function PersonalizedRecruitmentList({
 
   useEffect(() => {
     const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window.innerWidth < 1416);
     };
 
     checkIsMobile();
