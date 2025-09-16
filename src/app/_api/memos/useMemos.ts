@@ -20,7 +20,12 @@ export function useCreateMemo(recruitmentId?: string) {
     mutationFn: (data: { title: string; content: string }) =>
       createMemo(data, recruitmentId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["memos", { recruitmentId }] });
+      // 특정 공고의 메모 캐시 무효화
+      if (recruitmentId) {
+        queryClient.invalidateQueries({ queryKey: ["memos", { recruitmentId }] });
+      }
+      // 전체 메모 목록 캐시 무효화 (MemoBoard에서 사용)
+      queryClient.invalidateQueries({ queryKey: ["memoGroups"] });
     },
   });
 }
@@ -38,7 +43,12 @@ export function useUpdateMemo(recruitmentId?: string) {
       data: { title: string; content: string };
     }) => updateMemo(memoId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["memos", { recruitmentId }] });
+      // 특정 공고의 메모 캐시 무효화
+      if (recruitmentId) {
+        queryClient.invalidateQueries({ queryKey: ["memos", { recruitmentId }] });
+      }
+      // 전체 메모 목록 캐시 무효화 (MemoBoard에서 사용)
+      queryClient.invalidateQueries({ queryKey: ["memoGroups"] });
     },
   });
 }

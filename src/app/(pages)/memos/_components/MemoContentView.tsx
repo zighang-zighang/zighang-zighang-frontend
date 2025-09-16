@@ -11,6 +11,7 @@ interface MemoContentViewProps {
   onLeftMemoChange?: (memoId: string | null) => void;
   onRightMemoChange?: (memoId: string | null) => void;
   onDeleteMemo?: (memoId: string) => void;
+  onMemoSelect?: (memoId: string) => void;
 }
 
 export default function MemoContentView({
@@ -22,6 +23,7 @@ export default function MemoContentView({
   onLeftMemoChange,
   onRightMemoChange,
   onDeleteMemo,
+  onMemoSelect,
 }: MemoContentViewProps) {
   return (
     <div className="h-full w-full">
@@ -30,6 +32,7 @@ export default function MemoContentView({
           selectedMemo={selectedMemo} 
           memoGroups={memoGroups} 
           onDeleteMemo={onDeleteMemo}
+          onMemoSelect={onMemoSelect}
         />
       ) : (
         <SplitMemoView 

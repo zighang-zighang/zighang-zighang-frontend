@@ -158,6 +158,7 @@ export default function MemoBoard() {
         onLeftMemoChange={setLeftSelectedMemo}
         onRightMemoChange={setRightSelectedMemo}
         onDeleteMemo={handleDeleteMemo}
+        onMemoSelect={handleMemoSelect}
       />
     </div>
   );
