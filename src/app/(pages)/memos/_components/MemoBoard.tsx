@@ -3,8 +3,8 @@
 import { useState } from "react";
 import MemoList from "./MemoList";
 import MemoView from "./MemoView";
-import { MemoGroup } from "../_types/memoTypes";
 import { useMemoGroups } from "../../../_api/memos/useMemoGroups";
+import { useDeleteMemo } from "../../../_api/memos/useMemos";
 
 export default function MemoBoard() {
   const [selectedMemoId, setSelectedMemoId] = useState<string | null>(null);
@@ -15,6 +15,7 @@ export default function MemoBoard() {
   );
 
   const { data: memoGroups = [], isLoading, error } = useMemoGroups();
+  const deleteMemoMutation = useDeleteMemo();
 
   const handleMemoSelect = (memoId: string) => {
     if (viewMode === "split") {
@@ -53,6 +54,67 @@ export default function MemoBoard() {
     }
   };
 
+  const handleDeleteMemo = (memoId: string) => {
+    deleteMemoMutation.mutate(memoId, {
+      onSuccess: () => {
+        // 삭제된 메모가 현재 선택된 메모라면
+        if (selectedMemoId === memoId) {
+          // 해당 공고에 다른 메모가 있는지 확인
+          const memoGroup = memoGroups.find(group => 
+            group.memos.some(memo => memo.id === memoId)
+          );
+          if (memoGroup) {
+            const remainingMemos = memoGroup.memos.filter(memo => memo.id !== memoId);
+            if (remainingMemos.length > 0) {
+              // 다른 메모가 있으면 첫 번째 메모를 선택
+              setSelectedMemoId(remainingMemos[0].id);
+            } else {
+              // 메모가 더 이상 없으면 선택 해제
+              setSelectedMemoId(null);
+            }
+          } else {
+            setSelectedMemoId(null);
+          }
+        }
+        
+        if (leftSelectedMemo === memoId) {
+          const memoGroup = memoGroups.find(group => 
+            group.memos.some(memo => memo.id === memoId)
+          );
+          if (memoGroup) {
+            const remainingMemos = memoGroup.memos.filter(memo => memo.id !== memoId);
+            if (remainingMemos.length > 0) {
+              setLeftSelectedMemo(remainingMemos[0].id);
+            } else {
+              setLeftSelectedMemo(null);
+            }
+          } else {
+            setLeftSelectedMemo(null);
+          }
+        }
+        
+        if (rightSelectedMemo === memoId) {
+          const memoGroup = memoGroups.find(group => 
+            group.memos.some(memo => memo.id === memoId)
+          );
+          if (memoGroup) {
+            const remainingMemos = memoGroup.memos.filter(memo => memo.id !== memoId);
+            if (remainingMemos.length > 0) {
+              setRightSelectedMemo(remainingMemos[0].id);
+            } else {
+              setRightSelectedMemo(null);
+            }
+          } else {
+            setRightSelectedMemo(null);
+          }
+        }
+      },
+      onError: (error) => {
+        console.error("메모 삭제 실패:", error);
+      },
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="w-full h-[522px] flex items-center justify-center">
@@ -84,6 +146,7 @@ export default function MemoBoard() {
         viewMode={viewMode}
         leftSelectedMemo={leftSelectedMemo}
         rightSelectedMemo={rightSelectedMemo}
+        onDeleteMemo={handleDeleteMemo}
       />
       <MemoView
         selectedMemo={selectedMemoId}
@@ -94,6 +157,7 @@ export default function MemoBoard() {
         rightSelectedMemo={rightSelectedMemo}
         onLeftMemoChange={setLeftSelectedMemo}
         onRightMemoChange={setRightSelectedMemo}
+        onDeleteMemo={handleDeleteMemo}
       />
     </div>
   );

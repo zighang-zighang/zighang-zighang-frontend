@@ -6,11 +6,13 @@ import AddMemoButton from "./AddMemoButton";
 interface SingleMemoViewProps {
   selectedMemo?: string | null;
   memoGroups?: MemoGroup[];
+  onDeleteMemo?: (memoId: string) => void;
 }
 
 export default function SingleMemoView({
   selectedMemo,
   memoGroups,
+  onDeleteMemo,
 }: SingleMemoViewProps) {
   if (!selectedMemo) {
     return (
@@ -67,9 +69,7 @@ export default function SingleMemoView({
             <MemoSection
               key={memo.id}
               memo={memo}
-              onDelete={(memoId) => {
-                console.log("Delete memo:", memoId);
-              }}
+              onDelete={onDeleteMemo}
             />
           ))}
         </div>

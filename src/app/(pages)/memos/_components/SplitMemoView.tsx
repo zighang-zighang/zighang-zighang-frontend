@@ -11,12 +11,16 @@ interface SplitMemoViewProps {
   rightSelectedMemo?: string | null;
   onLeftMemoChange?: (memoId: string | null) => void;
   onRightMemoChange?: (memoId: string | null) => void;
+  onDeleteMemo?: (memoId: string) => void;
 }
 
 export default function SplitMemoView({
   memoGroups,
   leftSelectedMemo,
   rightSelectedMemo,
+  onLeftMemoChange,
+  onRightMemoChange,
+  onDeleteMemo,
 }: SplitMemoViewProps) {
   const router = useRouter();
   const leftSelectedGroup = memoGroups?.find((group) =>
@@ -61,9 +65,7 @@ export default function SplitMemoView({
                   <MemoSection
                     key={memo.id}
                     memo={memo}
-                    onDelete={(memoId) => {
-                      console.log("Delete left memo:", memoId);
-                    }}
+                    onDelete={onDeleteMemo}
                   />
                 ))}
               </div>
@@ -125,9 +127,7 @@ export default function SplitMemoView({
                   <MemoSection
                     key={memo.id}
                     memo={memo}
-                    onDelete={(memoId) => {
-                      console.log("Delete right memo:", memoId);
-                    }}
+                    onDelete={onDeleteMemo}
                   />
                 ))}
               </div>
