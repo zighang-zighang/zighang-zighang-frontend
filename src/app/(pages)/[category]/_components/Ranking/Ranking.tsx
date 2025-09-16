@@ -3,6 +3,7 @@ import { usePopularRecruitments } from "@/app/_api/popular/usePopular";
 import { useAuthState } from "@/app/_api/auth/useAuthState";
 import { useRouter } from "next/navigation";
 import { MobileRankingAnimation } from "./MobileRankingAnimation";
+import { Job } from "@/app/_types/jobs";
 
 interface RankingProps {
   slug: string;
@@ -91,12 +92,7 @@ function DesktopRanking({
   router,
 }: {
   slug: string;
-  data?: Array<{
-    id: string;
-    title: string;
-    companyName: string;
-    views: number;
-  }>;
+  data?: Job[];
   isLoading: boolean;
   error: Error | null;
   getCategoryTitle: (slug: string) => string;
@@ -242,7 +238,7 @@ function DesktopRanking({
                     {item.title}
                   </p>
                   <p className="text-zinc-600 text-Subheading4-12m">
-                    {item.companyName}
+                    {item.companyName || "회사명 없음"}
                   </p>
                 </div>
                 <p className="text-red-500 text-xs font-medium pb-4">

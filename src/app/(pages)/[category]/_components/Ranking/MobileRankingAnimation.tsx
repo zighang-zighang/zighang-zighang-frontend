@@ -2,15 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useAuthState } from "@/app/_api/auth/useAuthState";
+import { Job } from "@/app/_types/jobs";
 
 interface MobileRankingAnimationProps {
   slug: string;
-  data?: Array<{
-    id: string;
-    title: string;
-    companyName: string;
-    views: number;
-  }>;
+  data?: Job[];
   isLoading: boolean;
   error: Error | null;
 }
@@ -202,7 +198,7 @@ export function MobileRankingAnimation({
                     {topItems[currentRankingIndex].title}
                   </p>
                   <p className="text-zinc-600 text-[10px]">
-                    {topItems[currentRankingIndex].companyName}
+                    {topItems[currentRankingIndex].companyName || "회사명 없음"}
                   </p>
                 </div>
                 <p className="text-red-500 text-xs font-medium">
