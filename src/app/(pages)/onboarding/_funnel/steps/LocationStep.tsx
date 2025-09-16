@@ -18,35 +18,68 @@ export function LocationStep({
   initialRegion,
 }: {
   onBack: () => void;
-  onSubmit: (지역: string | null) => void;
-  initialRegion?: string;
+  onSubmit: (지역: string[] | null) => void;
+  initialRegion?: string | string[];
 }) {
-  const [region, setRegion] = useState<RegionValue | null>(
-    (initialRegion as RegionValue) || null
-  );
-  const isValid = useMemo(() => !!region, [region]);
+  const [regions, setRegions] = useState<RegionValue[]>(() => {
+    if (!initialRegion) return [];
+    // initialRegion이 배열인 경우 그대로 사용, 문자열인 경우 배열로 변환
+    if (Array.isArray(initialRegion)) {
+      return initialRegion;
+    }
+    // 쉼표로 구분된 문자열을 배열로 변환
+    if (initialRegion.includes(",")) {
+      return initialRegion
+        .split(",")
+        .map((region) => region.trim() as RegionValue);
+    }
+    return [initialRegion as RegionValue];
+  });
+  const isValid = useMemo(() => regions.length > 0, [regions]);
 
   const handleSelect = useCallback(
     (next: Exclude<RegionValue, "전체" | "해외">) => {
-      setRegion(next);
+      setRegions((prev) => {
+        if (prev.includes(next)) {
+          // 이미 선택된 지역이면 제거
+          return prev.filter((region) => region !== next);
+        } else {
+          // 선택되지 않은 지역이면 추가
+          return [...prev, next];
+        }
+      });
     },
     []
   );
   const handleChange = useCallback((next: RegionValue) => {
-    setRegion(next);
+    setRegions((prev) => {
+      if (next === "전체") {
+        return ["전체"];
+      } else if (next === "해외") {
+        if (prev.includes("해외")) {
+          return prev.filter((region) => region !== "해외");
+        } else {
+          return [...prev.filter((region) => region !== "전체"), "해외"];
+        }
+      } else {
+        if (prev.includes(next)) {
+          return prev.filter((region) => region !== next);
+        } else {
+          return [...prev.filter((region) => region !== "전체"), next];
+        }
+      }
+    });
   }, []);
 
   const handleSubmit = useCallback(() => {
-    if (!region) return;
+    if (regions.length === 0) return;
 
-    if (region === "전체") {
+    if (regions.includes("전체")) {
       onSubmit(null);
-    } else if (region === "해외") {
-      onSubmit("해외");
     } else {
-      onSubmit(region); // 나머지 지역
+      onSubmit(regions);
     }
-  }, [region, onSubmit]);
+  }, [regions, onSubmit]);
 
   return (
     <StepContainer>
@@ -68,12 +101,12 @@ export function LocationStep({
       <div className="flex flex-col md:flex-row items-center justify-center mt-6">
         <OnboardingMap
           geographies={SIDO_GEO}
-          value={region}
+          value={regions}
           onSelect={handleSelect}
         ></OnboardingMap>
         <div className="flex flex-col gap-2 ">
           <RegionButtonList
-            value={region}
+            value={regions}
             onChange={(next) => handleChange(next)}
           ></RegionButtonList>
           <StepActions>

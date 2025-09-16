@@ -42,15 +42,18 @@ type ApiOnboardingPayload = {
 
 function toApiPayload(
   context: 지역입력,
-  지역: string | null | undefined
+  지역: string | string[] | null | undefined
 ): ApiOnboardingPayload {
+  // 지역이 배열인 경우 첫 번째 지역을 사용하거나, 쉼표로 구분된 문자열로 변환
+  const regionValue = Array.isArray(지역) ? 지역.join(",") : 지역 || "";
+
   return {
     interestedJobs: context.직군.map(mapJobGroup),
     interestedJobCategories: context.직무 || [],
     careerYear: context.경력 || 0,
     educationLevel: mapEducationLevel(context.학력 || ""),
     graduationStatus: mapGraduationStatus(context.졸업상태 || "졸업"),
-    preferredRegion: 지역 || "",
+    preferredRegion: regionValue,
   };
 }
 
@@ -171,7 +174,10 @@ export default function OnboardingFunnel() {
           onBack={() => history.back()}
           onSubmit={(지역) => {
             // 지역 정보를 context에 저장하고 파일업로드 단계로 이동
-            history.push("파일업로드", (prev) => ({ ...prev, 지역 }));
+            history.push("파일업로드", (prev) => ({
+              ...prev,
+              지역: 지역,
+            }));
           }}
         />
       )}
@@ -189,13 +195,19 @@ export default function OnboardingFunnel() {
                 );
 
                 // 온보딩 데이터를 로컬 스토리지에 저장
+                const regionValue = Array.isArray(context.지역)
+                  ? context.지역
+                  : context.지역
+                  ? [context.지역]
+                  : [];
+
                 saveOnboardingFiltersToStorage({
                   직군: context.직군 || [],
                   직무: context.직무 || [],
                   경력: context.경력 || 0,
                   학력: context.학력 || "",
                   졸업상태: context.졸업상태 || "",
-                  지역: context.지역 || "",
+                  지역: regionValue,
                 });
 
                 // API 응답 데이터를 완료 단계로 전달
