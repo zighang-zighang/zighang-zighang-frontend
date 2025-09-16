@@ -14,12 +14,12 @@ export default function PersonalizedRecruitmentBanner({
   const { data: keywords = [], isLoading: loading } = useKeywords();
 
   return (
-    <div className="px-2 py-4 md:p-4 flex flex-col items-center justify-center min-w-64 min-h-36 md:w-full md:min-h-18 md:flex-row md:gap-7 bg-violet-50 rounded-lg mb-3.5">
+    <div className="px-1 py-4 md:p-4 flex flex-col items-center justify-center w-60 min-h-36 md:w-full md:min-h-18 md:flex-row md:gap-7 bg-violet-50 rounded-lg mb-3.5">
       <div className="flex items-center gap-2">
         <Profile></Profile>
         <p className="text-lg font-semibold">{userName}님의 공고 키워드</p>
       </div>
-      <div className="flex items-center justify-center min-w-64 md:w-auto flex-wrap gap-2 mt-6 md:mt-0 md:flex-nowrap">
+      <div className="flex items-center justify-center min-w-60 md:w-auto flex-wrap gap-2 mt-6 md:mt-0 md:flex-nowrap">
         {loading ? (
           <p className="text-gray-500 text-sm">키워드를 불러오는 중...</p>
         ) : keywords.length > 0 ? (

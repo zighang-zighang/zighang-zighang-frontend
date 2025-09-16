@@ -30,7 +30,7 @@ export default function RecruitmentCard({ item }: RecruitmentCardProps) {
   };
 
   return (
-    <div className="border border-gray-200 rounded-lg px-3.5 py-3 min-w-64 w-full h-34 hover:[box-shadow:0_8px_25px_rgba(0,0,0,0.1)] transition-shadow duration-200 cursor-pointer">
+    <div className="border border-gray-200 rounded-lg px-3.5 py-3 min-w-60 w-full h-34 hover:[box-shadow:0_8px_25px_rgba(0,0,0,0.1)] transition-shadow duration-200 cursor-pointer">
       <div className="flex gap-1 items-cente mb-3.5">
         <button
           onClick={() => setActiveTab("job")}
@@ -112,7 +112,7 @@ export default function RecruitmentCard({ item }: RecruitmentCardProps) {
           </div>
         </div>
       ) : (
-        <p className=" text-zinc-800 text-sm font-medium">{reason}</p>
+        <p className=" text-zinc-800 text-sm font-medium w-53">{reason}</p>
       )}
     </div>
   );

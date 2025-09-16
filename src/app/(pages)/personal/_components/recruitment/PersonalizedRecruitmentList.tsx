@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import PersonalizedRecruitmentCard from "./PersonalizedRecruitmentCard";
+import PersonalizedRecruitmentBanner from "./PersonalizedRecruitmentBanner";
 
 // 페이지네이션 아이콘 컴포넌트
 const ChevronLeftIcon = ({ isDisabled }: { isDisabled: boolean }) => (
@@ -130,6 +131,7 @@ export default function PersonalizedRecruitmentList({
     <div
       className={`w-full ${className} items-center justify-center flex flex-col`}
     >
+      <PersonalizedRecruitmentBanner userName="민수" />
       {/* 그리드 레이아웃 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 ">
         {currentItems.map((item, index) => (
