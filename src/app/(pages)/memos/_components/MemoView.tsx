@@ -34,7 +34,7 @@ export default function MemoView({
   };
 
   return (
-    <div className="w-2/3 flex flex-col border border-[#E1E1E4] rounded-r-[8px] h-[600px]">
+    <div className="w-2/3 flex flex-col border border-l-0 border-[#E1E1E4] rounded-r-[8px] h-[600px]">
       <MemoViewHeader
         selectedView={selectedView}
         onViewChange={handleViewChange}
