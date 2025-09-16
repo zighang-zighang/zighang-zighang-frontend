@@ -81,9 +81,8 @@ export function useNotes(recruitmentId?: string) {
   const addNote = useCallback(async () => {
     try {
       await createMemoMutation.mutateAsync({
-        title: "제목없음",
-        content: null,
-        ...(recruitmentId ? { recruitmentId } : {}),
+        title: "제목 없음",
+        content: "",
       });
 
       const fresh = await queryClient.fetchQuery({
