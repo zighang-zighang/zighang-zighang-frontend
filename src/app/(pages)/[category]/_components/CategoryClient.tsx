@@ -18,6 +18,7 @@ import filterAdapt from "@/app/_utils/filterAdapt";
 import ResultHeaderConnector from "./Filter/ResultHeaderConnector";
 import { useInfiniteBookmarks } from "@/app/_api/bookmark/list";
 import { useAuthState } from "@/app/_api/auth/useAuthState";
+import { Ranking } from "./Ranking/Ranking";
 
 export default function CategoryClient({
   slug,
@@ -36,6 +37,9 @@ export default function CategoryClient({
 
   return (
     <div className="relative w-full overflow-visible px-0 md:mx-auto md:max-w-screen-xl md:px-10">
+      <div className="mx-10 my-2">
+        <Ranking slug={slug} />
+      </div>
       <FilterDialogProvider initial={initial}>
         {active === "all" && (
           <>
