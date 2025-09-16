@@ -41,7 +41,6 @@ export type ApiOnboardingPayload = {
 };
 
 function toApiPayload(context: 지역입력): ApiOnboardingPayload {
-  console.log("toApiPayload context.지역:", context.지역);
   return {
     interestedJobs: context.직군.map(mapJobGroup),
     interestedJobCategories: context.직무 || [],
