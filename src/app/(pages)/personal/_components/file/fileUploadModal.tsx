@@ -30,7 +30,9 @@ export default function FileUploadModal({
       { progress: number; status: "loading" | "success" | "error" }
     >
   >({});
-  const [originalFiles, setOriginalFiles] = useState<File[]>([]);
+  const [originalFilesMap, setOriginalFilesMap] = useState<
+    Record<string, File>
+  >({});
   const uploadResumeMutation = useUploadResume();
 
   // 모달이 열릴 때마다 상태 초기화
@@ -40,12 +42,13 @@ export default function FileUploadModal({
       setError(null);
       setIsSubmitting(false);
       setFileProgress({});
-      setOriginalFiles([]);
+      setOriginalFilesMap({});
     }
   }, [open]);
 
   const processFileSequentially = async (files: File[]) => {
-    setOriginalFiles(files);
+    const newOriginalFilesMap: Record<string, File> = {};
+    const newUploadedFiles: UploadedFile[] = [];
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -58,17 +61,24 @@ export default function FileUploadModal({
         uploadedAt: new Date().toISOString(),
       };
 
-      // 파일 추가
-      setUploadedFiles((prev) => [...prev, uploaded]);
+      // 파일 ID와 원본 파일 매핑
+      newOriginalFilesMap[fileId] = file;
+      newUploadedFiles.push(uploaded);
 
       // 진행률 초기화
       setFileProgress((prev) => ({
         ...prev,
         [fileId]: { progress: 0, status: "loading" },
       }));
+    }
 
-      // 시뮬레이션 애니메이션 (100%까지)
-      await simulateFileUpload(fileId);
+    // 상태 업데이트
+    setOriginalFilesMap(newOriginalFilesMap);
+    setUploadedFiles(newUploadedFiles);
+
+    // 시뮬레이션 애니메이션 (100%까지)
+    for (const uploadedFile of newUploadedFiles) {
+      await simulateFileUpload(uploadedFile.id);
     }
   };
 
@@ -100,7 +110,7 @@ export default function FileUploadModal({
   };
 
   const handleComplete = async () => {
-    if (originalFiles.length === 0) {
+    if (uploadedFiles.length === 0) {
       handleError("업로드할 파일이 없습니다.");
       return;
     }
@@ -108,12 +118,16 @@ export default function FileUploadModal({
     setIsSubmitting(true);
 
     try {
-      // 모든 파일을 순차적으로 실제 업로드
-      for (let i = 0; i < originalFiles.length; i++) {
-        const file = originalFiles[i];
-        const fileId = uploadedFiles[i]?.id;
+      // 현재 표시된 파일들만 실제 업로드 (삭제된 파일은 제외)
+      for (const uploadedFile of uploadedFiles) {
+        const file = originalFilesMap[uploadedFile.id];
 
-        if (!fileId) continue;
+        if (!file) {
+          console.warn(
+            `파일 ${uploadedFile.id}에 해당하는 원본 파일을 찾을 수 없습니다.`
+          );
+          continue;
+        }
 
         try {
           // 실제 API 호출
@@ -129,7 +143,7 @@ export default function FileUploadModal({
           // 개별 파일 업로드 실패
           setFileProgress((prev) => ({
             ...prev,
-            [fileId]: { progress: 0, status: "error" },
+            [uploadedFile.id]: { progress: 0, status: "error" },
           }));
           throw error;
         }
@@ -268,6 +282,12 @@ export default function FileUploadModal({
                             const newProgress = { ...prev };
                             delete newProgress[id];
                             return newProgress;
+                          });
+                          // 파일 맵에서도 해당 파일 제거
+                          setOriginalFilesMap((prev) => {
+                            const newMap = { ...prev };
+                            delete newMap[id];
+                            return newMap;
                           });
                         }}
                       />
