@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Job } from "@/app/_types/jobs";
 
 interface RecruitmentInfoProps {
