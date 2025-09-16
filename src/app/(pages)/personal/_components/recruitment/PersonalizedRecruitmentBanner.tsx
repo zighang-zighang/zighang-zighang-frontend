@@ -5,13 +5,7 @@ import KeywordButton from "./keywordButton";
 import { useKeywords } from "@/app/_api/resume/hooks/useKeywords";
 import UserName from "@/app/(pages)/personal/_components/UserName";
 
-interface PersonalizedRecruitmentBannerProps {
-  userName?: string;
-}
-
-export default function PersonalizedRecruitmentBanner({
-  userName,
-}: PersonalizedRecruitmentBannerProps) {
+export default function PersonalizedRecruitmentBanner() {
   const { data: keywords = [], isLoading: loading } = useKeywords();
 
   return (
