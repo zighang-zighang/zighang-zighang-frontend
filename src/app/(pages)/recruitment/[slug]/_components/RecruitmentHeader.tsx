@@ -6,6 +6,7 @@ import { useBookmark } from "@/app/_api/bookmark/useBookmark";
 import { useRecruitmentDetail } from "@/app/_api/recruitment/detail/useRecruitmentDetail";
 import { logApplication } from "@/app/_api/recruitment/detail/applicationLog";
 import Icon from "@/app/(pages)/[category]/_components/Icons/Icon";
+import ShareIcon from "./Icons/ShareIcon";
 import { useState } from "react";
 
 interface RecruitmentHeaderProps {
@@ -26,6 +27,7 @@ export default function RecruitmentHeader({
   } = useBookmark(slug, isBookmarked);
 
   const [isLogging, setIsLogging] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   const handleApplyClick = async () => {
     if (isLogging) return;
@@ -38,6 +40,19 @@ export default function RecruitmentHeader({
       console.error("지원 로깅 실패:", error);
     } finally {
       setIsLogging(false);
+    }
+  };
+
+  const handleShareClick = async () => {
+    try {
+      const currentUrl = window.location.href;
+      await navigator.clipboard.writeText(currentUrl);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (error) {
+      console.error("링크 복사 실패:", error);
+      // fallback: 사용자에게 URL 표시
+      alert(`링크를 복사하세요: ${window.location.href}`);
     }
   };
   return (
@@ -85,8 +100,11 @@ export default function RecruitmentHeader({
             <button
               onClick={handleApplyClick}
               disabled={isLogging}
-              className="whitespace-nowrap rounded-lg text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 bg-primary text-white hover:bg-primary/90 transition-colors hover:cursor-pointer px-18 py-2 flex h-12 flex-1 items-center justify-center"
+              className="relative whitespace-nowrap rounded-lg text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 bg-primary text-white hover:bg-primary/90 transition-colors hover:cursor-pointer px-18 py-2 flex h-12 flex-1 items-center justify-center"
             >
+              <span className="pointer-events-none absolute -top-2 left-1/2 -translate-x-1/2 z-10 px-3 py-0.5 rounded-full border border-primary bg-white text-primary text-[12px] font-semibold leading-none shadow-sm">
+                {job.deadlineType}
+              </span>
               <span className="text-lg">지원하기</span>
             </button>
           </div>
@@ -96,16 +114,6 @@ export default function RecruitmentHeader({
         </span>
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-1">
-            <div className="flex items-center gap-1 rounded-[8px] bg-[#7951FF]/10 px-2 py-1.5 text-xs font-bold text-[#7951FF] md:gap-1">
-              <Image
-                alt="오늘 뜬 공고 아이콘"
-                loading="lazy"
-                width={16}
-                height={16}
-                src="https://zighang.com/icon/fire.svg"
-              />
-              오늘 뜬 공고
-            </div>
             <div className="flex items-center gap-1 rounded-[8px] bg-[#6F6F6F]/10 px-2 py-1.5 text-xs font-bold text-[#6F6F6F] md:gap-2">
               <Image
                 alt="조회수 아이콘"
@@ -117,6 +125,13 @@ export default function RecruitmentHeader({
               />
               <div>{job.views}</div>
             </div>
+            <button
+              onClick={handleShareClick}
+              className="cursor-pointer flex items-center gap-1 rounded-[8px] px-2 py-1.5 text-xs font-bold text-neutral-700 text-Heading5-14sb md:gap-1 hover:bg-gray-100 transition-colors"
+            >
+              <ShareIcon width={16} height={16} />
+              {isCopied ? "복사됨!" : "공유하기"}
+            </button>
           </div>
           <button
             className="group flex cursor-pointer items-center gap-1 border-none bg-transparent p-0 text-xs font-medium leading-[17px] text-[#71717A] underline transition-colors duration-200 hover:text-[#6F00B6] md:text-sm"
