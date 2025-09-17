@@ -29,8 +29,8 @@ export default function MemoSection({
   };
 
   const handleConfirmDelete = () => {
-    onDelete?.(memo.id);
     setIsDeleteModalOpen(false);
+    onDelete?.(memo.id);
   };
 
   const handleCancelDelete = () => {

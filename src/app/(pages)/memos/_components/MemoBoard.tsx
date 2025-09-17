@@ -4,7 +4,7 @@ import { useState } from "react";
 import MemoList from "./MemoList";
 import MemoView from "./MemoView";
 import { useMemoGroups } from "../../../_api/memos/useMemoGroups";
-import { useDeleteMemo, useBulkDeleteMemos } from "../../../_api/memos/useMemos";
+import { useBulkDeleteMemos, useDeleteMemo } from "../../../_api/memos/useMemos";
 
 export default function MemoBoard() {
   const [selectedMemoId, setSelectedMemoId] = useState<string | null>(null);
@@ -15,8 +15,8 @@ export default function MemoBoard() {
   );
 
   const { data: memoGroups = [], isLoading, error } = useMemoGroups();
-  const deleteMemoMutation = useDeleteMemo();
   const bulkDeleteMemosMutation = useBulkDeleteMemos();
+  const deleteMemoMutation = useDeleteMemo();
 
   const handleMemoSelect = (memoId: string) => {
     if (viewMode === "split") {
@@ -176,7 +176,6 @@ export default function MemoBoard() {
         viewMode={viewMode}
         leftSelectedMemo={leftSelectedMemo}
         rightSelectedMemo={rightSelectedMemo}
-        onDeleteMemo={handleDeleteMemo}
         onBulkDeleteRecruitments={handleBulkDeleteRecruitments}
       />
       <MemoView
