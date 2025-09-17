@@ -7,7 +7,7 @@ export interface PopularRecruitmentResponse {
 
 function getAccessToken(): string | null {
   try {
-    return localStorage.getItem("accessToken");
+    return localStorage.getItem("zh_access_token");
   } catch {
     return null;
   }
