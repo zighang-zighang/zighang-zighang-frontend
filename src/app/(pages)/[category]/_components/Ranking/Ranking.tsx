@@ -15,38 +15,6 @@ export function Ranking({ slug }: RankingProps) {
   const { isLoggedIn } = useAuthState();
   const router = useRouter();
 
-  // slug를 API용 job 파라미터로 변환
-  const getJobParam = (categorySlug: string) => {
-    const categoryMap: { [key: string]: string } = {
-      it: "IT_개발",
-      ai: "AI_데이터",
-      game: "게임",
-      design: "디자인",
-      strategy: "기획_전략",
-      marketing: "마케팅_광고",
-      md: "상품기획_MD",
-      sales: "영업",
-      logistics: "무역_물류",
-      driver: "운송_배송",
-      legal: "법률_법무",
-      hr: "HR_총무",
-      accounting: "회계_재무_세무",
-      finance: "증권_운용",
-      bank: "은행_카드_보험",
-      research: "엔지니어링_RND",
-      construction: "건설_건축",
-      production: "생산_기능직",
-      medical: "의료_보건",
-      public: "공공_복지",
-      education: "교육",
-      media: "미디어_엔터",
-      customer: "고객상담_TM",
-      service: "서비스",
-      food: "식음료",
-    };
-    return categoryMap[categorySlug] || "IT_개발";
-  };
-
   // 카테고리별 제목 매핑
   const getCategoryTitle = (categorySlug: string) => {
     const category = jobCategories.find(
@@ -55,8 +23,7 @@ export function Ranking({ slug }: RankingProps) {
     return category?.name || "전체";
   };
 
-  const jobParam = getJobParam(slug);
-  const { data, isLoading, error } = usePopularRecruitments(jobParam);
+  const { data, isLoading, error } = usePopularRecruitments();
 
   // 모바일용 애니메이션 컴포넌트 렌더링
   return (
