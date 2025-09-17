@@ -4,7 +4,10 @@ import { useState } from "react";
 import MemoList from "./MemoList";
 import MemoView from "./MemoView";
 import { useMemoGroups } from "../../../_api/memos/useMemoGroups";
-import { useBulkDeleteMemos, useDeleteMemo } from "../../../_api/memos/useMemos";
+import {
+  useBulkDeleteMemos,
+  useDeleteMemo,
+} from "../../../_api/memos/useMemos";
 
 export default function MemoBoard() {
   const [selectedMemoId, setSelectedMemoId] = useState<string | null>(null);
@@ -61,11 +64,13 @@ export default function MemoBoard() {
         // 삭제된 메모가 현재 선택된 메모라면
         if (selectedMemoId === memoId) {
           // 해당 공고에 다른 메모가 있는지 확인
-          const memoGroup = memoGroups.find(group => 
-            group.memos.some(memo => memo.id === memoId)
+          const memoGroup = memoGroups.find((group) =>
+            group.memos.some((memo) => memo.id === memoId)
           );
           if (memoGroup) {
-            const remainingMemos = memoGroup.memos.filter(memo => memo.id !== memoId);
+            const remainingMemos = memoGroup.memos.filter(
+              (memo) => memo.id !== memoId
+            );
             if (remainingMemos.length > 0) {
               // 다른 메모가 있으면 첫 번째 메모를 선택
               setSelectedMemoId(remainingMemos[0].id);
@@ -77,13 +82,15 @@ export default function MemoBoard() {
             setSelectedMemoId(null);
           }
         }
-        
+
         if (leftSelectedMemo === memoId) {
-          const memoGroup = memoGroups.find(group => 
-            group.memos.some(memo => memo.id === memoId)
+          const memoGroup = memoGroups.find((group) =>
+            group.memos.some((memo) => memo.id === memoId)
           );
           if (memoGroup) {
-            const remainingMemos = memoGroup.memos.filter(memo => memo.id !== memoId);
+            const remainingMemos = memoGroup.memos.filter(
+              (memo) => memo.id !== memoId
+            );
             if (remainingMemos.length > 0) {
               setLeftSelectedMemo(remainingMemos[0].id);
             } else {
@@ -93,13 +100,15 @@ export default function MemoBoard() {
             setLeftSelectedMemo(null);
           }
         }
-        
+
         if (rightSelectedMemo === memoId) {
-          const memoGroup = memoGroups.find(group => 
-            group.memos.some(memo => memo.id === memoId)
+          const memoGroup = memoGroups.find((group) =>
+            group.memos.some((memo) => memo.id === memoId)
           );
           if (memoGroup) {
-            const remainingMemos = memoGroup.memos.filter(memo => memo.id !== memoId);
+            const remainingMemos = memoGroup.memos.filter(
+              (memo) => memo.id !== memoId
+            );
             if (remainingMemos.length > 0) {
               setRightSelectedMemo(remainingMemos[0].id);
             } else {
@@ -121,10 +130,12 @@ export default function MemoBoard() {
       onSuccess: () => {
         // 삭제된 공고에 속한 메모들의 선택 상태 초기화
         const deletedMemoIds = new Set<string>();
-        recruitmentIds.forEach(recruitmentId => {
-          const memoGroup = memoGroups.find(group => group.recruitment.id === recruitmentId);
+        recruitmentIds.forEach((recruitmentId) => {
+          const memoGroup = memoGroups.find(
+            (group) => group.recruitment.id === recruitmentId
+          );
           if (memoGroup) {
-            memoGroup.memos.forEach(memo => deletedMemoIds.add(memo.id));
+            memoGroup.memos.forEach((memo) => deletedMemoIds.add(memo.id));
           }
         });
 
@@ -185,8 +196,6 @@ export default function MemoBoard() {
         onViewChange={handleViewChange}
         leftSelectedMemo={leftSelectedMemo}
         rightSelectedMemo={rightSelectedMemo}
-        onLeftMemoChange={setLeftSelectedMemo}
-        onRightMemoChange={setRightSelectedMemo}
         onDeleteMemo={handleDeleteMemo}
         onMemoSelect={handleMemoSelect}
       />
