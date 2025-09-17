@@ -76,7 +76,7 @@ export default function RecruitmentHeader({
           </div>
         )}
       </section>
-      <div className="flex w-full flex-col gap-2">
+      <div className="flex w-full flex-col gap-2 md:gap-0">
         <div className="flex justify-between">
           <h1 className="break-all text-xl font-semibold text-black md:gap-5 md:text-[26px]">
             {job.title}
@@ -92,7 +92,7 @@ export default function RecruitmentHeader({
               <Icon
                 variant="bookmark"
                 className={`transition-transform w-7 h-7 ${
-                  bookmarkState ? "text-purple-800" : "text-gray-200"
+                  bookmarkState ? "text-zighang-1000" : "text-gray-200"
                 }`}
               />
             </button>
