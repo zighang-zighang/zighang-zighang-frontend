@@ -1,3 +1,5 @@
+"use client";
+
 import { jobCategories } from "@/app/_constants/jobCategories";
 import { usePopularRecruitments } from "@/app/_api/popular/usePopular";
 import { useAuthState } from "@/app/_api/auth/useAuthState";

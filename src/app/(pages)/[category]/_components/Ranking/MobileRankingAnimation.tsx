@@ -18,7 +18,7 @@ export function MobileRankingAnimation({
   error,
 }: MobileRankingAnimationProps) {
   const { isLoggedIn } = useAuthState();
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep] = useState(0);
   const [currentRankingIndex, setCurrentRankingIndex] = useState(-1);
 
   // 카테고리별 제목 매핑
@@ -55,46 +55,16 @@ export function MobileRankingAnimation({
 
   // 애니메이션 단계별 실행 (무한 루프)
   useEffect(() => {
-    if (isLoading || error || !data?.length) return;
-
-    let intervalId: NodeJS.Timeout;
-
-    const startAnimation = () => {
-      setCurrentStep(0);
-      setCurrentRankingIndex(-1);
-
-      const timer1 = setTimeout(() => {
-        setCurrentRankingIndex(0); // 랭킹 1 표시
-      }, 2000);
-
-      const timer2 = setTimeout(() => {
-        setCurrentRankingIndex(1); // 랭킹 2 표시
-      }, 4000);
-
-      const timer3 = setTimeout(() => {
-        setCurrentRankingIndex(2); // 랭킹 3 표시
-      }, 6000);
-
-      // 8초 후 다시 처음부터 시작
-      intervalId = setTimeout(() => {
-        startAnimation();
-      }, 8000);
-
-      return () => {
-        clearTimeout(timer1);
-        clearTimeout(timer2);
-        clearTimeout(timer3);
-      };
-    };
-
-    // 첫 애니메이션 시작
-    const cleanup = startAnimation();
-
-    return () => {
-      if (cleanup) cleanup();
-      if (intervalId) clearTimeout(intervalId);
-    };
-  }, [isLoading, error, data]);
+    if (isLoading || error || !data?.length || !isLoggedIn) return;
+    const len = Math.min(3, data.length);
+    let i = -1; // -1이면 헤더(카테고리/타임스탬프) 노출
+    const id = setInterval(() => {
+      i = i + 1;
+      if (i >= len) i = -1;
+      setCurrentRankingIndex(i);
+    }, 2000);
+    return () => clearInterval(id);
+  }, [isLoading, error, isLoggedIn, data?.length]);
 
   // 로딩 상태
   if (isLoading) {
