@@ -230,7 +230,11 @@ function DesktopRanking({
       ) : (
         <div className="flex gap-6 w-full justify-between">
           {topItems.map((item, index) => (
-            <section key={item.id} className="flex">
+            <section
+              key={item.id}
+              className="flex cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors"
+              onClick={() => router.push(`/recruitment/${item.id}`)}
+            >
               <div className="flex gap-2 items-center">
                 <p className="text-purple-800 text-lg font-medium pb-3">
                   {index + 1}
