@@ -1,8 +1,9 @@
-import { Job } from "@/app/_types/jobs";
+import { RecommendedRecruitment } from "@/app/_types/jobs";
+import { mapJobGroup } from "@/app/(pages)/onboarding/_utils/mapping";
 
 export interface PopularRecruitmentResponse {
   success: boolean;
-  data: Job[];
+  data: RecommendedRecruitment[];
 }
 
 function getAccessToken(): string | null {
@@ -30,8 +31,9 @@ export async function fetchPopularRecruitments(): Promise<PopularRecruitmentResp
       return { success: true, data: [] };
     }
     
-    // jobs 배열을 쿼리 파라미터로 변환
-    const jobsParam = jobCategories.map(job => `jobs=${encodeURIComponent(job)}`).join('&');
+    // jobs 배열을 API 형식으로 매핑한 후 쿼리 파라미터로 변환
+    const mappedJobs = jobCategories.map(mapJobGroup);
+    const jobsParam = mappedJobs.map((job: string) => `jobs=${encodeURIComponent(job)}`).join('&');
     const url = `/api/recruitments/popular?${jobsParam}`;
 
     const res = await fetch(url, {

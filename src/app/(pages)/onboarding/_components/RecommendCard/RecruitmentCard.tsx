@@ -31,9 +31,15 @@ export default function RecruitmentCard({
           />
         </div>
         <div className="flex flex-col">
-          <p className="font-semibold text-xs ">{title}</p>
-          <p className="text-black text-[8.86px] mt-0.5">{company}</p>
-          <p className="text-zinc-400 text-[7.75px] mt-1.5">{location}</p>
+          <p className="font-semibold text-xs w-[120px] overflow-hidden text-ellipsis whitespace-nowrap">
+            {title}
+          </p>
+          <p className="text-black text-[8.86px] mt-0.5 w-[120px] overflow-hidden text-ellipsis whitespace-nowrap">
+            {company}
+          </p>
+          <p className="text-zinc-400 text-[7.75px] mt-1.5 w-[120px] overflow-hidden text-ellipsis whitespace-nowrap">
+            {location}
+          </p>
         </div>
       </div>
     </div>
