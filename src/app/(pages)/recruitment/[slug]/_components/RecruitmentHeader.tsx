@@ -85,7 +85,7 @@ export default function RecruitmentHeader({
             <button
               onClick={toggle}
               disabled={isPending}
-              className={`inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 bg-white hover:bg-zinc-100 active:bg-zinc-200 transition-colors h-12 min-w-12 p-2 border border-[#EDEDED] ${
+              className={`cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 bg-white hover:bg-zinc-100 active:bg-zinc-200 transition-colors h-12 min-w-12 p-2 border border-[#EDEDED] ${
                 bookmarkState ? "bg-[#F7F1FB]" : "bg-[#FAFAFA]"
               }`}
             >

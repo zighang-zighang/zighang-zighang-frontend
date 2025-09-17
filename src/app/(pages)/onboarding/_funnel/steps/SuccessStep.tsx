@@ -152,7 +152,7 @@ export default function SuccessStep({
 
         <StepActions showBorder={false} className="mt-7">
           <button
-            className="text-white text-base font-semibold px-10 py-3 bg-violet-500 rounded-lg w-full md:w-auto"
+            className="text-white text-base font-semibold px-10 py-3 bg-violet-500 rounded-lg w-full md:w-auto cursor-pointer"
             onClick={handleComplete}
           >
             공고 탐색 시작
