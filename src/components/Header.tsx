@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Profile from "./Icons/Profile";
 import ProfileDropdown from "./ProfileDropdown";
+import HeaderBookmark from "./Icons/bookMark";
 
 export default function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -134,7 +135,9 @@ export default function Header() {
                 )}
               </div>
             </div>
-
+            <div className="hidden md:block mb-1">
+              <HeaderBookmark />
+            </div>
             {isLoggedIn ? (
               <div className="relative hidden md:block z-50">
                 <button
