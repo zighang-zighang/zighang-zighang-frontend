@@ -26,7 +26,6 @@ export function Ranking({ slug }: RankingProps) {
     try {
       // 로컬스토리지에서 사용자 필터 정보 가져오기
       const stored = localStorage.getItem("userFilters");
-      console.log(stored);
       if (stored) {
         const userFilters = JSON.parse(stored);
         const jobs = userFilters.jobs || [];
