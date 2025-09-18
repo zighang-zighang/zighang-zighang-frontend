@@ -214,7 +214,7 @@ export default function Header() {
 
       {/* 사이드바 */}
       <div
-        className={`fixed rounded-l-2xl bg-white h-full right-0 z-[1001] transition-transform duration-300 ease-in-out ${
+        className={`w-2/3 md:w-auto fixed rounded-l-2xl bg-white h-full right-0 z-[1001] transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
