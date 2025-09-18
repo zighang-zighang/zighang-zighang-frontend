@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MemoGroup } from "../_types/memoTypes";
 import { calculateDDay } from "../_utils/dateUtils";
 import DeleteMemo from "../../recruitment/[slug]/_components/Note/DeleteMemo";
+import { ChevronRightIcon } from "../_Icons/ChevronRightIcon";
 
 interface MemoListProps {
   memoGroups: MemoGroup[];
@@ -78,7 +79,7 @@ export default function MemoList({
   return (
     <div
       className={`${
-        isMobile ? "w-full" : "w-1/3 border border-[#E1E1E4]"
+        isMobile ? "mx-7" : "w-1/3 border border-[#E1E1E4]"
       } flex flex-col  ${
         isMobile ? "rounded-[8px]" : "rounded-l-[8px]"
       } h-[600px]`}
@@ -110,7 +111,7 @@ export default function MemoList({
           </button>
         )}
       </div>
-      <div className="flex-1 overflow-y-auto border border-[#E1E1E4] rounded-lg md:border-none">
+      <div className="md:flex-1 overflow-y-auto border border-[#E1E1E4] rounded-lg md:border-none">
         {memoGroups.map((group) => {
           const dDate = calculateDDay(group.recruitment.endDate);
           const isExpired = dDate.startsWith("D+");
@@ -211,18 +212,3 @@ export default function MemoList({
     </div>
   );
 }
-
-const ChevronRightIcon = () => (
-  <svg
-    width="24"
-    height="25"
-    viewBox="0 0 24 25"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M8.99953 7.21075C8.60953 7.60075 8.60953 8.23075 8.99953 8.62075L12.8795 12.5008L8.99953 16.3808C8.60953 16.7708 8.60953 17.4008 8.99953 17.7908C9.38953 18.1808 10.0195 18.1808 10.4095 17.7908L14.9995 13.2008C15.3895 12.8108 15.3895 12.1808 14.9995 11.7908L10.4095 7.20075C10.0295 6.82075 9.38953 6.82075 8.99953 7.21075Z"
-      fill="#303030"
-    />
-  </svg>
-);

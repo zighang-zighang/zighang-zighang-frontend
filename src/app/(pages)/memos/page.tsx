@@ -6,8 +6,8 @@ export default function MemosPage() {
   return (
     <div>
       <Header />
-      <main className="flex flex-col mx-auto w-[85%] md:w-[70%] mb-[150px]">
-        <h1 className="text-Heading2-20sb md:text-Heading1-24sb mt-[26px] mb-[24px] md:mt-[78px] md:mb-6">
+      <main className="flex flex-col mx-auto md:w-[70%] mb-[150px]">
+        <h1 className="hidden md:block text-Heading1-24sb mt-[26px] mb-[24px] md:mt-[78px] md:mb-6">
           메모장 관리페이지
         </h1>
         <MemoBoard />

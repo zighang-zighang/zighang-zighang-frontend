@@ -196,7 +196,7 @@ export default function MemoBoard() {
   }
 
   return (
-    <div className="w-full h-[522px] flex">
+    <div className="md:w-full h-[522px] md:flex">
       {/* 데스크톱 레이아웃 */}
       {isDesktop ? (
         <>
@@ -224,23 +224,28 @@ export default function MemoBoard() {
         /* 모바일 레이아웃 */
         <>
           {mobileViewMode === "list" ? (
-            <MemoList
-              memoGroups={memoGroups}
-              selectedMemoId={selectedMemoId}
-              onMemoSelect={handleMemoSelect}
-              viewMode={viewMode}
-              leftSelectedMemo={leftSelectedMemo}
-              rightSelectedMemo={rightSelectedMemo}
-              onBulkDeleteRecruitments={handleBulkDeleteRecruitments}
-              isMobile={true}
-            />
+            <div className="flex flex-col">
+              <h1 className="text-Heading2-20sb mt-[26px] mb-[18px] mx-7">
+                메모장 관리페이지
+              </h1>
+              <MemoList
+                memoGroups={memoGroups}
+                selectedMemoId={selectedMemoId}
+                onMemoSelect={handleMemoSelect}
+                viewMode={viewMode}
+                leftSelectedMemo={leftSelectedMemo}
+                rightSelectedMemo={rightSelectedMemo}
+                onBulkDeleteRecruitments={handleBulkDeleteRecruitments}
+                isMobile={true}
+              />
+            </div>
           ) : (
             <div className="w-full h-full flex flex-col">
               {/* 모바일 뒤로가기 버튼 */}
-              <div className="h-[58px] flex items-center px-4 border-b border-[#E1E1E4] flex-shrink-0">
+              <div className="px-3.5 h-[58px] flex items-center flex-shrink-0 border-b border-neutral-200 mb-[26px]">
                 <button
                   onClick={handleMobileBackToList}
-                  className="flex items-center gap-2 text-Heading3-18sb text-[#303030]"
+                  className="flex items-center gap-2 text-Heading3-18sb text-[#303030] cursor-pointer"
                 >
                   <svg
                     width="20"
@@ -257,11 +262,11 @@ export default function MemoBoard() {
                       strokeLinejoin="round"
                     />
                   </svg>
-                  메모장
+                  목록으로
                 </button>
               </div>
               {/* 메모 상세 뷰 */}
-              <div className="flex-1">
+              <div className="flex-1 mx-5">
                 <MemoView
                   selectedMemo={selectedMemoId}
                   memoGroups={memoGroups}
