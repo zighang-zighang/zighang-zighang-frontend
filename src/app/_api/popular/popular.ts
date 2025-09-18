@@ -1,9 +1,9 @@
-import { RecommendedRecruitment } from "@/app/_types/jobs";
+import { Job } from "@/app/_types/jobs";
 import { mapJobGroup } from "@/app/(pages)/onboarding/_utils/mapping";
 
 export interface PopularRecruitmentResponse {
   success: boolean;
-  data: RecommendedRecruitment[];
+  data: Job[];
 }
 
 function getAccessToken(): string | null {

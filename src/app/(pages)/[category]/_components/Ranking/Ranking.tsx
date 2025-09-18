@@ -23,6 +23,23 @@ export function Ranking({ slug }: RankingProps) {
     return category?.name || "전체";
   };
 
+  // 로컬스토리지에서 jobs 배열 확인하여 제목 결정
+  const getRankingTitle = () => {
+    try {
+      const stored = localStorage.getItem("userFilters");
+      if (stored) {
+        const userFilters = JSON.parse(stored);
+        const jobs = userFilters.jobs || [];
+        if (jobs.length === 0) {
+          return "흥미직군 TOP 인기공고";
+        }
+      }
+    } catch (error) {
+      console.error("로컬스토리지 읽기 실패:", error);
+    }
+    return `${getCategoryTitle(slug)} 실시간 공고`;
+  };
+
   const { data, isLoading, error } = usePopularRecruitments();
 
   // 모바일용 애니메이션 컴포넌트 렌더링
@@ -43,6 +60,7 @@ export function Ranking({ slug }: RankingProps) {
         isLoading={isLoading}
         error={error}
         getCategoryTitle={getCategoryTitle}
+        getRankingTitle={getRankingTitle}
         isLoggedIn={isLoggedIn}
         router={router}
       />
@@ -57,6 +75,7 @@ function DesktopRanking({
   isLoading,
   error,
   getCategoryTitle,
+  getRankingTitle,
   isLoggedIn,
   router,
 }: {
@@ -65,6 +84,7 @@ function DesktopRanking({
   isLoading: boolean;
   error: Error | null;
   getCategoryTitle: (slug: string) => string;
+  getRankingTitle: () => string;
   isLoggedIn: boolean;
   router: ReturnType<typeof useRouter>;
 }) {
@@ -74,7 +94,7 @@ function DesktopRanking({
       <div className="hidden md:flex w-full border px-7 py-4 border-neutral-200 rounded-lg items-center gap-5">
         <div className="w-45">
           <h3 className="text-purple-800 text-sm font-semibold">
-            {getCategoryTitle(slug)} 실시간 공고
+            {getRankingTitle()}
           </h3>
           <p className="text-neutral-400 text-[10px] font-medium">로딩 중...</p>
         </div>
@@ -93,7 +113,7 @@ function DesktopRanking({
       <div className="hidden md:flex w-full border px-7 py-4 border-neutral-200 rounded-lg items-center gap-5">
         <div className="w-45">
           <h3 className="text-purple-800 text-sm font-semibold">
-            {getCategoryTitle(slug)} 실시간 공고
+            {getRankingTitle()}
           </h3>
           <p className="text-neutral-400 text-[10px] font-medium">오류 발생</p>
         </div>
@@ -112,7 +132,7 @@ function DesktopRanking({
       <div className="hidden md:flex w-full border px-7 py-4 border-neutral-200 rounded-lg items-center gap-5">
         <div className="w-45">
           <h3 className="text-purple-800 text-sm font-semibold">
-            {getCategoryTitle(slug)} 실시간 공고
+            {getRankingTitle()}
           </h3>
           <p className="text-neutral-400 text-[10px] font-medium">
             {new Date().toLocaleString("ko-KR")}
@@ -131,9 +151,9 @@ function DesktopRanking({
   return (
     <div className="hidden md:flex w-full border px-7 py-4 border-neutral-200 rounded-lg items-center gap-5">
       <div className="w-45">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-[140px]">
           <h3 className="text-purple-800 text-sm font-semibold">
-            {getCategoryTitle(slug)} 실시간 공고
+            {getRankingTitle()}
           </h3>
         </div>
         <p className="text-neutral-400 text-[10px] font-medium">
