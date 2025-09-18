@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuthState } from "@/app/_api/auth/useAuthState";
 import { Job } from "@/app/_types/jobs";
 import { useRouter } from "next/navigation";
+import { TriangleUpIcon } from "./Ranking";
 
 interface MobileRankingAnimationProps {
   slug: string;
@@ -14,7 +15,6 @@ interface MobileRankingAnimationProps {
 }
 
 export function MobileRankingAnimation({
-  slug,
   data,
   isLoading,
   error,
@@ -24,7 +24,6 @@ export function MobileRankingAnimation({
   const router = useRouter();
   const [currentStep] = useState(0);
   const [currentRankingIndex, setCurrentRankingIndex] = useState(-1);
-
 
   // 애니메이션 단계별 실행 (무한 루프)
   useEffect(() => {
@@ -152,9 +151,12 @@ export function MobileRankingAnimation({
                     {topItems[currentRankingIndex].companyName || "회사명 없음"}
                   </p>
                 </div>
-                <p className="text-red-500 text-xs font-medium">
-                  {topItems[currentRankingIndex].views}
-                </p>
+                <div className="flex items-center pb-4">
+                  <TriangleUpIcon />
+                  <p className="text-red-500 text-xs font-medium">
+                    {topItems[currentRankingIndex].views}
+                  </p>
+                </div>
               </div>
             )}
           </div>
