@@ -16,12 +16,6 @@ export function Ranking({ slug }: RankingProps) {
   const router = useRouter();
 
   // 카테고리별 제목 매핑
-  const getCategoryTitle = (categorySlug: string) => {
-    const category = jobCategories.find(
-      (c) => c.href.slice(1) === categorySlug
-    );
-    return category?.name || "전체";
-  };
 
   // 로컬스토리지에서 jobs 배열 확인하여 제목 결정
   const getRankingTitle = () => {
@@ -37,7 +31,7 @@ export function Ranking({ slug }: RankingProps) {
     } catch (error) {
       console.error("로컬스토리지 읽기 실패:", error);
     }
-    return `${getCategoryTitle(slug)} 실시간 공고`;
+    return `관심직무 TOP 인기공고`;
   };
 
   const { data, isLoading, error } = usePopularRecruitments();
@@ -51,6 +45,7 @@ export function Ranking({ slug }: RankingProps) {
         data={data?.data}
         isLoading={isLoading}
         error={error}
+        getRankingTitle={getRankingTitle}
       />
 
       {/* 데스크톱용 기존 컴포넌트 */}
@@ -59,7 +54,6 @@ export function Ranking({ slug }: RankingProps) {
         data={data?.data}
         isLoading={isLoading}
         error={error}
-        getCategoryTitle={getCategoryTitle}
         getRankingTitle={getRankingTitle}
         isLoggedIn={isLoggedIn}
         router={router}
@@ -83,7 +77,6 @@ function DesktopRanking({
   data?: Job[];
   isLoading: boolean;
   error: Error | null;
-  getCategoryTitle: (slug: string) => string;
   getRankingTitle: () => string;
   isLoggedIn: boolean;
   router: ReturnType<typeof useRouter>;
@@ -229,7 +222,7 @@ function DesktopRanking({
                   {index + 1}
                 </p>
                 <div className="flex flex-col">
-                  <p className="text-zinc-800 text-Subheading3-14m truncate max-w-[250px]">
+                  <p className="text-zinc-800 text-Subheading3-14m truncate max-w-[240px]">
                     {item.title}
                   </p>
                   <p className="text-zinc-600 text-Subheading4-12m">
