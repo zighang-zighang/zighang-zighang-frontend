@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import {
   usePopularRecruitments,
   useCategoryPopularRecruitments,
@@ -87,6 +88,14 @@ export function Ranking({ slug, useCategoryApi = false }: RankingProps) {
     return `관심직무 TOP 인기공고`;
   };
 
+  // 클라이언트에서만 실행되는 제목 상태
+  const [title, setTitle] = useState("관심직무 TOP 인기공고");
+
+  // 클라이언트에서 제목 업데이트
+  useEffect(() => {
+    setTitle(getRankingTitle());
+  }, [useCategoryApi, slug]);
+
   // 조건에 따라 다른 API 사용
   const categoryApiParam = getCategoryApiParam(slug);
   const popularData = usePopularRecruitments();
@@ -105,7 +114,7 @@ export function Ranking({ slug, useCategoryApi = false }: RankingProps) {
         data={data?.data}
         isLoading={isLoading}
         error={error}
-        getRankingTitle={getRankingTitle}
+        getRankingTitle={() => title}
       />
 
       {/* 데스크톱용 기존 컴포넌트 */}
@@ -114,7 +123,7 @@ export function Ranking({ slug, useCategoryApi = false }: RankingProps) {
         data={data?.data}
         isLoading={isLoading}
         error={error}
-        getRankingTitle={getRankingTitle}
+        getRankingTitle={() => title}
         isLoggedIn={isLoggedIn}
         router={router}
       />
