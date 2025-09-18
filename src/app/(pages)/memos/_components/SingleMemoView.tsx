@@ -9,6 +9,7 @@ interface SingleMemoViewProps {
   memoGroups?: MemoGroup[];
   onDeleteMemo?: (memoId: string) => void;
   onMemoSelect?: (memoId: string) => void;
+  isMobile?: boolean;
 }
 
 export default function SingleMemoView({
@@ -16,6 +17,7 @@ export default function SingleMemoView({
   memoGroups,
   onDeleteMemo,
   onMemoSelect,
+  isMobile = false,
 }: SingleMemoViewProps) {
   // 선택된 메모가 속한 공고 그룹 찾기
   const selectedGroup = memoGroups?.find((group) =>

@@ -11,6 +11,7 @@ interface SplitMemoViewProps {
   leftSelectedMemo?: string | null;
   rightSelectedMemo?: string | null;
   onDeleteMemo?: (memoId: string) => void;
+  isMobile?: boolean;
 }
 
 export default function SplitMemoView({
@@ -18,6 +19,7 @@ export default function SplitMemoView({
   leftSelectedMemo,
   rightSelectedMemo,
   onDeleteMemo,
+  isMobile = false,
 }: SplitMemoViewProps) {
   const router = useRouter();
   const leftSelectedGroup = memoGroups?.find((group) =>

@@ -8,6 +8,7 @@ import {
   useBulkDeleteMemos,
   useDeleteMemo,
 } from "../../../_api/memos/useMemos";
+import { useIsDesktop } from "../../../_hooks/useIsDesktop";
 
 export default function MemoBoard() {
   const [selectedMemoId, setSelectedMemoId] = useState<string | null>(null);
@@ -16,12 +17,23 @@ export default function MemoBoard() {
   const [rightSelectedMemo, setRightSelectedMemo] = useState<string | null>(
     null
   );
+  const [mobileViewMode, setMobileViewMode] = useState<"list" | "detail">(
+    "list"
+  );
 
+  const isDesktop = useIsDesktop();
   const { data: memoGroups = [], isLoading, error } = useMemoGroups();
   const bulkDeleteMemosMutation = useBulkDeleteMemos();
   const deleteMemoMutation = useDeleteMemo();
 
   const handleMemoSelect = (memoId: string) => {
+    if (!isDesktop) {
+      // 모바일에서는 상세 뷰로 전환
+      setSelectedMemoId(memoId);
+      setMobileViewMode("detail");
+      return;
+    }
+
     if (viewMode === "split") {
       // 스플릿뷰에서는 중복 방지 및 토글 기능
       if (leftSelectedMemo === memoId) {
@@ -56,6 +68,11 @@ export default function MemoBoard() {
       setLeftSelectedMemo(null);
       setRightSelectedMemo(null);
     }
+  };
+
+  const handleMobileBackToList = () => {
+    setMobileViewMode("list");
+    setSelectedMemoId(null);
   };
 
   const handleDeleteMemo = (memoId: string) => {
@@ -180,25 +197,87 @@ export default function MemoBoard() {
 
   return (
     <div className="w-full h-[522px] flex">
-      <MemoList
-        memoGroups={memoGroups}
-        selectedMemoId={selectedMemoId}
-        onMemoSelect={handleMemoSelect}
-        viewMode={viewMode}
-        leftSelectedMemo={leftSelectedMemo}
-        rightSelectedMemo={rightSelectedMemo}
-        onBulkDeleteRecruitments={handleBulkDeleteRecruitments}
-      />
-      <MemoView
-        selectedMemo={selectedMemoId}
-        memoGroups={memoGroups}
-        viewMode={viewMode}
-        onViewChange={handleViewChange}
-        leftSelectedMemo={leftSelectedMemo}
-        rightSelectedMemo={rightSelectedMemo}
-        onDeleteMemo={handleDeleteMemo}
-        onMemoSelect={handleMemoSelect}
-      />
+      {/* 데스크톱 레이아웃 */}
+      {isDesktop ? (
+        <>
+          <MemoList
+            memoGroups={memoGroups}
+            selectedMemoId={selectedMemoId}
+            onMemoSelect={handleMemoSelect}
+            viewMode={viewMode}
+            leftSelectedMemo={leftSelectedMemo}
+            rightSelectedMemo={rightSelectedMemo}
+            onBulkDeleteRecruitments={handleBulkDeleteRecruitments}
+          />
+          <MemoView
+            selectedMemo={selectedMemoId}
+            memoGroups={memoGroups}
+            viewMode={viewMode}
+            onViewChange={handleViewChange}
+            leftSelectedMemo={leftSelectedMemo}
+            rightSelectedMemo={rightSelectedMemo}
+            onDeleteMemo={handleDeleteMemo}
+            onMemoSelect={handleMemoSelect}
+          />
+        </>
+      ) : (
+        /* 모바일 레이아웃 */
+        <>
+          {mobileViewMode === "list" ? (
+            <MemoList
+              memoGroups={memoGroups}
+              selectedMemoId={selectedMemoId}
+              onMemoSelect={handleMemoSelect}
+              viewMode={viewMode}
+              leftSelectedMemo={leftSelectedMemo}
+              rightSelectedMemo={rightSelectedMemo}
+              onBulkDeleteRecruitments={handleBulkDeleteRecruitments}
+              isMobile={true}
+            />
+          ) : (
+            <div className="w-full h-full flex flex-col">
+              {/* 모바일 뒤로가기 버튼 */}
+              <div className="h-[58px] flex items-center px-4 border-b border-[#E1E1E4] flex-shrink-0">
+                <button
+                  onClick={handleMobileBackToList}
+                  className="flex items-center gap-2 text-Heading3-18sb text-[#303030]"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12.5 15L7.5 10L12.5 5"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  메모장
+                </button>
+              </div>
+              {/* 메모 상세 뷰 */}
+              <div className="flex-1">
+                <MemoView
+                  selectedMemo={selectedMemoId}
+                  memoGroups={memoGroups}
+                  viewMode="single"
+                  onViewChange={handleViewChange}
+                  leftSelectedMemo={null}
+                  rightSelectedMemo={null}
+                  onDeleteMemo={handleDeleteMemo}
+                  onMemoSelect={handleMemoSelect}
+                  isMobile={true}
+                />
+              </div>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }

@@ -11,6 +11,7 @@ interface MemoListProps {
   leftSelectedMemo?: string | null;
   rightSelectedMemo?: string | null;
   onBulkDeleteRecruitments?: (recruitmentIds: string[]) => void;
+  isMobile?: boolean;
 }
 
 export default function MemoList({
@@ -21,11 +22,11 @@ export default function MemoList({
   leftSelectedMemo,
   rightSelectedMemo,
   onBulkDeleteRecruitments,
+  isMobile = false,
 }: MemoListProps) {
   const [isEditMode, setIsEditMode] = useState(false);
-  const [selectedRecruitmentsForDelete, setSelectedRecruitmentsForDelete] = useState<
-    Set<string>
-  >(new Set());
+  const [selectedRecruitmentsForDelete, setSelectedRecruitmentsForDelete] =
+    useState<Set<string>>(new Set());
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleEditClick = () => {
@@ -44,7 +45,6 @@ export default function MemoList({
     }
   };
 
-
   const handleRecruitmentSelectForDelete = (recruitmentId: string) => {
     const newSelected = new Set(selectedRecruitmentsForDelete);
     if (newSelected.has(recruitmentId)) {
@@ -54,7 +54,6 @@ export default function MemoList({
     }
     setSelectedRecruitmentsForDelete(newSelected);
   };
-
 
   const handleConfirmDelete = () => {
     if (selectedRecruitmentsForDelete.size > 0 && onBulkDeleteRecruitments) {
@@ -77,9 +76,15 @@ export default function MemoList({
   };
 
   return (
-    <div className="w-1/3 flex flex-col border border-[#E1E1E4] rounded-l-[8px] h-[600px]">
-      <div className="h-[58px] flex justify-between px-4 py-[14px] text-Heading3-18sb border-b border-[#E1E1E4] flex-shrink-0">
-        <div>메모장</div>
+    <div
+      className={`${
+        isMobile ? "w-full" : "w-1/3 border border-[#E1E1E4]"
+      } flex flex-col  ${
+        isMobile ? "rounded-[8px]" : "rounded-l-[8px]"
+      } h-[600px]`}
+    >
+      <div className="h-[58px] flex justify-between md:px-4 py-[14px] text-Heading3-18sb md:border-b border-[#E1E1E4] flex-shrink-0">
+        <div>{isMobile ? "전체메모" : "메모장"}</div>
         {isEditMode ? (
           <div className="flex gap-2">
             <button
@@ -105,7 +110,7 @@ export default function MemoList({
           </button>
         )}
       </div>
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto border border-[#E1E1E4] rounded-lg md:border-none">
         {memoGroups.map((group) => {
           const dDate = calculateDDay(group.recruitment.endDate);
           const isExpired = dDate.startsWith("D+");
@@ -118,9 +123,8 @@ export default function MemoList({
               : leftSelectedMemo === firstMemoId ||
                 rightSelectedMemo === firstMemoId;
 
-          const isRecruitmentSelectedForDelete = selectedRecruitmentsForDelete.has(
-            group.recruitment.id
-          );
+          const isRecruitmentSelectedForDelete =
+            selectedRecruitmentsForDelete.has(group.recruitment.id);
 
           return (
             <div
@@ -134,10 +138,10 @@ export default function MemoList({
                 }
               }}
             >
-              <div className="relative">
-                {isEditMode && (
-                  <div 
-                    className="absolute right-0 top-0"
+              <div className="relative pr-8 md:pr-0">
+                {isEditMode ? (
+                  <div
+                    className="absolute right-0 top-6  md:top-0"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleRecruitmentSelectForDelete(group.recruitment.id);
@@ -169,6 +173,12 @@ export default function MemoList({
                       )}
                     </div>
                   </div>
+                ) : (
+                  isMobile && (
+                    <div className="absolute right-0 top-1/2 transform -translate-y-1/2">
+                      <ChevronRightIcon />
+                    </div>
+                  )
                 )}
                 <div
                   className={`text-Badge3-10m px-2 py-[6px] rounded-[4px] inline-block mb-[6px] ${
@@ -179,10 +189,10 @@ export default function MemoList({
                 >
                   {dDate}
                 </div>
-                <div className="text-Heading5-14sb mb-[2px]">
+                <div className="text-Heading5-14sb mb-[2px] truncate">
                   {group.recruitment.title}
                 </div>
-                <div className="text-Body1-14r text-[#5E5E5F]">
+                <div className="text-Body1-14r text-[#5E5E5F] truncate">
                   {group.recruitment.companyName}
                 </div>
               </div>
@@ -190,7 +200,7 @@ export default function MemoList({
           );
         })}
       </div>
-      
+
       {isDeleteModalOpen && (
         <DeleteMemo
           title={getSelectedMemoTitle()}
@@ -201,3 +211,18 @@ export default function MemoList({
     </div>
   );
 }
+
+const ChevronRightIcon = () => (
+  <svg
+    width="24"
+    height="25"
+    viewBox="0 0 24 25"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M8.99953 7.21075C8.60953 7.60075 8.60953 8.23075 8.99953 8.62075L12.8795 12.5008L8.99953 16.3808C8.60953 16.7708 8.60953 17.4008 8.99953 17.7908C9.38953 18.1808 10.0195 18.1808 10.4095 17.7908L14.9995 13.2008C15.3895 12.8108 15.3895 12.1808 14.9995 11.7908L10.4095 7.20075C10.0295 6.82075 9.38953 6.82075 8.99953 7.21075Z"
+      fill="#303030"
+    />
+  </svg>
+);

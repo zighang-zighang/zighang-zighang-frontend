@@ -14,6 +14,7 @@ interface MemoViewProps {
   rightSelectedMemo?: string | null;
   onDeleteMemo?: (memoId: string) => void;
   onMemoSelect?: (memoId: string) => void;
+  isMobile?: boolean;
 }
 
 export default function MemoView({ 
@@ -24,7 +25,8 @@ export default function MemoView({
   leftSelectedMemo,
   rightSelectedMemo,
   onDeleteMemo,
-  onMemoSelect
+  onMemoSelect,
+  isMobile = false
 }: MemoViewProps) {
   const [selectedView, setSelectedView] = useState<"single" | "split">(viewMode);
 
@@ -34,13 +36,15 @@ export default function MemoView({
   };
 
   return (
-    <div className="w-2/3 flex flex-col border border-l-0 border-[#E1E1E4] rounded-r-[8px] h-[600px]">
-      <MemoViewHeader
-        selectedView={selectedView}
-        onViewChange={handleViewChange}
-      />
+    <div className={`${isMobile ? 'w-full' : 'w-2/3'} flex flex-col border ${isMobile ? 'border-[#E1E1E4] rounded-[8px]' : 'border-l-0 border-[#E1E1E4] rounded-r-[8px]'} h-[600px]`}>
+      {!isMobile && (
+        <MemoViewHeader
+          selectedView={selectedView}
+          onViewChange={handleViewChange}
+        />
+      )}
 
-      <div className="flex-1 bg-[#F1F1F5] rounded-br-[8px]">
+      <div className={`flex-1 bg-[#F1F1F5] ${isMobile ? 'rounded-[8px]' : 'rounded-br-[8px]'}`}>
         <MemoContentView 
           viewMode={selectedView} 
           selectedMemo={selectedMemo} 
@@ -49,6 +53,7 @@ export default function MemoView({
           rightSelectedMemo={rightSelectedMemo}
           onDeleteMemo={onDeleteMemo}
           onMemoSelect={onMemoSelect}
+          isMobile={isMobile}
         />
       </div>
     </div>
