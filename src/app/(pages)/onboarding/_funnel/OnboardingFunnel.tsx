@@ -113,6 +113,7 @@ export default function OnboardingFunnel() {
       )}
       직군입력={({ history, context }) => (
         <JobCategoryStep
+          onBack={() => history.back()}
           initialSelected={context.직군 || []}
           onNext={(직군) =>
             history.push("직무입력", (prev) => ({ ...prev, 직군 }))
