@@ -139,7 +139,6 @@ export default function OnboardingFunnel() {
           initialSelected={context.직무 || []}
           onBack={() => history.back()}
           onNext={(직무) => {
-            console.log("직무입력 onNext 전달값:", 직무);
             history.push("경력입력", (prev) => ({ ...prev, 직무 }));
           }}
         />
