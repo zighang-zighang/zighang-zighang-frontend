@@ -18,7 +18,6 @@ export default function SingleMemoView({
   memoGroups,
   onDeleteMemo,
   onMemoSelect,
-  isMobile = false,
 }: SingleMemoViewProps) {
   // 선택된 메모가 속한 공고 그룹 찾기
   const selectedGroup = memoGroups?.find((group) =>
