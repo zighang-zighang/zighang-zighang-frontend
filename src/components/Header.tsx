@@ -2,10 +2,18 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Profile from "./Icons/Profile";
+import ProfileDropdown from "./ProfileDropdown";
+import HeaderBookmark from "./Icons/bookMark";
 
 export default function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -15,10 +23,50 @@ export default function Header() {
     setIsSidebarOpen(false);
   };
 
+  const toggleProfileDropdown = () => {
+    setIsProfileDropdownOpen(!isProfileDropdownOpen);
+  };
+
+  const closeProfileDropdown = () => {
+    setIsProfileDropdownOpen(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("zh_access_token");
+    localStorage.removeItem("zh_refresh_token");
+    localStorage.removeItem("user_name");
+    setIsLoggedIn(false);
+    setIsProfileDropdownOpen(false);
+    window.location.reload();
+  };
+
+  const handlePersonalClick = () => {
+    if (isLoggedIn) {
+      router.push("/personal");
+    } else {
+      router.push("/join");
+    }
+  };
+
+  useEffect(() => {
+    try {
+      const token = localStorage.getItem("zh_access_token");
+      setIsLoggedIn(Boolean(token));
+    } catch {}
+
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "zh_access_token") {
+        setIsLoggedIn(Boolean(e.newValue));
+      }
+    };
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
+
   return (
     <>
       <header className="relative w-full md:px-10">
-        <div className="relative z-10 box-border flex w-full flex-row items-center justify-between py-5 md:py-3">
+        <div className="relative z-50 box-border flex w-full flex-row items-center justify-between py-3 md:py-3">
           <div className="ml-3 flex items-center gap-5">
             <Link href="/" className="mr-4 flex-shrink-0 md:flex-shrink">
               <Image
@@ -37,7 +85,9 @@ export default function Header() {
                 <Link href="/" className="pointer-events-auto relative">
                   <div className="text-[#353535] ds-web-navi">채용 공고</div>
                 </Link>
-                <div className="absolute w-full border border-primary/80"></div>
+                {pathname === "/" && (
+                  <div className="absolute w-full border border-primary/80"></div>
+                )}
               </div>
               <div
                 className="relative hidden hbp:block"
@@ -46,38 +96,31 @@ export default function Header() {
                 <Link href="/company" className="pointer-events-auto relative">
                   <div className="text-[#353535] ds-web-navi">기업별</div>
                 </Link>
+                {pathname === "/company" && (
+                  <div className="absolute w-full border border-primary/80"></div>
+                )}
               </div>
               <div className="relative hidden sm:block">
-                <Link
-                  href="/pages/jobs/today"
-                  className="pointer-events-auto relative"
-                >
+                <Link href="/today" className="pointer-events-auto relative">
                   <div className="text-[#353535] ds-web-navi">실시간 공고</div>
                 </Link>
+                {pathname === "/today" && (
+                  <div className="absolute w-full border border-primary/80"></div>
+                )}
               </div>
               <div
                 className="relative hidden hbp:block"
                 style={{ display: "hidden" }}
               >
-                <Link
-                  href="https://tally.so/r/nPYly5"
-                  className="pointer-events-auto relative"
-                  target="_blank"
+                <button
+                  onClick={handlePersonalClick}
+                  className="pointer-events-auto relative cursor-pointer"
                 >
-                  <div className="text-[#353535] ds-web-navi">공고 제보</div>
-                </Link>
-              </div>
-              <div
-                className="relative hidden hbp:block"
-                style={{ display: "hidden" }}
-              >
-                <Link
-                  href="https://linktr.ee/zighang_chat"
-                  className="pointer-events-auto relative"
-                  target="_blank"
-                >
-                  <div className="text-[#353535] ds-web-navi">오픈 채팅</div>
-                </Link>
+                  <div className="text-[#353535] ds-web-navi">맞춤 공고</div>
+                </button>
+                {pathname === "/personal" && (
+                  <div className="absolute w-full border border-primary/80"></div>
+                )}
               </div>
             </div>
           </div>
@@ -87,18 +130,59 @@ export default function Header() {
                 <Link href="/hiring" className="pointer-events-auto relative">
                   <div className="text-[#353535] ds-web-navi">기업회원</div>
                 </Link>
+                {pathname === "/hiring" && (
+                  <div className="absolute w-full border border-primary/80"></div>
+                )}
               </div>
             </div>
-
-            <Link href="/join" rel="nofollow" className="hidden md:block">
-              <div className="flex min-h-8 items-center justify-center px-2 text-[#6F00B6] md:min-h-10 md:rounded-lg md:border md:border-line md:px-4 md:py-[0px] ds-Button2-16sb">
-                로그인 / 회원가입
+            {isLoggedIn && (
+              <div className="hidden md:block mb-1">
+                <HeaderBookmark />
               </div>
-            </Link>
+            )}
+            {isLoggedIn ? (
+              <div className="relative hidden md:block z-50">
+                <button
+                  onClick={toggleProfileDropdown}
+                  aria-label="내 프로필"
+                  className="relative cursor-pointer"
+                >
+                  <Profile />
+                </button>
+                <ProfileDropdown
+                  isOpen={isProfileDropdownOpen}
+                  onClose={closeProfileDropdown}
+                  onLogout={handleLogout}
+                />
+              </div>
+            ) : (
+              <Link href="/join" rel="nofollow" className="hidden md:block">
+                <div className="flex min-h-8 items-center justify-center px-2 text-[#6F00B6] md:min-h-10 md:rounded-lg md:border md:border-line md:px-4 md:py-[0px] ds-Button2-16sb">
+                  로그인 / 회원가입
+                </div>
+              </Link>
+            )}
 
-            <Link href="/join" rel="nofollow" className="block md:hidden">
-              <div className="text-[#6F00B6] font-semibold">로그인</div>
-            </Link>
+            {isLoggedIn ? (
+              <div className="relative block md:hidden z-50">
+                <button
+                  onClick={toggleProfileDropdown}
+                  aria-label="내 프로필"
+                  className="relative"
+                >
+                  <Profile />
+                </button>
+                <ProfileDropdown
+                  isOpen={isProfileDropdownOpen}
+                  onClose={closeProfileDropdown}
+                  onLogout={handleLogout}
+                />
+              </div>
+            ) : (
+              <Link href="/join" rel="nofollow" className="block md:hidden">
+                <div className="text-[#6F00B6] font-semibold">로그인</div>
+              </Link>
+            )}
 
             <button
               className="mr-3 rounded-md bg-transparent p-1 pb-1.5 hover:bg-gray-200 active:bg-gray-300 md:hidden"
@@ -132,10 +216,10 @@ export default function Header() {
         }`}
         onClick={closeSidebar}
       />
-      
+
       {/* 사이드바 */}
       <div
-        className={`fixed rounded-l-2xl bg-white h-full w-[70%] right-0 z-[1001] transition-transform duration-300 ease-in-out ${
+        className={`w-2/3 md:w-auto fixed rounded-l-2xl bg-white h-full right-0 z-[1001] transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -162,52 +246,60 @@ export default function Header() {
 
           <Link
             href="/"
-            className="pointer-events-auto box-border flex w-full px-2 py-2 text-base font-semibold  text-primary"
+            className={`pointer-events-auto box-border flex w-full px-2 py-2 text-base font-semibold ${
+              pathname === "/" ? "text-primary" : "text-[#353535]"
+            }`}
             onClick={closeSidebar}
           >
-            <div className="border-b border-primary">채용 공고</div>
+            <div className={pathname === "/" ? "border-b border-primary" : ""}>
+              채용 공고
+            </div>
           </Link>
 
           <Link
             href="/company"
-            className="pointer-events-auto box-border flex w-full px-2 py-2 text-base font-semibold text-[#353535]"
+            className={`pointer-events-auto box-border flex w-full px-2 py-2 text-base font-semibold ${
+              pathname === "/company" ? "text-primary" : "text-[#353535]"
+            }`}
             onClick={closeSidebar}
           >
-            <div>기업별</div>
+            <div
+              className={
+                pathname === "/company" ? "border-b border-primary" : ""
+              }
+            >
+              기업별
+            </div>
           </Link>
 
           <Link
-            href="/pages/jobs/today"
-            className="pointer-events-auto box-border flex w-full px-2 py-2 text-base font-semibold text-[#353535]"
+            href="/today"
+            className={`pointer-events-auto box-border flex w-full px-2 py-2 text-base font-semibold ${
+              pathname === "/today" ? "text-primary" : "text-[#353535]"
+            }`}
             onClick={closeSidebar}
           >
-            <div>실시간 공고</div>
+            <div
+              className={pathname === "/today" ? "border-b border-primary" : ""}
+            >
+              실시간 공고
+            </div>
           </Link>
 
           <Link
-            href="https://tally.so/r/nPYly5"
-            target="_blank"
-            className="pointer-events-auto box-border flex w-full px-2 py-2 text-base font-semibold text-[#353535]"
+            href="/personal"
+            className={`pointer-events-auto box-border flex w-full px-2 py-2 text-base font-semibold ${
+              pathname === "/personal" ? "text-primary" : "text-[#353535]"
+            }`}
             onClick={closeSidebar}
           >
-            <div>공고 제보</div>
-          </Link>
-
-          <Link
-            href="https://linktr.ee/zighang_chat"
-            target="_blank"
-            className="pointer-events-auto box-border flex w-full px-2 py-2 text-base font-semibold text-[#353535]"
-            onClick={closeSidebar}
-          >
-            <div>오픈 채팅</div>
-          </Link>
-
-          <Link
-            href="/hiring"
-            className="pointer-events-auto box-border flex w-full px-2 py-2 text-base font-semibold text-[#353535]"
-            onClick={closeSidebar}
-          >
-            <div>기업회원</div>
+            <div
+              className={
+                pathname === "/personal" ? "border-b border-primary" : ""
+              }
+            >
+              맞춤 공고
+            </div>
           </Link>
         </div>
       </div>
