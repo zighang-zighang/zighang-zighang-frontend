@@ -135,9 +135,11 @@ export default function Header() {
                 )}
               </div>
             </div>
-            <div className="hidden md:block mb-1">
-              <HeaderBookmark />
-            </div>
+            {isLoggedIn && (
+              <div className="hidden md:block mb-1">
+                <HeaderBookmark />
+              </div>
+            )}
             {isLoggedIn ? (
               <div className="relative hidden md:block z-50">
                 <button

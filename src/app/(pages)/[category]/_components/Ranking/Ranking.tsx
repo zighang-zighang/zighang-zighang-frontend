@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   usePopularRecruitments,
   useCategoryPopularRecruitments,
@@ -55,13 +55,13 @@ export function Ranking({ slug, useCategoryApi = false }: RankingProps) {
   };
 
   // 카테고리명을 한글로 변환하는 함수
-  const getCategoryDisplayName = (categorySlug: string) => {
+  const getCategoryDisplayName = useCallback((categorySlug: string) => {
     const categoryApiParam = getCategoryApiParam(categorySlug);
     return jobGroupReverseMap[categoryApiParam] || "IT·개발";
-  };
+  }, []);
 
   // 로컬스토리지에서 jobs 배열 확인하여 제목 결정
-  const getRankingTitle = () => {
+  const getRankingTitle = useCallback(() => {
     // 카테고리별 API 사용 시 카테고리명 포함 제목 반환
     if (useCategoryApi) {
       return `${getCategoryDisplayName(slug)} TOP 인기공고`;
@@ -86,7 +86,7 @@ export function Ranking({ slug, useCategoryApi = false }: RankingProps) {
       console.error("로컬스토리지 읽기 실패:", error);
     }
     return `관심직무 TOP 인기공고`;
-  };
+  }, [useCategoryApi, slug, getCategoryDisplayName]);
 
   // 클라이언트에서만 실행되는 제목 상태
   const [title, setTitle] = useState("관심직무 TOP 인기공고");
@@ -94,7 +94,7 @@ export function Ranking({ slug, useCategoryApi = false }: RankingProps) {
   // 클라이언트에서 제목 업데이트
   useEffect(() => {
     setTitle(getRankingTitle());
-  }, [useCategoryApi, slug]);
+  }, [useCategoryApi, slug, getRankingTitle]);
 
   // 조건에 따라 다른 API 사용
   const categoryApiParam = getCategoryApiParam(slug);
