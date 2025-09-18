@@ -18,8 +18,15 @@ export function Ranking({ slug }: RankingProps) {
 
   // 로컬스토리지에서 jobs 배열 확인하여 제목 결정
   const getRankingTitle = () => {
+    // 서버 사이드 렌더링 중에는 localStorage 접근 불가
+    if (typeof window === "undefined") {
+      return "관심직무 TOP 인기공고";
+    }
+
     try {
+      // 로컬스토리지에서 사용자 필터 정보 가져오기
       const stored = localStorage.getItem("userFilters");
+      console.log(stored);
       if (stored) {
         const userFilters = JSON.parse(stored);
         const jobs = userFilters.jobs || [];
